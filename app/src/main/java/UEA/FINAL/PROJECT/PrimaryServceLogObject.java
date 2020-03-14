@@ -2,7 +2,7 @@
  *
  * TITLE:       3YP Motorcycle Feedback System Mobile Device App
  *
- * FILE:        GpsForegroundServceLogObject.Java
+ * FILE:        PrimaryServceLogObject.Java
  *
  * LAYOUT(S):   n/a
  *
@@ -40,11 +40,11 @@ package UEA.FINAL.PROJECT;
 
 import android.util.Log;
 
-public class GpsForegroundServceLogObject {
+public class PrimaryServceLogObject {
     /*--------------------------------------
         CONSTANTS
     --------------------------------------*/
-    private static final String TAG = GpsForegroundServceLogObject.class.getSimpleName();
+    private static final String TAG = PrimaryServceLogObject.class.getSimpleName();
 
 
     /*--------------------------------------
@@ -85,7 +85,7 @@ public class GpsForegroundServceLogObject {
     /*--------------------------------------
         CONSTRUCTOR
     --------------------------------------*/
-    public GpsForegroundServceLogObject(double latitude, double longitude, double accuracy, long locationFixTime, long locationUseTime) {
+    public PrimaryServceLogObject(double latitude, double longitude, double accuracy, long locationFixTime, long locationUseTime) {
         //may only need empty constructor for object (set variables as proceed)
         this.latitude = latitude;
         this.longitude = longitude;

@@ -4,34 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PrimaryForegroundServiceHost"
-    >
+    tools:context=".PrimaryForegroundServiceHost">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay"
-        >
+        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"
-            />
+            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <?xml version="1.0" encoding="utf-8"?>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".GpsForegroundServiceActivity"
-        >
+        tools:context=".GpsForegroundServiceActivity">
 
         <Button
             android:id="@+id/button_gpsforegroundservice_start"
@@ -41,8 +36,7 @@
             android:text="start service"
             app:layout_constraintEnd_toEndOf="@id/guide_right"
             app:layout_constraintStart_toStartOf="@id/guide_left"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/button_gpsforegroundservice_stop"
@@ -52,8 +46,7 @@
             android:text="stop service"
             app:layout_constraintEnd_toEndOf="@id/guide_right"
             app:layout_constraintStart_toStartOf="@id/guide_left"
-            app:layout_constraintTop_toBottomOf="@id/button_gpsforegroundservice_start"
-            />
+            app:layout_constraintTop_toBottomOf="@id/button_gpsforegroundservice_start" />
 
         <Button
             android:id="@+id/button_test_battery_optimisation"
@@ -63,8 +56,7 @@
             android:text="test battery optimisation for app"
             app:layout_constraintEnd_toEndOf="@id/guide_right"
             app:layout_constraintStart_toStartOf="@id/guide_left"
-            app:layout_constraintTop_toBottomOf="@id/button_gpsforegroundservice_stop"
-            />
+            app:layout_constraintTop_toBottomOf="@id/button_gpsforegroundservice_stop" />
 
         <Button
             android:id="@+id/button_test_audiofile_gpsforegroundservice"
@@ -74,8 +66,7 @@
             android:text="test audio\n(trigger speed warning)"
             app:layout_constraintEnd_toEndOf="@id/guide_right"
             app:layout_constraintStart_toStartOf="@id/guide_left"
-            app:layout_constraintTop_toBottomOf="@id/button_test_battery_optimisation"
-            />
+            app:layout_constraintTop_toBottomOf="@id/button_test_battery_optimisation" />
 
 
         <!-- GUIDELINES -->
@@ -84,16 +75,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.8"
-            />
+            app:layout_constraintGuide_percent="0.8" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.2"
-            />
+            app:layout_constraintGuide_percent="0.2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

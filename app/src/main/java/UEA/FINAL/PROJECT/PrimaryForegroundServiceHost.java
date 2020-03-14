@@ -102,7 +102,7 @@ public class PrimaryForegroundServiceHost extends AppCompatActivity {
         //---TOOLBAR---
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Foreground GPS Service");
+        getSupportActionBar().setTitle("Primary Service Host Activity");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //---VIEWS---

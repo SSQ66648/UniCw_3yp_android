@@ -276,7 +276,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
     /*------------------
         Testing/Log Variables
     ------------------*/
-    GpsForegroundServceLogObject logObject;
+    PrimaryServceLogObject logObject;
     //stream to file
     OutputStream oStream = null;
     File dir;
@@ -1803,7 +1803,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
 
             Log.d(TAG, "checkAsyncLock: CONDITIONS MET: begin AsyncHttp");
             //create log object(location's fix time and use time)
-            logObject = new GpsForegroundServceLogObject(finalLocation.getLatitude(),
+            logObject = new PrimaryServceLogObject(finalLocation.getLatitude(),
                     finalLocation.getLongitude(), finalLocation.getAccuracy(),
                     finalLocationRealTime, SystemClock.elapsedRealtime());
             //todo: add this to creation above

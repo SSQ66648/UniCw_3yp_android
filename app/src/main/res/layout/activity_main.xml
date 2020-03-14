@@ -91,10 +91,8 @@
                     app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                     app:layout_constraintTop_toBottomOf="@id/button_main_test_serviceactivity" />
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
