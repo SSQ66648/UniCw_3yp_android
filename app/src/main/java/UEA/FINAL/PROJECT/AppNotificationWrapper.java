@@ -1,11 +1,16 @@
 /*--------------------------------------------------------------------------------------------------
  * PROJECT:     3YP Motorcycle Feedback System App (UEA.FINAL.PROJECT)
  *
- * FILE:        PrimaryForegroundService.Java
+ * FILE:        PrimeForegroundService.Java
  *
  * AUTHOR:      SSQ16SHU / 100166648
  *
- * DESCRIPTION: Handles creation of notification channels on app boot (required: foreground service)
+ * DESCRIPTION: 8th version of main function of project app: started from host activity, runs
+ *              continuously in background to receive location updates from GPS and network
+ *              providers, use coordinates to create and send HTTP queries to OverpassAPI, receive
+ *              and parse JSON response to find speed limit of road at current location.
+ *              Also handles bluetooth input of bike "status" including speed, warning the user via
+ *              bluetooth connection to headset if current speed exceeds the limit at location.
  *--------------------------------------------------------------------------------------------------
  * NOTES:
  *      +   Dates are recorded in YYMMDD notation.
@@ -59,7 +64,7 @@ public class AppNotificationWrapper extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //name here visible to user: describe what its for in real app
             //importance level define how disruptive notifications can be (sound, popup etc)
-            NotificationChannel foregroundChannel = new NotificationChannel(
+            NotificationChannel channel1 = new NotificationChannel(
                     CHANNEL_3YP,
                     "project foreground service notification channel",
                     NotificationManager.IMPORTANCE_HIGH
@@ -67,16 +72,11 @@ public class AppNotificationWrapper extends Application {
             //remember user has ultimate control over notifications: can turn off at will
             //create channel cant change in hindsight: have to uninstall and reinstall with settings
             //description should describe function of channel
-            foregroundChannel.setDescription("project foreground service notification channel");
-
-            //reference to manager and create channels (can pass list of channels: channel grouping)
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(foregroundChannel);
-
+            channel1.setDescription("project foreground service notification channel");
         } else {
-            Log.e(TAG, "createNotificationChannels: Error: NOTIFICATION CHANNEL CANNOT BE " +
-                    "MADE: CANNOT CONTINUE APP");
+            Log.w(TAG, "createNotificationChannels: Warning: SDK below target: ");
         }
+
 
     }
 }

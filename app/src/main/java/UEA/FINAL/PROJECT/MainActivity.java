@@ -33,7 +33,6 @@ package UEA.FINAL.PROJECT;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,9 +56,11 @@ public class MainActivity extends AppCompatActivity {
         LIFECYCLE
     --------------------------------------*/
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //logcat clarification of relevent content:
+        Log.d(TAG, "----------------------------------------------------------------------------------------------------");
         Log.d(TAG, "onCreate: ");
 
         //---TOOLBAR---
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         button_serviceActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SyncDevices.class));
+                startActivity(new Intent(MainActivity.this, PrimeForegroundServiceHost.class));
             }
         });
 
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         button_optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //todo: change code to class when created...
                 startActivity(new Intent(MainActivity.this, SyncDevices.class));
             }
         });

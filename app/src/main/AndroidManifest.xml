@@ -48,14 +48,14 @@
         </activity>
 
         <activity
-            android:name=".PrimaryForegroundServiceHost"
+            android:name=".PrimeForegroundServiceHost"
             android:label="PrimaryForegroundServiceHost"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
 
 
         <service
-            android:name=".PrimaryForegroundService"
+            android:name=".PrimeForegroundService"
             android:enabled="true" />
 
     </application>

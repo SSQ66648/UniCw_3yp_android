@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--****************************************************************************
+*
+* TITLE:        3YP Motorcycle Feedback System Mobile Device App
+*
+* FILE:         activity_main.xml
+*
+* ASSOCIATED:   MainActivity.Java
+*
+* DESCRIPTION:  Activity layout for main page of app
+*
+* AUTHOR:       SSQ16SHU / 100166648
+*
+* HISTORY:      v0.1    191223  initial Implementation
+*
+* NOTES:       All elements (where possible) are listed vertically (left-right)
+*
+*****************************************************************************-->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +25,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- ****************************** APP/TOOLBAR ****************************** -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -25,74 +43,69 @@
 
 
     <!-- ****************************** CONTAINER: ****************************** -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appbar">
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
+            <!-- ****************************** Guidelines ****************************** -->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.2" />
 
-                <!-- ****************************** Guidelines ****************************** -->
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineLeft"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.2" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.8" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineRight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.8" />
+            <!-- ****************************** BUTTONS: ******************************-->
 
-                <!-- ****************************** BUTTONS: ******************************-->
+            <Button
+                android:id="@+id/button_main_opensync"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="sync bluetooth devices"
+                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
-                    android:id="@+id/button_main_opensync"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="sync bluetooth devices"
-                    app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-                    app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/button_main_test_serviceactivity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="(test)\nservice activity"
+                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+                app:layout_constraintTop_toBottomOf="@id/button_main_opensync" />
 
-                <Button
-                    android:id="@+id/button_main_test_serviceactivity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="(test)\nservice activity"
-                    app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-                    app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                    app:layout_constraintTop_toBottomOf="@id/button_main_opensync" />
+            <Button
+                android:id="@+id/button_main_openoptions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="options menu"
+                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+                app:layout_constraintTop_toBottomOf="@id/button_main_test_serviceactivity" />
 
-                <Button
-                    android:id="@+id/button_main_openoptions"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="options menu"
-                    app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-                    app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                    app:layout_constraintTop_toBottomOf="@id/button_main_test_serviceactivity" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -67,7 +67,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS;
 
-public class PrimaryForegroundServiceHost extends AppCompatActivity {
+public class PrimeForegroundServiceHost extends AppCompatActivity {
     private static final String TAG = "GpsForegroundServiceAct";
 
     /*--------------------------------------
@@ -121,7 +121,7 @@ public class PrimaryForegroundServiceHost extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "onClick: stop service");
                 stopGpsService();
-                Toast.makeText(PrimaryForegroundServiceHost.this, "Stopping Service...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PrimeForegroundServiceHost.this, "Stopping Service...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -150,9 +150,8 @@ public class PrimaryForegroundServiceHost extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.w(TAG, "onStart: Warning: ");
         Log.d(TAG, "onStart: (re) creating service intent");
-        foregroundIntent = new Intent(this, PrimaryForegroundService.class);
+        foregroundIntent = new Intent(this, PrimeForegroundService.class);
     }
 
     @Override
@@ -212,8 +211,8 @@ public class PrimaryForegroundServiceHost extends AppCompatActivity {
     //-send broadcast to running service with service method to trigger from activity
     public void sendMsg() {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        Intent intent = new Intent(PrimaryForegroundService.SERVICE_BROADCASTRECEIVER_ACTION);
-        intent.putExtra(METHOD_TRIGGER, PrimaryForegroundService.METHODTRIGGER_TESTAUDIO);
+        Intent intent = new Intent(PrimeForegroundService.SERVICE_BROADCASTRECEIVER_ACTION);
+        intent.putExtra(METHOD_TRIGGER, PrimeForegroundService.METHODTRIGGER_TESTAUDIO);
         lbm.sendBroadcast(intent);
     }
 
