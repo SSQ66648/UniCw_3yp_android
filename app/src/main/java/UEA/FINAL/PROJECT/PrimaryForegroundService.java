@@ -30,6 +30,7 @@
  *      +   Selection of road from JSON response (if more than one) as been to use the first result
  *          in the list (pending a way to order the results from the API by distance from exact
  *          coordinates queried)
+ *      +   Dates are recorded in YYMMDD notation.
  *--------------------------------------------------------------------------------------------------
  * OUTSTANDING ISSUES:
  *      +
@@ -85,33 +86,6 @@
  *                              -unacceptable word-delay: may have to be replaced with sentences.
  *              v3.1    200313  removed all bound-service code after extensive bug hunting: does NOT
  *                              work, EVENTUALLY replaced with broadcast receiver and constants.
- *
- *------------------------------------------------------------------------------
- *------------------------------------------------------------------------------
- * NOTES:
- *          +
- *          +   currently using asynclock to prevent repetition of api query on same location
- *              (todo: how to call checklock inbetween location updates? -may not be needed due to speed of updates on gps)
- *              (as could be a delay until next update when location has already changed?)
- *          +   experimental api radius value of 10 todo: roadTest this: experimental 20m in progress
- *          +   may still change gps listener as "the API is completely unreliable on custom android
- *              phones (Samsung)" - may include test v8 device. recommended to "call
- *              getLastKnownLocation, and call onLocationChanged yourself" :no problems as of yet:
- *              postponed.
- *          +   mean median seems as expected. it is repeated zeros that caused the assumption it
- *              doesnt: debugging has removed vast majority of these.
- *          +   for debugging purposes, the first update (assigned to oldLocation) had its "delay"
- *              added to the array as 0: effects the mean/median but clearer on array print.
- *          +   using location strategy of:
- *              prioritise location by accuracy if within 15 seconds of previous update, otherwise
- *              prioritise newer location update (as some distance may have been travelled in 15
- *              seconds): will have to test this as api call may take longer than this to respond.
- *
- *          +   date notation: YYMMDD
- *          +   comment format:
- *                  //---GROUP---
- *                  //-purpose of method etc-
- *                  //explanation
  *------------------------------------------------------------------------------
  * TO DO LIST:
  *              todo:   warning counter trigger (or by time)
