@@ -47,6 +47,13 @@
                 android:value=".MainActivity" />
         </activity>
 
+        <activity
+            android:name=".PrimaryForegroundServiceHost"
+            android:label="PrimaryForegroundServiceHost"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
+
+
         <service
             android:name=".PrimaryForegroundService"
             android:enabled="true" />

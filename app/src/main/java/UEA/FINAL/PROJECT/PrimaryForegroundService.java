@@ -187,14 +187,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static com.example.bluetooth_v3.NotificationApp.CHANNEL_TEST_FOREGROUND_SERVICE;
+import static UEA.FINAL.PROJECT.AppNotificationWrapper.CHANNEL_3YP;
 
 public class PrimaryForegroundService extends Service implements LocationListener,
         AsyncCompleteListener, MediaPlayer.OnCompletionListener {
     /*--------------------------------------
         CONSTANTS
     --------------------------------------*/
-    private static final String TAG = "GpsForegroundService";
+    private static final String TAG = "PrimaryForegroundService";
     //overpassAPI radius request value (const for easy changing during debug)
     public static final int API_RADIUS_VALUE = 20;
     //max seconds allowed to prioritise accuracy over newest location in locationchanged
@@ -327,7 +327,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
 
         //register receiver for activity reqests to trigger service methods
         LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
-                new IntentFilter(GpsForegroundService.SERVICE_BROADCASTRECEIVER_ACTION));
+                new IntentFilter(PrimaryForegroundService.SERVICE_BROADCASTRECEIVER_ACTION));
     }
 
 
@@ -338,13 +338,13 @@ public class PrimaryForegroundService extends Service implements LocationListene
 
         //send to calling activity on click of notification
         Intent notificationIntent = new Intent(this,
-                GpsForegroundServiceActivity.class);
+                PrimaryForegroundService.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 
         //create notification
         Notification notification = new NotificationCompat.Builder(this,
-                CHANNEL_TEST_FOREGROUND_SERVICE)
+                CHANNEL_3YP)
                 .setContentTitle("Gps Foreground Service")
                 .setContentText("Running...")
                 .setSmallIcon(R.drawable.ic_road)
@@ -861,7 +861,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
             MEMBER VAR
         ------------------*/
         private AsyncCompleteListener listener;
-        private WeakReference<GpsForegroundService> weakReference;
+        private WeakReference<PrimaryForegroundService> weakReference;
         String url;
         Double lat;
         Double lon;
@@ -875,7 +875,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
             CONSTRUCTOR
         ------------------*/
         //-pass service (activity) reference and coordinates
-        AsyncHTTP(GpsForegroundService activity, AsyncCompleteListener listener,
+        AsyncHTTP(PrimaryForegroundService activity, AsyncCompleteListener listener,
                   OkHttpClient client, double lat, double lon) {
             Log.d(TAG, "constructed: AsyncHTTP");
             weakReference = new WeakReference<>(activity);
@@ -891,7 +891,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
        ------------------*/
         @Override
         protected void onPreExecute() {
-            GpsForegroundService activity = weakReference.get();
+            PrimaryForegroundService activity = weakReference.get();
             Log.d(TAG, "onPreExecute: AsyncHTTP");
             super.onPreExecute();
 
@@ -932,7 +932,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
         @Override
         protected String doInBackground(Void... voids) {
             Log.d(TAG, "doInBackground: AsyncHTTP");
-            GpsForegroundService activity = weakReference.get();
+            PrimaryForegroundService activity = weakReference.get();
 
             //check if task has been cancelled
             if (isCancelled()) {
@@ -1019,7 +1019,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
         protected void onPostExecute(String responseString) {
             super.onPostExecute(responseString);
             Log.d(TAG, "onPostExecute: AsyncHTTP");
-            GpsForegroundService activity = weakReference.get();
+            PrimaryForegroundService activity = weakReference.get();
 
             //cancel check: exit regardless of string status
             if (isCancelled()) {
@@ -1089,7 +1089,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
         /*------------------
             MEMBER VAR
         ------------------*/
-        private WeakReference<GpsForegroundService> weakReference;
+        private WeakReference<PrimaryForegroundService> weakReference;
         private AsyncCompleteListener listener;
         private String response;
         //testing: get array of both names and speeds to select closest option from
@@ -1108,7 +1108,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
             CONSTRUCTOR
         ------------------*/
         //-pass service (activity) reference
-        AsyncPARSE(GpsForegroundService activity, AsyncCompleteListener listener, String response) {
+        AsyncPARSE(PrimaryForegroundService activity, AsyncCompleteListener listener, String response) {
             Log.d(TAG, "constructed: AsyncPARSE:");
             weakReference = new WeakReference<>(activity);
             this.listener = listener;
@@ -1123,7 +1123,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
         protected void onPreExecute() {
             Log.d(TAG, "onPreExecute: AsyncPARSE");
             super.onPreExecute();
-            GpsForegroundService activity = weakReference.get();
+            PrimaryForegroundService activity = weakReference.get();
             //update error msg
             errorMessageMethod = "onPreExecute: ";
 
@@ -1151,7 +1151,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
         ------------------*/
         @Override
         protected Void doInBackground(Void... voids) {
-            GpsForegroundService activity = weakReference.get();
+            PrimaryForegroundService activity = weakReference.get();
             Log.d(TAG, "doInBackground: AsyncPARSE");
             errorMessageMethod = "doInBackground: ";
 
@@ -1291,7 +1291,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
         ------------------*/
         @Override
         protected void onPostExecute(Void aVoid) {
-            GpsForegroundService activity = weakReference.get();
+            PrimaryForegroundService activity = weakReference.get();
             super.onPostExecute(aVoid);
             Log.d(TAG, "AsyncPARSE: onPostExecute: ");
             errorMessageMethod = "onPostExecute: ";
@@ -1341,7 +1341,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
         ------------------*/
         //-logs JOSN response to logfile (debugging attempt to track actual response contents)
         public void logJsonResponse(String response) {
-            GpsForegroundService activity = weakReference.get();
+            PrimaryForegroundService activity = weakReference.get();
             try {
                 activity.oStream = new FileOutputStream(activity.file, true);
                 activity.oStream.write(LOGFILE_LINEBREAK_EQAL.getBytes());
@@ -1362,7 +1362,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
 
         //-selection logic for values to return if more than one in API response
         private void chooseRoad() {
-            GpsForegroundService activity = weakReference.get();
+            PrimaryForegroundService activity = weakReference.get();
             Log.d(TAG, "AsyncPARSE: chooseRoad: ");
             errorMessageMethod = "chooseRoad: ";
 
@@ -1879,7 +1879,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
     //INCOMPLETE DUE TO SERVICE INSTEAD OF ACTIVITY USE
 //    private void requestPermission() {
 //        if (ActivityCompat.shouldShowRequestPermissionRationale(
-//                GpsForegroundServiceActivity.,
+//                PrimaryForegroundServiceActivity.,
 //                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 //            Toast.makeText(TestForegroundServiceActivity.this,
 //                    "Write External Storage permission required to create publicly " +
@@ -1918,7 +1918,7 @@ public class PrimaryForegroundService extends Service implements LocationListene
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onReceive: method action broadcast from activity...");
             //get number value of constant (to trigger switch method choice below)
-            int broadcastMsg = intent.getIntExtra(GpsForegroundServiceActivity.METHOD_TRIGGER,
+            int broadcastMsg = intent.getIntExtra(PrimaryForegroundServiceHost.METHOD_TRIGGER,
                     0);
 
             switch (broadcastMsg) {
