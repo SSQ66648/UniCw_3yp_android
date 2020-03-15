@@ -347,7 +347,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 CHANNEL_3YP)
                 .setContentTitle("Gps Foreground Service")
                 .setContentText("Running...")
-                .setSmallIcon(R.drawable.ic_road)
+                .setSmallIcon(R.drawable.ic_noun_Road_4918)
                 //start activity on notification click
                 .setContentIntent(pendingIntent)
                 .build();
