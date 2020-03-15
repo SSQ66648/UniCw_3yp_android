@@ -31,7 +31,8 @@
  *      //todo: add icons to device cards depending on type of device
  *      //todo: add enable bt toast to button click if not enabled
  *      //todo: potentially build recycleres once and then update adapter when needed (item changed or similar)
- *      //todo:
+ *      //todo: add green on connect
+ *      //todo: add button disconnect
  *      //todo:
  *
  -----------------------------------------------------------------------------*/
@@ -40,6 +41,7 @@ package UEA.FINAL.PROJECT;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
@@ -100,6 +102,12 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
     //collection of device cards to populate recycler lists
     private ArrayList<DeviceCard> deviceCardList;
+
+    //-check both devices have been connected
+    private boolean helmetConnected = false;
+    private boolean bikeConnected = false;
+    //testing: toggle for buttons
+
 
 
     /*--------------------------------------
@@ -338,10 +346,43 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         recycAdapter = new CardAdapterDevice(cardList);
         recyclerView.setAdapter(recycAdapter);
 
+        //task to carry out when clicking a card item
         recycAdapter.setOnItemClickListener(new CardAdapterDevice.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                //todo: do when clicked item!
+                //create pop up choice to connect to device
+                final Dialog dialog = new Dialog(BluetoothActions.this);
+                dialog.setContentView(R.layout.dialog_popup_connect_to_device);
+                dialog.setTitle("Connect to Device");
+
+                //assign pop up buttons
+                Button dialogButton_helmet = dialog.findViewById(R.id.button_popup_connect_helmet);
+                dialogButton_helmet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+
+                    }
+                });
+
+                Button dialogButton_bike = dialog.findViewById(R.id.button_popup_connect_bike);
+                dialogButton_bike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+
+                    }
+                });
+
+                Button dialogButton_cancel = dialog.findViewById(R.id.button_popup_connect_cancel);
+                dialogButton_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
     }

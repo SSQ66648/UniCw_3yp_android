@@ -6,6 +6,8 @@
 
     <!-- added color values -->
     <!-- more luminous colours for toggle button: easier to see -->
+    <color name="black">#000000</color>
     <color name="red">#ff0000</color>
     <color name="green">#00ff00</color>
+    <color name="popup_grey">#b3b1b1</color>
 </resources>

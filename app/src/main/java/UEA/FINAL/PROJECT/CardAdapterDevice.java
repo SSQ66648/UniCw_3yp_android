@@ -86,7 +86,6 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
-
                         }
                     }
                 }
@@ -118,7 +117,6 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
         //get info (image (in holder) changed to image returned by ArrayList item (currentItem))
         holder.deviceIcon.setImageResource(currentItem.getImageResource());
         holder.deviceName.setText(currentItem.getDeviceName());
-        holder.connect.setImageResource(R.drawable.ic_noun_connect_2605299_cc);
     }
 
 
