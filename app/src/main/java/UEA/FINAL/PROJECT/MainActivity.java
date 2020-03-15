@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         button_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SyncDevices.class));
+                startActivity(new Intent(MainActivity.this, BluetoothActions.class));
             }
         });
 

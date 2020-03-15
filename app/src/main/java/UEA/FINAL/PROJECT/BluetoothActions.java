@@ -110,9 +110,10 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         //---TOOLBAR---
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Connect Bluetooth Devices");
+        getSupportActionBar().setTitle(getLocalBluetoothName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //todo: move above toolbar?
 
         //---VIEWS----
         toggle_enableBT = findViewById(R.id.toggle_bluetoothactions_enablebluetooth);
@@ -159,6 +160,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     --------------------------------------*/
     @Override
     public void onClick(View v) {
+        Log.d(TAG, "onClick: ");
         switch (v.getId()) {
             case R.id.toggle_bluetoothactions_enablebluetooth:
                 enableBluetooth();
@@ -179,6 +181,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     --------------------------------------*/
     //-initialise status change listening
     public void registerReceiverStatusChange() {
+        Log.d(TAG, "registerReceiverStatusChange: ");
         IntentFilter intentFilter = new IntentFilter();
         //device status changes (//todo: check the removal of action found here does not affect usage)
 //        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
@@ -196,6 +199,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
     //-initialise device discovery listening
     public void registerReceiverDiscover() {
+        Log.d(TAG, "registerReceiverDiscover: ");
         IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(broadcastReceiver_discover, intentFilter);
     }
@@ -203,6 +207,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
     //-toggle device bluetooth
     public void enableBluetooth() {
+        Log.d(TAG, "enableBluetooth: ");
         if (toggle_enableBT.isChecked()) {
             Log.d(TAG, "enableBluetooth: isChecked: ");
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -247,7 +252,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     public String getLocalBluetoothName() {
         Log.d(TAG, "getLocalBluetoothName: getting local name... ");
         if (bluetoothAdapter == null) {
-            Log.e(TAG, "getLocalBluetoothName: Error: Bluetooth adapter is null");
+            Log.w(TAG, "getLocalBluetoothName: warning: Bluetooth adapter is null: getting default adapter...");
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         }
         String name = bluetoothAdapter.getName();
@@ -304,6 +309,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
     //builds passed card list into recyclerView via adapter
     public void buildRecyclerView(ArrayList<DeviceCard> cardList, RecyclerView recyclerView) {
+        Log.d(TAG, "buildRecyclerView: ");
         //set to true if known size of items will not change: increase performance.
         recyclerView.setHasFixedSize(true);
 
@@ -319,6 +325,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     //(likely but unencumbered device types return android image)
     //todo: combine any catagories to return same icon resource
     public int chooseIcon(BluetoothDevice device) {
+        Log.d(TAG, "chooseIcon: ");
         if (device != null) {
             BluetoothClass btClass = device.getBluetoothClass();
             int deviceClass = btClass.getDeviceClass();
@@ -478,6 +485,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
+                Log.d(TAG, "onReceive: Device found...");
                 BluetoothDevice device = intent.getParcelableExtra(
                         BluetoothDevice.EXTRA_DEVICE);
 
@@ -533,6 +541,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
     //returns true if object is connected(always false prior to API ver 15 (iceCreamSandwich: 2011))
     public boolean isConnected() {
+        Log.d(TAG, "isConnected: ");
         boolean retval = false;
         try {
             Method method = bluetoothAdapter.getClass().getMethod("getProfileConnectionState", int.class);
@@ -550,6 +559,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     //get readable version (string) of device class and output to logcat
     //(currently for debugging info. Order by verbatim class listing)
     public String deviceClassToString(BluetoothClass btClass) {
+        Log.d(TAG, "deviceClassToString: ");
         //audio-focus
         if (btClass.getDeviceClass() == BluetoothClass.Device.AUDIO_VIDEO_CAMCORDER) {
             Log.d(TAG, "deviceClassToString: device type: AUDIO_VIDEO_CAMCORDER");
@@ -715,6 +725,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
     //return string of bluetooth device class major type, output to logcat
     public String deviceMajorClassToString(BluetoothClass btClass) {
+        Log.d(TAG, "deviceMajorClassToString: ");
         if (btClass.getMajorDeviceClass() == BluetoothClass.Device.Major.AUDIO_VIDEO) {
             Log.d(TAG, "deviceMajorClassToString: device major type: AUDIO_VIDEO");
             return "AUDIO_VIDEO";
@@ -765,6 +776,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
      */
     @TargetApi(23)
     private void checkBTPermissions() {
+        Log.d(TAG, "checkBTPermissions: ");
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             int permissionCheck =
                     this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");

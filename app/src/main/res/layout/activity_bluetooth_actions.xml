@@ -69,41 +69,26 @@
 
 
         <!-- ****************************** UPPER VIEWS: ******************************-->
-        <TextView
-            android:id="@+id/labeltext_bluetoothactions_devicename"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="device bluetooth name"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/prompttext_bluetoothactions_instructions"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
-            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-            app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:id="@+id/prompttext_bluetoothactions_instructions"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:text="Please pair and connect to headset and bike Bluetooth "
+            android:text="Pair and connect to BOTH headset and bike Bluetooth "
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="@id/guidelineTop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/labeltext_bluetoothactions_devicename" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ToggleButton
             android:id="@+id/toggle_bluetoothactions_enablebluetooth"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textOff="please enable bluetooth"
+            android:textOff="enable bluetooth"
             android:textOn="bluetooth enabled"
             app:layout_constraintBottom_toTopOf="@+id/guidelineTop2"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
@@ -159,6 +144,8 @@
                     android:id="@+id/recycler_bluetoothactions_discovereddevices"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@android:color/darker_gray"
                     android:scrollbars="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -179,6 +166,8 @@
                     android:id="@+id/recycler_bluetoothactions_paireddevices"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@android:color/darker_gray"
                     android:scrollbars="vertical"
                     app:layout_constraintEnd_toEndOf="parent"

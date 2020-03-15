@@ -53,6 +53,13 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
 
+        <activity
+            android:name=".BluetoothActions"
+            android:label="BluetoothActions"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
+
+
 
         <service
             android:name=".PrimeForegroundService"
