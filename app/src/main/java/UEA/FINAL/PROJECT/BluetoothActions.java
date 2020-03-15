@@ -353,7 +353,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             @Override
             public void onItemClick(int position) {
 
-
                 //create pop up choice to connect to device
                 final Dialog dialog = new Dialog(BluetoothActions.this);
                 dialog.setContentView(R.layout.dialog_popup_connect_to_device);
@@ -364,9 +363,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 dialogButton_helmet.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        connectDevice(helmetConnected, v);
+                        connectDevice(helmetConnected);
                         dialog.dismiss();
-
                     }
                 });
 
@@ -394,12 +392,12 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
 
     //-attempts to connect to device and sets boolean
-    public void connectDevice(boolean connectStatus, View view) {
+    public void connectDevice(boolean connectStatus) {
         //not already connected
         if (!connectStatus) {
             //todo: CONNECT WIZARDRY
             //set color
-            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+//            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
             connectStatus = true;
         } else {
             Log.w(TAG, "connectDevice: Warning: already connected type");
@@ -413,17 +411,20 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
 
     //disconnect device
-    public void disconnectDevice(boolean connectStatus, View view) {
+    public void disconnectDevice(boolean connectStatus) {
         if (connectStatus) {
             //todo: disconnect wizardry
             //set color to normal
-            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.card_background));
+//            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.card_background));
             connectStatus = false;
         } else {
             Log.w(TAG, "disconnectDevice: Warning: cannot disconnect as not connected");
             //todo: handling?
         }
     }
+
+
+    //-
 
 
     //-selects icon based on device type (only included those likely to be encountered in this area
