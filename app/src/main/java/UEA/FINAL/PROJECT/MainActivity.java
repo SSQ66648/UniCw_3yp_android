@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Motorcycle Feedback App");
 
         //--BUTTONS---
-        button_sync = findViewById(R.id.button_main_opensync);
+        button_sync = findViewById(R.id.button_main_openbluetooth);
         button_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

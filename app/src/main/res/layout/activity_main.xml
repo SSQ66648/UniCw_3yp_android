@@ -75,11 +75,11 @@
             <!-- ****************************** BUTTONS: ******************************-->
 
             <Button
-                android:id="@+id/button_main_opensync"
+                android:id="@+id/button_main_openbluetooth"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="sync bluetooth devices"
+                android:text="connect bluetooth devices"
                 app:layout_constraintEnd_toEndOf="@id/guidelineRight"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -92,7 +92,7 @@
                 android:text="(test)\nservice activity"
                 app:layout_constraintEnd_toEndOf="@id/guidelineRight"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@id/button_main_opensync" />
+                app:layout_constraintTop_toBottomOf="@id/button_main_openoptions" />
 
             <Button
                 android:id="@+id/button_main_openoptions"
@@ -102,7 +102,7 @@
                 android:text="options menu"
                 app:layout_constraintEnd_toEndOf="@id/guidelineRight"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@id/button_main_test_serviceactivity" />
+                app:layout_constraintTop_toBottomOf="@id/button_main_openbluetooth" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
