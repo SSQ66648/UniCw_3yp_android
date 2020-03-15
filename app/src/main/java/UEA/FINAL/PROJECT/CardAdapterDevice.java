@@ -79,8 +79,7 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
     public CardAdapterDevice.CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_device, parent, false);
-        CardAdapterDevice.CardViewHolder cardViewHolder = new CardAdapterDevice.CardViewHolder(v);
-        return cardViewHolder;
+        return new CardViewHolder(v);
     }
 
 

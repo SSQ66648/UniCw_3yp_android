@@ -90,6 +90,7 @@
             android:layout_height="wrap_content"
             android:textOff="enable bluetooth"
             android:textOn="bluetooth enabled"
+            android:theme="@style/ToggleButton.YourTheme"
             app:layout_constraintBottom_toTopOf="@+id/guidelineTop2"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"

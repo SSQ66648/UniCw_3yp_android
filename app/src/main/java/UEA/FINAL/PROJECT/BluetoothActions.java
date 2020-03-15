@@ -15,7 +15,7 @@
  * HISTORY:     v1.0    200315  Initial implementation.
  *------------------------------------------------------------------------------
  * NOTES:       
- *      +   
+ *      +   logcat records "errors" of no adapter attached, however this is intended behaviour
  *------------------------------------------------------------------------------
  * TO DO LIST:  
  *      //todo: complete activity implementation
@@ -27,6 +27,8 @@
  *      //todo: on connection (both) switch to host activity
  *      //todo: complete passing of bluetooth management to Foreground service (or own service: communicate with prime service)
  *      //todo: add icons to device cards depending on type of device
+ *      //todo: add enable bt toast to button click if not enabled
+ *      //todo:
  *      //todo:
  *      //todo:
  *
@@ -142,7 +144,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         Log.d(TAG, "onResume: ");
         //(re) check if bluetooth enabled
         //todo: once selecting cards is possible: move this there as a 'check' before moving to next activity- leave bt to toggle button here
-        checkBluetoothState();
+        //cannot use here as will enter loop if not granted.
+//        checkBluetoothState();
     }
 
 
@@ -164,13 +167,13 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.toggle_bluetoothactions_enablebluetooth:
                 enableBluetooth();
-                makeVisible();
                 break;
             case R.id.button_bluetoothactions_discoverdevices:
                 createDiscoveredList();
                 break;
             case R.id.button_bluetoothactions_paireddevices:
                 createPairedList();
+                button_pairedDevices.requestFocus();
                 break;
         }
     }
@@ -233,6 +236,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                         BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(intent, 1);
             }
+            //combine methods: if adapter has been enabled: make device visible
+            makeVisible();
         } else {
             Log.w(TAG, "enableBluetooth: notChecked. ");
             Toast.makeText(getApplicationContext(),
@@ -245,6 +250,18 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 }
             }
         }
+    }
+
+
+    //-allow other devices to discover bluetooth
+    //todo: combine this with toggle
+    public void makeVisible() {
+        Log.d(TAG, "makeVisible: making device visible to others... ");
+        Intent discoverintent = new Intent(
+                BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverintent.putExtra(
+                BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 3000);
+        startActivity(discoverintent);
     }
 
 
@@ -284,7 +301,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     }
 
 
-    //todo: add checking
+    //todo: add checking::::: if bluetooth off Toast
     //show recycler list of currently paired bluetooth devices
     private void createPairedList() {
         Log.d(TAG, "createPairedList: ");
@@ -329,6 +346,11 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         if (device != null) {
             BluetoothClass btClass = device.getBluetoothClass();
             int deviceClass = btClass.getDeviceClass();
+
+            //testing:
+            Log.d(TAG, "chooseIcon: device class:\n\t" +
+                    deviceClassToString(btClass));
+
 
             if (deviceClass == BluetoothClass.Device.AUDIO_VIDEO_HEADPHONES) {
                 Log.d(TAG, "chooseIcon: HEADPHONES");
@@ -496,7 +518,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 //                        + device.getName() + ":" + device.getAddress());
 
                 //add discovered device to card list
-                deviceCardList.add(new DeviceCard(chooseIcon(device), device.getName()));
+                deviceCardList.add(new DeviceCard(chooseIcon(device), chooseName(device)));
                 //update list
                 buildRecyclerView(deviceCardList, recyc_discoveredDevices);
             }
@@ -507,6 +529,22 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     /*--------------------------------------
         HELPER METHODS
     --------------------------------------*/
+    //-assigns address as device name if one not available
+    public String chooseName(BluetoothDevice device) {
+        if (device.getName() != null) {
+            //use existing name
+            return device.getName();
+            //substitute class type
+        } else if (deviceClassToString(device.getBluetoothClass()) != "DEVICE CLASS UNRECOGNISED") {
+            return deviceClassToString(device.getBluetoothClass());
+        } else if (device.getAddress() != null) {
+            return device.getAddress();
+        } else {
+            return "DEVICE CANNOT BE IDENTIFIED";
+        }
+    }
+
+
     //-check bt is enabled on device
     private void checkBluetoothState() {
         Log.d(TAG, "checkBluetoothState: ");
@@ -524,18 +562,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 startActivityForResult(enableBtIntent, 1);
             }
         }
-    }
-
-
-    //-allow other devices to discover bluetooth
-    //todo: combine this with toggle
-    public void makeVisible() {
-        Log.d(TAG, "makeVisible: making device visible to others... ");
-        Intent discoverintent = new Intent(
-                BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverintent.putExtra(
-                BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 3000);
-        startActivity(discoverintent);
     }
 
 
@@ -718,7 +744,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             Log.d(TAG, "deviceClassToString: DEVICE CLASS UNRECOGNISED: " +
                     "(device code possibly not specified) value: " + btClass.toString());
             //not predefined in BluetoothClass.class: return identifier to later research
-            return "DEVICE CLASS UNRECOGNISED: value: " + btClass.toString();
+            Log.d(TAG, "deviceClassToString: DEVICE CLASS UNRECOGNISED: value: " + btClass.toString());
+            return "DEVICE CLASS UNRECOGNISED";
         }
     }
 
