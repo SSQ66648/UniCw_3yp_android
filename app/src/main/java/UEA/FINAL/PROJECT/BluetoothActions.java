@@ -13,6 +13,7 @@
  * AUTHOR:      SSQ16SHU / 100166648
  *
  * HISTORY:     v1.0    200315  Initial implementation.
+ * HISTORY:     v1.1    200315  added click events to cards, additional dialogs.
  *------------------------------------------------------------------------------
  * NOTES:       
  *      +   logcat records "errors" of no adapter attached, however this is intended behaviour
@@ -33,7 +34,7 @@
  *      //todo: potentially build recycleres once and then update adapter when needed (item changed or similar)
  *      //todo: add green on connect
  *      //todo: add button disconnect
- *      //todo:
+ *      //todo: address orientation of yes/no mental model
  *
  -----------------------------------------------------------------------------*/
 
@@ -64,6 +65,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -107,7 +110,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     private boolean helmetConnected = false;
     private boolean bikeConnected = false;
     //testing: toggle for buttons
-
 
 
     /*--------------------------------------
@@ -350,6 +352,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         recycAdapter.setOnItemClickListener(new CardAdapterDevice.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+
+
                 //create pop up choice to connect to device
                 final Dialog dialog = new Dialog(BluetoothActions.this);
                 dialog.setContentView(R.layout.dialog_popup_connect_to_device);
@@ -360,6 +364,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 dialogButton_helmet.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        connectDevice(helmetConnected, v);
                         dialog.dismiss();
 
                     }
@@ -385,6 +390,39 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 dialog.show();
             }
         });
+    }
+
+
+    //-attempts to connect to device and sets boolean
+    public void connectDevice(boolean connectStatus, View view) {
+        //not already connected
+        if (!connectStatus) {
+            //todo: CONNECT WIZARDRY
+            //set color
+            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+            connectStatus = true;
+        } else {
+            Log.w(TAG, "connectDevice: Warning: already connected type");
+            //todo: add handling eg pop up already connected type, do you want to switch to this device?)
+        }
+        //open activity when both device status are connected
+        if (helmetConnected && bikeConnected) {
+            //todo: intent to next activity
+        }
+    }
+
+
+    //disconnect device
+    public void disconnectDevice(boolean connectStatus, View view) {
+        if (connectStatus) {
+            //todo: disconnect wizardry
+            //set color to normal
+            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.card_background));
+            connectStatus = false;
+        } else {
+            Log.w(TAG, "disconnectDevice: Warning: cannot disconnect as not connected");
+            //todo: handling?
+        }
     }
 
 
