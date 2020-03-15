@@ -42,6 +42,7 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
     --------------------------------------*/
     //---VARIABLES---
     private ArrayList<DeviceCard> cardList;
+    private OnItemClickListener clickListener;
 
 
     /*--------------------------------------
@@ -53,6 +54,15 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
 
 
     /*--------------------------------------
+        INTERFACE
+    --------------------------------------*/
+    //-listens for card click in recyclerView
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+
+    /*--------------------------------------
         INNER CLASS(ES)
     --------------------------------------*/
     public static class CardViewHolder extends RecyclerView.ViewHolder {
@@ -60,13 +70,27 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
         //---VIEWS---
         public ImageView deviceIcon;
         public TextView deviceName;
+        public ImageView connect;
 
         //---CONSTRUCTOR---
-        public CardViewHolder(@NonNull View itemView) {
+        public CardViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             //references to views (pass values in onBindViewHolder)
             deviceIcon = itemView.findViewById(R.id.image_carddevice_icon);
             deviceName = itemView.findViewById(R.id.labeltext_carddevice_device_name);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -79,7 +103,8 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
     public CardAdapterDevice.CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_device, parent, false);
-        return new CardViewHolder(v);
+        CardViewHolder cvh = new CardViewHolder(v, clickListener);
+        return cvh;
     }
 
 
@@ -93,6 +118,7 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
         //get info (image (in holder) changed to image returned by ArrayList item (currentItem))
         holder.deviceIcon.setImageResource(currentItem.getImageResource());
         holder.deviceName.setText(currentItem.getDeviceName());
+        holder.connect.setImageResource(R.drawable.ic_noun_connect_2605299_cc);
     }
 
 
@@ -104,6 +130,12 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
     public int getItemCount() {
         return cardList
                 .size();
+    }
+
+
+    //-sets the desired click listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        clickListener = listener;
     }
 
 

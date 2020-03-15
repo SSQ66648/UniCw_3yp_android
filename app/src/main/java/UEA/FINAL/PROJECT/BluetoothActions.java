@@ -17,18 +17,20 @@
  * NOTES:       
  *      +   logcat records "errors" of no adapter attached, however this is intended behaviour
  *------------------------------------------------------------------------------
- * TO DO LIST:  
- *      //todo: complete activity implementation
- *      //todo: complete scanning for devices
- *      //todo: complete pairing to device
- *      //todo: complete listing of paired devices
+ * FUTURE IMPROVEMENTS:
+ *      +   current buttons being subject to expanding recyclerview is not ideal:
+ *              either move buttons above and focus switch to selected,
+ *              use same view for both buttons by click,
+ *              add ability to collapse view to zero on second click
+ *------------------------------------------------------------------------------
+ * TO DO LIST:
  *      //todo: connect to paired device (headset)
  *      //todo: connect to paired device (bike)
  *      //todo: on connection (both) switch to host activity
  *      //todo: complete passing of bluetooth management to Foreground service (or own service: communicate with prime service)
  *      //todo: add icons to device cards depending on type of device
  *      //todo: add enable bt toast to button click if not enabled
- *      //todo:
+ *      //todo: potentially build recycleres once and then update adapter when needed (item changed or similar)
  *      //todo:
  *      //todo:
  *
@@ -93,7 +95,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     private BluetoothAdapter bluetoothAdapter;
     private Set<BluetoothDevice> set_pairedDevices;
 
-    private RecyclerView.Adapter recycAdapter;  //only provide items currently needed (performance)
+    private CardAdapterDevice recycAdapter;  //only provide items currently needed (performance)
     private RecyclerView.LayoutManager recycLayoutManager;
 
     //collection of device cards to populate recycler lists
@@ -335,6 +337,13 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
         recycAdapter = new CardAdapterDevice(cardList);
         recyclerView.setAdapter(recycAdapter);
+
+        recycAdapter.setOnItemClickListener(new CardAdapterDevice.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //todo: do when clicked item!
+            }
+        });
     }
 
 
