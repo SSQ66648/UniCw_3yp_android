@@ -14,7 +14,9 @@
  *
  * HISTORY:     v1.0    200315  Initial implementation (from previous test classes).
  *              v1.1    200315  Added click events to cards, additional dialogs.
- *              v1.2    200316  Added card click connect/disconnect logic, solved switch device logic, added connection code.
+ *              v1.2    200316  Added card click connect/disconnect logic, solved switch device
+ *                              logic, added watchedBooleans and listeners to trigger the added
+ *                              create activity intent method, also show/hiding start intent button
  *
  *------------------------------------------------------------------------------
  * NOTES:       
@@ -34,17 +36,11 @@
  *          prioritise functionality
  *------------------------------------------------------------------------------
  * TO DO LIST:
- *      //todo: connect to paired device (headset)
- *      //todo: connect to paired device (bike)
- *      //todo: on connection (both) switch to host activity
  *      //todo: complete passing of bluetooth management to Foreground service (or own service: communicate with prime service)
- *      //todo: add icons to device cards depending on type of device
  *      //todo: add enable bt toast to button click if not enabled
  *      //todo: potentially build recycleres once and then update adapter when needed (item changed or similar)
  *      //todo: add green on connect
- *      //todo: add button disconnect
  *      //todo: address orientation of yes/no mental model
- *      //todo: add devices connected to connecting msg box? -change as usual when connecting in progress...?)
  *      //todo: add device type checking on connect as? - change from option to if these types of device, connect as, else if these he;lmet types connect as
  *      //todo: add set device type to switch prompt
  *      //todo: use same getcardlist logic to access specific card ... can this be used to change background color?
@@ -111,7 +107,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     private TextView text_connectingInfo;
     private RecyclerView recyc_discoveredDevices;
     private RecyclerView recyc_pairedDevices;
-
+    private Button button_moveActivity;
 
     //---VARIABLES---
     private BluetoothAdapter bluetoothAdapter;
@@ -124,17 +120,25 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     private ArrayList<DeviceCard> deviceCardList;
 
     //-check both devices have been connected
-    private boolean helmetConnected = false;
-    private boolean bikeConnected = false;
+//    private boolean helmetConnected = false;
+//    private boolean bikeConnected = false;
 
     //switch device latch: wait for disconnect complete before reconnecting
     CountDownLatch countDownLatch;
+
+    //watched booleans to trigger activity change
+    private WatchedBool helmetWatchedBool = new WatchedBool();
+    private WatchedBool bikeWatchedBool = new WatchedBool();
 
     /*------------------
         Connection Variables
     ------------------*/
     //EXTRA string to send on to mainActivity
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
+    //intent to move activities when selected both devices
+    Intent bluetoothActivityIntent;
+
+    private String bikeMacAddress;
 
 
     /*--------------------------------------
@@ -161,6 +165,9 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         button_discoverDevices.setOnClickListener(this);
         button_pairedDevices = findViewById(R.id.button_bluetoothactions_paireddevices);
         button_pairedDevices.setOnClickListener(this);
+        button_moveActivity = findViewById(R.id.button_bluetoothactions_start_activity);
+        button_moveActivity.setOnClickListener(this);
+
 
         text_connectingInfo = findViewById(R.id.infotext_bluetoothactions_connecting);
 
@@ -173,12 +180,37 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         registerReceiverDiscover();
 //todo: move to resume?
 
+        //set bool changed listeners
+
+        helmetWatchedBool.setBooleanChangeListener(new VariableChangeListener() {
+            @Override
+            public void onVariableChanged(Object... newValue) {
+                Log.d(TAG, "onVariableChanged: ");
+                checkDevicesConnected();
+            }
+        });
+
+        bikeWatchedBool.setBooleanChangeListener(new VariableChangeListener() {
+            @Override
+            public void onVariableChanged(Object... newValue) {
+                Log.d(TAG, "onVariableChanged: ");
+                //opposite of above
+                checkDevicesConnected();
+            }
+        });
+
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
+
+        //check if both are still connected: show/remove button to next activity
+        checkDevicesConnected();
+
+
         //(re) check if bluetooth enabled
         //todo: once selecting cards is possible: move this there as a 'check' before moving to next activity- leave bt to toggle button here
         //cannot use here as will enter loop if not granted.
@@ -210,7 +242,10 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.button_bluetoothactions_paireddevices:
                 createPairedList();
-                button_pairedDevices.requestFocus();
+                break;
+            case R.id.button_bluetoothactions_start_activity:
+                button_moveActivity.setVisibility(View.GONE);
+                startActivity(bluetoothActivityIntent);
                 break;
         }
     }
@@ -439,7 +474,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         switch (type) {
             case DeviceCard.CONNECTION_HELMET:
                 //helmet connection requested:
-                if (!helmetConnected) {
+                if (!helmetWatchedBool.getValue()) {
                     Log.d(TAG, "requestConnectDevice: helmet not connected: proceed.");
 //todo: connect code
 //TODO: LOOK INTO THIS IF HAVE TIME: CURRENTLY HAVE TO ASSUME PAIRED AND CONNECTD BY SELF - use for testing??
@@ -449,7 +484,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     //set color (ABANDONED DUE TO IMPOSSIBILITY OF TASK)
 //            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
                     //record type and specific card connected
-                    helmetConnected = true;
+                    helmetWatchedBool.setValue(true);
                     card.setConnectionStatus(true, DeviceCard.CONNECTION_HELMET);
                     Log.d(TAG, "requestConnectDevice: HELMET CONNECTED");
                 } else {
@@ -459,14 +494,16 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 break;
             case DeviceCard.CONNECTION_BIKE:
                 //bike connection requested
-                if (!bikeConnected) {
+                if (!bikeWatchedBool.getValue()) {
                     Log.d(TAG, "requestConnectDevice: bike not connected: proceed.");
 //todo: connect code
                     //set color (ABANDONED DUE TO IMPOSSIBILITY OF TASK)
 //            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
-                    bikeConnected = true;
+                    bikeWatchedBool.setValue(true);
                     card.setConnectionStatus(true, DeviceCard.CONNECTION_BIKE);
-                    Log.d(TAG, "requestConnectDevice: BIKE CONNECTED");
+                    //get bluetooth address
+                    bikeMacAddress = card.getDevice().getAddress();
+                    Log.d(TAG, "requestConnectDevice: BIKE \"CONNECTED:\"");
                 } else {
                     Log.w(TAG, "requestConnectDevice: Warning: bike device already connected: prompt for disconnect");
                     requestDisconnectDevice(card, type);
@@ -478,23 +515,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 //todo: how to handle? (should not be possible but have fallen into that trap before)
                 break;
         }
-
-////todo: move to own method?
-        //todo: consider how to trigger this again when not in this method (user goes back then what?)
-        //open activity when both device status are connected
-        if (helmetConnected && bikeConnected) {
-            Log.d(TAG, "requestConnectDevice: BOTH connections active: proceed to next activity");
-            //testing:
-            Log.d(TAG, "--------------------------------------------------------------------------------");
-            Log.d(TAG, "--------------------------------------------------------------------------------");
-
-//todo: intent to next activity
-        }
     }
 
-
-    //--------------------------------------------------------------------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------------------------------------------
 
     //-disconnects previous device of type and connects current device
     public void switchDevice(final DeviceCard card, final String type) {
@@ -583,9 +605,9 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         //todo: DISCONNECT CODE
         //set local flag (then card) to disconnected
         if (card.getConnectionType() == DeviceCard.CONNECTION_HELMET) {
-            helmetConnected = false;
+            helmetWatchedBool.setValue(false);
         } else if (card.getConnectionType() == DeviceCard.CONNECTION_BIKE) {
-            bikeConnected = false;
+            bikeWatchedBool.setValue(false);
         } else if (card.getConnectionType() == DeviceCard.CONNECTION_NONE) {
             Log.e(TAG, "onClick: Error: card connection type indicates is NOT connected");
             //todo: handle ?
@@ -604,6 +626,26 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         }
     }
 
+
+    //-check if both bike and helmet are connected
+    public void checkDevicesConnected() {
+        Log.d(TAG, "checkDevicesConnected: ");
+        if (helmetWatchedBool.getValue() && bikeWatchedBool.getValue()) {
+            Log.d(TAG, "checkDevicesConnected: both connected...");
+            //create intent to next activity
+            bluetoothActivityIntent = new Intent(BluetoothActions.this, PrimeForegroundServiceHost.class);
+            //include bike address
+            bluetoothActivityIntent.putExtra(EXTRA_DEVICE_ADDRESS, bikeMacAddress);
+            //todo: either trigger here or use button?
+
+            //show button
+            button_moveActivity.setVisibility(View.VISIBLE);
+        } else {
+            Log.d(TAG, "checkDevicesConnected: both not connected...");
+            //no longer have both connected: remove button
+            button_moveActivity.setVisibility(View.GONE);
+        }
+    }
 
     //-selects icon based on device type (only included those likely to be encountered in this area
     //(likely but unencumbered device types return android image)

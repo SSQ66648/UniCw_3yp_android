@@ -178,7 +178,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <!-- status info: no text: set when connecting to device -->
+        <!-- status info: no text: set when connecting to device ... get rid of this...?-->
         <TextView
             android:id="@+id/infotext_bluetoothactions_connecting"
             android:layout_width="wrap_content"
@@ -193,7 +193,7 @@
             app:layout_constraintTop_toTopOf="@id/guidelineBottom" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/button_bluetoothactions_start_activity"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"

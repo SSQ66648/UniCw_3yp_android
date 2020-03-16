@@ -338,7 +338,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //send to calling activity on click of notification
         Intent notificationIntent = new Intent(this,
-                PrimeForegroundService.class);
+                PrimeForegroundServiceHost.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 

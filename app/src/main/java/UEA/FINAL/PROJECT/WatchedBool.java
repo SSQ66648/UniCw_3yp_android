@@ -10,6 +10,7 @@
  * AUTHOR:      SSQ16SHU / 100166648
  *
  * HISTORY:     v1.0    200316  Initial implementation.
+ *              v1.1    200316  Returned to version previously tested as is known working.
  *------------------------------------------------------------------------------
  * NOTES:       
  *      +   
@@ -40,17 +41,17 @@ public class WatchedBool {
     /*--------------------------------------
         CONSTRUCTOR
     --------------------------------------*/
-    public WatchedBool(boolean value) {
-        setValue(value);
-    }
+//    public WatchedBool(boolean value) {
+//        setValue(value);
+//    }
 
 
     /*--------------------------------------
         INTERFACES
     --------------------------------------*/
-    public interface VariableChangeListener {
-        public void onVariableChanged(Object... variableThatHasChanged);
-    }
+//    public interface VariableChangeListener {
+//        public void onVariableChanged(Object... variableThatHasChanged);
+//    }
 
 
     /*--------------------------------------
@@ -67,12 +68,14 @@ public class WatchedBool {
     public void setValue(boolean value) {
         if (value != this.value) {
             this.value = value;
-            signalChanged();
+        }
+        if (variableChangeListener != null) {
+            variableChangeListener.onVariableChanged();
         }
     }
 
 
-    public void setVariableChangeListener(VariableChangeListener variableChangeListener) {
+    public void setBooleanChangeListener(VariableChangeListener variableChangeListener) {
         this.variableChangeListener = variableChangeListener;
     }
 
@@ -80,10 +83,10 @@ public class WatchedBool {
     /*--------------------------------------
         METHODS
     --------------------------------------*/
-    private void signalChanged() {
-        if (variableChangeListener != null) {
-            variableChangeListener.onVariableChanged(value);
-        }
-    }
+//    private void signalChanged() {
+//        if (variableChangeListener != null) {
+//            variableChangeListener.onVariableChanged(value);
+//        }
+//    }
 
 }
