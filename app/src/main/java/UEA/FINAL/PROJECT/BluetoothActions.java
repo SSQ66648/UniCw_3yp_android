@@ -82,6 +82,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 /*--------------------------------------
     IMPORT LIST
@@ -378,10 +379,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     dialogButton_helmet.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //testing:
-                            Log.e(TAG, "TESTING: get view type: " + recycAdapter.getItemViewType(position));
-
-
                             requestConnectDevice(cardList.get(position), DeviceCard.CONNECTION_HELMET);
                             dialog.dismiss();
                         }
@@ -410,7 +407,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 } else {
 
                     //device is already connected: prompt disconnect todo: add handling if unexpected type?
-                    disconnectDevice(cardList.get(position), cardList.get(position).getConnectionType());
+                    requestDisconnectDevice(cardList.get(position), cardList.get(position).getConnectionType());
                 }
             }
         });
@@ -438,37 +435,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     Log.d(TAG, "requestConnectDevice: HELMET CONNECTED");
                 } else {
                     Log.w(TAG, "requestConnectDevice: Warning: Helmet device already connected: prompt for switch connect");
-                    //prompt user for switch
-                    final Dialog dialog = new Dialog(this);
-                    dialog.setContentView(R.layout.dialog_popup_switch_device_connection);
-
-                    Button dialogButton_switchDevice = dialog.findViewById(R.id.button_popup_disconnect_device);
-                    dialogButton_switchDevice.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Log.d(TAG, "onClick: switch device");
-                            //disconnect old connection
-                            for (int i = 0; i < recycAdapter.getItemCount(); i++) {
-                                //iterate all cards until existing connection type is found, then disconnect
-                                if (recycAdapter.getCardList().get(i).getConnectionType() == type) {
-                                    disconnectDevice(recycAdapter.getCardList().get(i), type);
-                                }
-                            }
-
-                            //establish new connection recursively: todo: testing.
-                            requestConnectDevice(card, type);
-                            dialog.dismiss();
-                        }
-                    });
-                    Button dialogButton_switchDeviceCancel = dialog.findViewById(R.id.button_popup_disconenct_cancel);
-                    dialogButton_switchDeviceCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Log.d(TAG, "onClick: cancel");
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.show();
+                    switchDevice(card, type);
                 }
                 break;
             case DeviceCard.CONNECTION_BIKE:
@@ -483,7 +450,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     Log.d(TAG, "requestConnectDevice: BIKE CONNECTED");
                 } else {
                     Log.w(TAG, "requestConnectDevice: Warning: bike device already connected: prompt for disconnect");
-                    disconnectDevice(card, type);
+                    requestDisconnectDevice(card, type);
                 }
                 break;
             default:
@@ -507,9 +474,60 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     }
 
 
-    //todo: test if final is issue
-    public void disconnectDevice(final DeviceCard card, String type) {
-        Log.d(TAG, "disconnectDevice: ");
+    //-disconnects previous device of type and connects current device
+    public void switchDevice(final DeviceCard card, final String type) {
+        Log.d(TAG, "switchDevice: ");
+        //prompt user for switch
+        final Dialog dialog = new Dialog(BluetoothActions.this);
+        dialog.setContentView(R.layout.dialog_popup_switch_device_connection);
+
+        Button dialogButton_switchDevice = dialog.findViewById(R.id.button_popup_switch_device);
+        dialogButton_switchDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: switch device");
+                dialog.dismiss();
+                //stop code until disconnected
+                countDownLatch = new CountDownLatch(1);
+
+                //disconnect old connection
+                for (int i = 0; i < recycAdapter.getItemCount(); i++) {
+                    //iterate all cards until existing connection type is found, then disconnect
+                    if (recycAdapter.getCardList().get(i).getConnectionType() == type) {
+                        disconnectDevice(recycAdapter.getCardList().get(i), type);
+                    }
+                }
+
+                try {
+                    Log.d(TAG, "onClick: awaiting disconnect latch");
+                    countDownLatch.await();
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "onClick: Error: awaiting countdownLatch");
+                    e.printStackTrace();
+                }
+
+                //establish new connection: todo: testing.
+                requestConnectDevice(card, type);
+            }
+        });
+        Button dialogButton_switchDeviceCancel = dialog.findViewById(R.id.button_popup_switch_cancel);
+        dialogButton_switchDeviceCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: cancel");
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+
+    CountDownLatch countDownLatch;
+
+
+    //-disconnects device from passed card
+    public void requestDisconnectDevice(final DeviceCard card, final String type) {
+        Log.d(TAG, "requestDisconnectDevice: ");
         //todo: check actually connected?
 
         //create dialog
@@ -523,22 +541,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: disconnect");
-                //todo: DISCONNECT CODE
-                //set local flag (then card) to disconnected
-                if (card.getConnectionType() == DeviceCard.CONNECTION_HELMET) {
-                    helmetConnected = false;
-                } else if (card.getConnectionType() == DeviceCard.CONNECTION_BIKE) {
-                    bikeConnected = false;
-                } else if (card.getConnectionType() == DeviceCard.CONNECTION_NONE) {
-                    Log.e(TAG, "onClick: Error: card connection type indicates is NOT connected");
-                    //todo: handle ?
-                } else {
-                    Log.e(TAG, "onClick: Error: unexpected card type");
-                    //todo: handling?
-                }
-                card.setConnectionStatus(false, DeviceCard.CONNECTION_NONE);
+                disconnectDevice(card, type);
                 dialog.dismiss();
-                Log.d(TAG, "onClick: device disconnected");
             }
         });
 
@@ -552,6 +556,28 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         });
 
         dialog.show();
+    }
+
+
+    public void disconnectDevice(DeviceCard card, String type) {
+        Log.d(TAG, "disconnectDevice: ");
+        //todo: DISCONNECT CODE
+        //set local flag (then card) to disconnected
+        if (card.getConnectionType() == DeviceCard.CONNECTION_HELMET) {
+            helmetConnected = false;
+        } else if (card.getConnectionType() == DeviceCard.CONNECTION_BIKE) {
+            bikeConnected = false;
+        } else if (card.getConnectionType() == DeviceCard.CONNECTION_NONE) {
+            Log.e(TAG, "onClick: Error: card connection type indicates is NOT connected");
+            //todo: handle ?
+        } else {
+            Log.e(TAG, "onClick: Error: unexpected card type");
+            //todo: handling?
+        }
+        card.setConnectionStatus(false, DeviceCard.CONNECTION_NONE);
+        Log.d(TAG, "onClick: device disconnected");
+        //allow switch to recall requestConnect
+        countDownLatch.countDown();
     }
 
 
