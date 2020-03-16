@@ -14,7 +14,7 @@
  *
  * HISTORY:     v1.0    200315  Initial implementation (from previous test classes).
  *              v1.1    200315  Added click events to cards, additional dialogs.
- *              v1.2    200316  Added pairing to discovered devices.
+ *              v1.2    200316  Added card click connect/disconnect logic.
  *
  *------------------------------------------------------------------------------
  * NOTES:       
@@ -46,6 +46,7 @@
  *      //todo: address orientation of yes/no mental model
  *      //todo: add devices connected to connecting msg box? -change as usual when connecting in progress...?)
  *      //todo: add device type checking on connect as? - change from option to if these types of device, connect as, else if these he;lmet types connect as
+ *      //todo: add set device type to switch prompt
  *
  -----------------------------------------------------------------------------*/
 
@@ -361,7 +362,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             public void onItemClick(final int position) {
 
                 //use same dialog object for both cases:
-                final Dialog dialog = new Dialog(BluetoothActions.this);
+                final Dialog dialog = new Dialog(BluetoothActions.this, R.style.DialogWithTitle);
 
                 //todo: check if card device is connected
                 if (!cardList.get(position).getConnectionStatus()) {
@@ -432,8 +433,9 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     Log.d(TAG, "requestConnectDevice: HELMET CONNECTED");
                 } else {
                     //todo: NEED TO TEST THIS WITH 2ND 'HELMET DEVICE'
-                    Log.w(TAG, "requestConnectDevice: Warning: Helmet device already connected: prompt for disconnect");
-                    //show disconnect
+                    Log.w(TAG, "requestConnectDevice: Warning: Helmet device already connected: prompt for switch connect");
+                    //prompt user for switch
+                    Dialog dialog = new Dialog(this, R.style.DialogWithTitle);
                     disconnectDevice(card, type);
                 }
                 break;
@@ -479,7 +481,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         //todo: check actually connected?
 
         //create dialog
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this, R.style.DialogWithTitle);
         dialog.setContentView(R.layout.dialog_popup_disconnect_from_device);
         dialog.setTitle("Disconnect from [" + card.getConnectionType() + "] Device?");
 

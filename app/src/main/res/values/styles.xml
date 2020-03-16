@@ -52,5 +52,10 @@
         <item name="colorControlActivated">@color/green</item>
     </style>
 
+    <style name="DialogWithTitle" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
 
 </resources>
