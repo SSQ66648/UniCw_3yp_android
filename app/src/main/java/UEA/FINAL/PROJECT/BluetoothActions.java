@@ -47,6 +47,7 @@
  *      //todo: add devices connected to connecting msg box? -change as usual when connecting in progress...?)
  *      //todo: add device type checking on connect as? - change from option to if these types of device, connect as, else if these he;lmet types connect as
  *      //todo: add set device type to switch prompt
+ *      //todo: use same getcardlist logic to access specific card ... can this be used to change background color?
  *
  -----------------------------------------------------------------------------*/
 
@@ -362,7 +363,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             public void onItemClick(final int position) {
 
                 //use same dialog object for both cases:
-                final Dialog dialog = new Dialog(BluetoothActions.this, R.style.DialogWithTitle);
+                final Dialog dialog = new Dialog(BluetoothActions.this);
 
                 //todo: check if card device is connected
                 if (!cardList.get(position).getConnectionStatus()) {
@@ -377,6 +378,10 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     dialogButton_helmet.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            //testing:
+                            Log.e(TAG, "TESTING: get view type: " + recycAdapter.getItemViewType(position));
+
+
                             requestConnectDevice(cardList.get(position), DeviceCard.CONNECTION_HELMET);
                             dialog.dismiss();
                         }
@@ -413,7 +418,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
     //todo: ADD ENABLED CHECK HERE OR ....disable all card clicks if not enabled: show toast to enable?
     //-attempts to connect to device and sets bool flag which type is connected
-    public void requestConnectDevice(DeviceCard card, String type) {
+    public void requestConnectDevice(final DeviceCard card, final String type) {
         Log.d(TAG, "requestConnectDevice: passed card: " + card.toString());
 
         //check both not already connected? (should not be possible?)
@@ -432,11 +437,38 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     card.setConnectionStatus(true, DeviceCard.CONNECTION_HELMET);
                     Log.d(TAG, "requestConnectDevice: HELMET CONNECTED");
                 } else {
-                    //todo: NEED TO TEST THIS WITH 2ND 'HELMET DEVICE'
                     Log.w(TAG, "requestConnectDevice: Warning: Helmet device already connected: prompt for switch connect");
                     //prompt user for switch
-                    Dialog dialog = new Dialog(this, R.style.DialogWithTitle);
-                    disconnectDevice(card, type);
+                    final Dialog dialog = new Dialog(this);
+                    dialog.setContentView(R.layout.dialog_popup_switch_device_connection);
+
+                    Button dialogButton_switchDevice = dialog.findViewById(R.id.button_popup_disconnect_device);
+                    dialogButton_switchDevice.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d(TAG, "onClick: switch device");
+                            //disconnect old connection
+                            for (int i = 0; i < recycAdapter.getItemCount(); i++) {
+                                //iterate all cards until existing connection type is found, then disconnect
+                                if (recycAdapter.getCardList().get(i).getConnectionType() == type) {
+                                    disconnectDevice(recycAdapter.getCardList().get(i), type);
+                                }
+                            }
+
+                            //establish new connection recursively: todo: testing.
+                            requestConnectDevice(card, type);
+                            dialog.dismiss();
+                        }
+                    });
+                    Button dialogButton_switchDeviceCancel = dialog.findViewById(R.id.button_popup_disconenct_cancel);
+                    dialogButton_switchDeviceCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d(TAG, "onClick: cancel");
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 }
                 break;
             case DeviceCard.CONNECTION_BIKE:
@@ -481,7 +513,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         //todo: check actually connected?
 
         //create dialog
-        final Dialog dialog = new Dialog(this, R.style.DialogWithTitle);
+        final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_popup_disconnect_from_device);
         dialog.setTitle("Disconnect from [" + card.getConnectionType() + "] Device?");
 
@@ -510,7 +542,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        Button dialogButton_disconnectCancel = dialog.findViewById(R.id.button_popup_disconnect_cancel);
+        Button dialogButton_disconnectCancel = dialog.findViewById(R.id.button_popup_disconenct_cancel);
         dialogButton_disconnectCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

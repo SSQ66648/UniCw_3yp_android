@@ -1,36 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/popup_grey"
     android:gravity="center">
 
     <TextView
-        android:id="@+id/textprompt_popup_connecttowhich"
+        android:id="@+id/text_dialogtitle_switch_device"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/cardview_light_background"
+        android:text="Connect to Another Bluetooth Device"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textprompt_popup_switch_connection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textprompt_popup_switch_connection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/cardview_light_background"
         android:text="This type of device is already connected:\ndid you want to switch to this device instead?"
         android:textAlignment="center"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/button_popup_disconnect_device"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/text_dialogtitle_switch_device" />
 
     <Button
-        android:id="@+id/button_popup_disconnect_device"
-        android:layout_width="wrap_content"
+        android:id="@+id/button_popup_switch_device"
+        android:layout_width="138dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="disconnect"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="switch device"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guide50pc"
+        app:layout_constraintEnd_toStartOf="@+id/button_popup_switch_cancel"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textprompt_popup_connecttowhich" />
+        app:layout_constraintTop_toBottomOf="@+id/textprompt_popup_switch_connection" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide50pc"
@@ -40,14 +63,16 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <Button
-        android:id="@+id/button_popup_disconnect_cancel"
-        android:layout_width="0dp"
+        android:id="@+id/button_popup_switch_cancel"
+        android:layout_width="138dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
         android:text="cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/button_popup_switch_device"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guide50pc"
-        app:layout_constraintTop_toTopOf="@id/button_popup_disconnect_device" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_popup_switch_device"
+        app:layout_constraintTop_toTopOf="@+id/button_popup_switch_device" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

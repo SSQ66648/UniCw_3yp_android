@@ -137,6 +137,12 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
     }
 
 
+    //-attempt to access list from outside class
+    public ArrayList<DeviceCard> getCardList() {
+        return cardList;
+    }
+
+
     //-replace the list with new version
     //todo: test this
     public void updateDataset(ArrayList<DeviceCard> newList) {
