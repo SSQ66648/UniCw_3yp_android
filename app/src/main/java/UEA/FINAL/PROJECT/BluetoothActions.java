@@ -12,11 +12,17 @@
  *
  * AUTHOR:      SSQ16SHU / 100166648
  *
- * HISTORY:     v1.0    200315  Initial implementation.
- * HISTORY:     v1.1    200315  added click events to cards, additional dialogs.
+ * HISTORY:     v1.0    200315  Initial implementation (from previous test classes).
+ *              v1.1    200315  Added click events to cards, additional dialogs.
+ *              v1.2    200316  Added pairing to discovered devices.
+ *
  *------------------------------------------------------------------------------
  * NOTES:       
- *      +   logcat records "errors" of no adapter attached, however this is intended behaviour
+ *      +   logcat records "errors" of no adapter attached, however attempting to solve this has
+ *          resulted in much wasted time: as this does not affect the intended behaviour, this has
+ *          been indefinitely postponed.
+ *      +   initial pairing code idea has been abandoned as multiple sources claim best to let
+ *          android handle it (attempting to connect to unpaired device prompts pairing by system).
  *------------------------------------------------------------------------------
  * FUTURE IMPROVEMENTS:
  *      +   current buttons being subject to expanding recyclerview is not ideal:
@@ -38,7 +44,8 @@
  *      //todo: add green on connect
  *      //todo: add button disconnect
  *      //todo: address orientation of yes/no mental model
- *      //todo:
+ *      //todo: add devices connected to connecting msg box? -change as usual when connecting in progress...?)
+ *      //todo: add device type checking on connect as? - change from option to if these types of device, connect as, else if these he;lmet types connect as
  *
  -----------------------------------------------------------------------------*/
 
@@ -59,18 +66,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -355,14 +358,16 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         //task to carry out when clicking a card item
         recycAdapter.setOnItemClickListener(new CardAdapterDevice.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(final int position) {
+
+                //use same dialog object for both cases:
+                final Dialog dialog = new Dialog(BluetoothActions.this);
 
                 //todo: check if card device is connected
                 if (!cardList.get(position).getConnectionStatus()) {
                     //not connected: prompt to connect
 
                     //create pop up choice to connect to device
-                    final Dialog dialog = new Dialog(BluetoothActions.this);
                     dialog.setContentView(R.layout.dialog_popup_connect_to_device);
                     dialog.setTitle("Connect to Device");
 
@@ -371,7 +376,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     dialogButton_helmet.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            connectDevice(helmetConnected);
+                            requestConnectDevice(cardList.get(position), DeviceCard.CONNECTION_HELMET);
                             dialog.dismiss();
                         }
                     });
@@ -380,6 +385,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     dialogButton_bike.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            requestConnectDevice(cardList.get(position), DeviceCard.CONNECTION_BIKE);
                             dialog.dismiss();
 
                         }
@@ -394,46 +400,125 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     });
 
                     dialog.show();
+
+                } else {
+
+                    //device is already connected: prompt disconnect todo: add handling if unexpected type?
+                    disconnectDevice(cardList.get(position), cardList.get(position).getConnectionType());
                 }
             }
         });
     }
 
+    //todo: ADD ENABLED CHECK HERE OR ....disable all card clicks if not enabled: show toast to enable?
+    //-attempts to connect to device and sets bool flag which type is connected
+    public void requestConnectDevice(DeviceCard card, String type) {
+        Log.d(TAG, "requestConnectDevice: passed card: " + card.toString());
 
-    //-attempts to connect to device and sets boolean
-    public void connectDevice(boolean connectStatus) {
-        //not already connected
-        if (!connectStatus) {
-            //todo: CONNECT WIZARDRY
-            //set color
+        //check both not already connected? (should not be possible?)
+        //todo: 'duplicate' both connected check here as well? - may be viable if user goes back to activity
+
+        switch (type) {
+            case DeviceCard.CONNECTION_HELMET:
+                //helmet connection requested:
+                if (!helmetConnected) {
+                    Log.d(TAG, "requestConnectDevice: helmet not connected: proceed.");
+//todo: connect code
+                    //set color (ABANDONED DUE TO IMPOSSIBILITY OF TASK)
 //            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
-            connectStatus = true;
-        } else {
-            Log.w(TAG, "connectDevice: Warning: already connected type");
-            //todo: add handling eg pop up already connected type, do you want to switch to this device?)
+                    //record type and specific card connected
+                    helmetConnected = true;
+                    card.setConnectionStatus(true, DeviceCard.CONNECTION_HELMET);
+                    Log.d(TAG, "requestConnectDevice: HELMET CONNECTED");
+                } else {
+                    //todo: NEED TO TEST THIS WITH 2ND 'HELMET DEVICE'
+                    Log.w(TAG, "requestConnectDevice: Warning: Helmet device already connected: prompt for disconnect");
+                    //show disconnect
+                    disconnectDevice(card, type);
+                }
+                break;
+            case DeviceCard.CONNECTION_BIKE:
+                //bike connection requested
+                if (!bikeConnected) {
+                    Log.d(TAG, "requestConnectDevice: bike not connected: proceed.");
+//todo: connect code
+                    //set color (ABANDONED DUE TO IMPOSSIBILITY OF TASK)
+//            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+                    bikeConnected = true;
+                    card.setConnectionStatus(true, DeviceCard.CONNECTION_BIKE);
+                    Log.d(TAG, "requestConnectDevice: BIKE CONNECTED");
+                } else {
+                    Log.w(TAG, "requestConnectDevice: Warning: bike device already connected: prompt for disconnect");
+                    disconnectDevice(card, type);
+                }
+                break;
+            default:
+                //unrecognised connection type
+                Log.e(TAG, "requestConnectDevice: Error: unrecognised connection type requested");
+                //todo: how to handle? (should not be possible but have fallen into that trap before)
+                break;
         }
+
+////todo: move to own method?
+        //todo: consider how to trigger this again when not in this method (user goes back then what?)
         //open activity when both device status are connected
         if (helmetConnected && bikeConnected) {
-            //todo: intent to next activity
+            Log.d(TAG, "requestConnectDevice: BOTH connections active: proceed to next activity");
+            //testing:
+            Log.d(TAG, "--------------------------------------------------------------------------------");
+            Log.d(TAG, "--------------------------------------------------------------------------------");
+
+//todo: intent to next activity
         }
     }
 
 
-    //disconnect device
-    public void disconnectDevice(boolean connectStatus) {
-        if (connectStatus) {
-            //todo: disconnect wizardry
-            //set color to normal
-//            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.card_background));
-            connectStatus = false;
-        } else {
-            Log.w(TAG, "disconnectDevice: Warning: cannot disconnect as not connected");
-            //todo: handling?
-        }
+    //todo: test if final is issue
+    public void disconnectDevice(final DeviceCard card, String type) {
+        Log.d(TAG, "disconnectDevice: ");
+        //todo: check actually connected?
+
+        //create dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_popup_disconnect_from_device);
+        dialog.setTitle("Disconnect from [" + card.getConnectionType() + "] Device?");
+
+        //set buttons
+        Button dialogButton_disconnect = dialog.findViewById(R.id.button_popup_disconnect_device);
+        dialogButton_disconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: disconnect");
+                //todo: DISCONNECT CODE
+                //set local flag (then card) to disconnected
+                if (card.getConnectionType() == DeviceCard.CONNECTION_HELMET) {
+                    helmetConnected = false;
+                } else if (card.getConnectionType() == DeviceCard.CONNECTION_BIKE) {
+                    bikeConnected = false;
+                } else if (card.getConnectionType() == DeviceCard.CONNECTION_NONE) {
+                    Log.e(TAG, "onClick: Error: card connection type indicates is NOT connected");
+                    //todo: handle ?
+                } else {
+                    Log.e(TAG, "onClick: Error: unexpected card type");
+                    //todo: handling?
+                }
+                card.setConnectionStatus(false, DeviceCard.CONNECTION_NONE);
+                dialog.dismiss();
+                Log.d(TAG, "onClick: device disconnected");
+            }
+        });
+
+        Button dialogButton_disconnectCancel = dialog.findViewById(R.id.button_popup_disconnect_cancel);
+        dialogButton_disconnectCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: cancel");
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
-
-
-    //-
 
 
     //-selects icon based on device type (only included those likely to be encountered in this area
@@ -523,7 +608,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
 
     /*--------------------------------------
-        (UNUSED) METHODS
+        (UNUSED) METHODS (potentially impossible)
     --------------------------------------*/
     //show list of connected devices
     //todo: currently incomplete (only shows bool if connection is currently established but cant find out how to specify to WHAT) - research suggests not possible.
@@ -664,6 +749,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
 
     //returns true if object is connected(always false prior to API ver 15 (iceCreamSandwich: 2011))
+    //todo: confirm memory that this is true for ANYTHING connected to ADAPTER not specific-device.
     public boolean isConnected() {
         Log.d(TAG, "isConnected: ");
         boolean retval = false;
