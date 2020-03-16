@@ -23,6 +23,9 @@
  *              either move buttons above and focus switch to selected,
  *              use same view for both buttons by click,
  *              add ability to collapse view to zero on second click
+ *      +   setting card clicked to color/change text is proving very difficult to work out:
+ *          unfortunately postponed indefinitely as it alone has taken too many hours of work:
+ *          prioritise functionality
  *------------------------------------------------------------------------------
  * TO DO LIST:
  *      //todo: connect to paired device (headset)
@@ -35,6 +38,7 @@
  *      //todo: add green on connect
  *      //todo: add button disconnect
  *      //todo: address orientation of yes/no mental model
+ *      //todo:
  *
  -----------------------------------------------------------------------------*/
 
@@ -328,16 +332,16 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
         //each paired device found:
         for (int i = 0; i < set_pairedDevices.size(); i++) {
-            //get type of device (pass icon and name from methods)
-            deviceCardList.add(new DeviceCard(chooseIcon(arrayDevices.get(i)), arrayDevices.get(i).getName()));
+            //get type of device (pass icon and name from methods) (testing: add device to card itself for connecting...?)
+            deviceCardList.add(new DeviceCard(chooseIcon(arrayDevices.get(i)), arrayDevices.get(i).getName(), arrayDevices.get(i)));
         }
 
         buildRecyclerView(deviceCardList, recyc_pairedDevices);
     }
 
 
-    //builds passed card list into recyclerView via adapter
-    public void buildRecyclerView(ArrayList<DeviceCard> cardList, RecyclerView recyclerView) {
+    //builds passed card list into recyclerView via adapter (including itemClickListener)
+    public void buildRecyclerView(final ArrayList<DeviceCard> cardList, RecyclerView recyclerView) {
         Log.d(TAG, "buildRecyclerView: ");
         //set to true if known size of items will not change: increase performance.
         recyclerView.setHasFixedSize(true);
@@ -353,39 +357,44 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             @Override
             public void onItemClick(int position) {
 
-                //create pop up choice to connect to device
-                final Dialog dialog = new Dialog(BluetoothActions.this);
-                dialog.setContentView(R.layout.dialog_popup_connect_to_device);
-                dialog.setTitle("Connect to Device");
+                //todo: check if card device is connected
+                if (!cardList.get(position).getConnectionStatus()) {
+                    //not connected: prompt to connect
 
-                //assign pop up buttons
-                Button dialogButton_helmet = dialog.findViewById(R.id.button_popup_connect_helmet);
-                dialogButton_helmet.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        connectDevice(helmetConnected);
-                        dialog.dismiss();
-                    }
-                });
+                    //create pop up choice to connect to device
+                    final Dialog dialog = new Dialog(BluetoothActions.this);
+                    dialog.setContentView(R.layout.dialog_popup_connect_to_device);
+                    dialog.setTitle("Connect to Device");
 
-                Button dialogButton_bike = dialog.findViewById(R.id.button_popup_connect_bike);
-                dialogButton_bike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
+                    //assign pop up buttons
+                    Button dialogButton_helmet = dialog.findViewById(R.id.button_popup_connect_helmet);
+                    dialogButton_helmet.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            connectDevice(helmetConnected);
+                            dialog.dismiss();
+                        }
+                    });
 
-                    }
-                });
+                    Button dialogButton_bike = dialog.findViewById(R.id.button_popup_connect_bike);
+                    dialogButton_bike.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
 
-                Button dialogButton_cancel = dialog.findViewById(R.id.button_popup_connect_cancel);
-                dialogButton_cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
+                        }
+                    });
 
-                dialog.show();
+                    Button dialogButton_cancel = dialog.findViewById(R.id.button_popup_connect_cancel);
+                    dialogButton_cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                }
             }
         });
     }
@@ -607,7 +616,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 //                        + device.getName() + ":" + device.getAddress());
 
                 //add discovered device to card list
-                deviceCardList.add(new DeviceCard(chooseIcon(device), chooseName(device)));
+                deviceCardList.add(new DeviceCard(chooseIcon(device), chooseName(device), device));
                 //update list
                 buildRecyclerView(deviceCardList, recyc_discoveredDevices);
             }
@@ -665,7 +674,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         } catch (Exception e) {
             Toast.makeText(this, "something broke in isConnected()...",
                     Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "listConnected: ERROR exception occurred. debugging needed!");
+            Log.e(TAG, "listConnected: ERROR exception occurred. debugging needed!");
+            e.printStackTrace();
         }
         return retval;
     }

@@ -6,10 +6,17 @@ android {
     defaultConfig {
         applicationId "UEA.FINAL.PROJECT"
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+//        attempt to speed build disable splitting apk ():
+        if (project.hasProperty('devBuild')) {
+            splits.density.enable = false
+        }
+
+
     }
     buildTypes {
         release {
