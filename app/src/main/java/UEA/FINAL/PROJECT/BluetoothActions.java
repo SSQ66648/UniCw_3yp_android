@@ -14,7 +14,7 @@
  *
  * HISTORY:     v1.0    200315  Initial implementation (from previous test classes).
  *              v1.1    200315  Added click events to cards, additional dialogs.
- *              v1.2    200316  Added card click connect/disconnect logic.
+ *              v1.2    200316  Added card click connect/disconnect logic, solved switch device logic, added connection code.
  *
  *------------------------------------------------------------------------------
  * NOTES:       
@@ -59,6 +59,7 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -66,6 +67,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -79,9 +81,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 /*--------------------------------------
@@ -119,7 +125,15 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     //-check both devices have been connected
     private boolean helmetConnected = false;
     private boolean bikeConnected = false;
-    //testing: toggle for buttons
+
+    //switch device latch: wait for disconnect complete before reconnecting
+    CountDownLatch countDownLatch;
+
+    /*------------------
+        Connection Variables
+    ------------------*/
+    //EXTRA string to send on to mainActivity
+    public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
 
     /*--------------------------------------
@@ -427,6 +441,10 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 if (!helmetConnected) {
                     Log.d(TAG, "requestConnectDevice: helmet not connected: proceed.");
 //todo: connect code
+//TODO: LOOK INTO THIS IF HAVE TIME: CURRENTLY HAVE TO ASSUME PAIRED AND CONNECTD BY SELF - use for testing??
+                    //demo measures:
+                    Toast.makeText(this, "THIS PROGRAM HAS TO ASSUME YOUR HEADSET IS ALREADY CONNECTED", Toast.LENGTH_SHORT).show();
+
                     //set color (ABANDONED DUE TO IMPOSSIBILITY OF TASK)
 //            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
                     //record type and specific card connected
@@ -474,6 +492,137 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     }
 
 
+    public void connectDevice(DeviceCard card, String type) {
+        //notify user toast/text view
+
+        //get mac address of bike
+        if (type == DeviceCard.CONNECTION_BIKE) {
+            String bikeAddress = card.getDevice().getAddress();
+
+        } else if (type == DeviceCard.CONNECTION_HELMET) {
+            //simply connect (no need to retain address as extra)
+            String address = card.getDevice().getAddress();
+            Log.d(TAG, "connectDevice: helmet address: " + address);
+
+            //create device and set MAC address
+            try {
+                BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
+                Log.d(TAG, "connectDevice: remote device created by address: " + device.getName());
+
+
+                try {
+                    bluetoothHeadsetSocket = createBluetoothSocket(device);
+                    Log.d(TAG, "connectDevice: created socket");
+                } catch (IOException e) {
+                    Log.e(TAG, "connectDevice: Error: creating socket");
+                    e.getMessage();
+                    e.printStackTrace();
+                    //todo: toast
+                }
+                //establish connection
+                try {
+                    bluetoothHeadsetSocket.connect();
+                    Log.d(TAG, "connectDevice: socket connected");
+                } catch (IOException e) {
+                    Log.e(TAG, "connectDevice: Error: connecting to socket");
+                    e.printStackTrace();
+                    try {
+                        bluetoothHeadsetSocket.close();
+                        Log.w(TAG, "connectDevice: Warning: failed connection socket closed.");
+                    } catch (IOException e2) {
+                        Log.e(TAG, "connectDevice: Error: failed to close socket on failed connection...");
+                        //todo: handle?
+                    }
+                }
+
+                headsetThread = new ConnectedThread(bluetoothHeadsetSocket);
+                headsetThread.start();
+
+
+            } catch (Exception e) {
+                Log.e(TAG, "connectDevice: Error: getting remote device.");
+            }
+
+        }
+    }
+
+    private ConnectedThread headsetThread;
+    private BluetoothSocket bluetoothHeadsetSocket;
+    private UUID uuidHeadset;
+    // SPP UUID service - this should work for most devices
+    private static final UUID BtModuleUUID =
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+
+    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
+        return device.createRfcommSocketToServiceRecord(BtModuleUUID);
+    }
+
+
+    //create new class for connect thread
+    private class ConnectedThread extends Thread {
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+
+        //creation of the connect thread
+        public ConnectedThread(BluetoothSocket socket) {
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+
+            try {
+                //Create I/O streams for connection
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) {
+                //todo: insert code to handle exception
+            }
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+        }
+
+        public void run() {
+            byte[] buffer = new byte[256];
+            int bytes;
+
+            // Keep looping to listen for received messages
+            while (true) {
+                try {
+                    //read bytes from input buffer
+                    bytes = mmInStream.read(buffer);
+                    String readMessage = new String(buffer, 0, bytes);
+                    // Send the obtained bytes to the UI Activity via handler
+                    hnd_bluetoothIn.obtainMessage(handlerState, bytes, -1,
+                            readMessage).sendToTarget();
+                } catch (IOException e) {
+                    break;
+                }
+            }
+        }
+
+        //write to remote device
+        public void write(String input) {
+            //convert String into bytes
+            byte[] msgBuffer = input.getBytes();
+            try {
+                //write bytes over bluetooth outStream
+                mmOutStream.write(msgBuffer);
+            } catch (IOException e) {
+                //if you cannot write, close application
+                Toast.makeText(getBaseContext(), "Connection Failure",
+                        Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    }
+
+    Handler hnd_bluetoothIn;
+    //identify handler message
+    final int handlerState = 0;
+
+
+    //--------------------------------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------------------------
+
     //-disconnects previous device of type and connects current device
     public void switchDevice(final DeviceCard card, final String type) {
         Log.d(TAG, "switchDevice: ");
@@ -520,9 +669,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         });
         dialog.show();
     }
-
-
-    CountDownLatch countDownLatch;
 
 
     //-disconnects device from passed card
@@ -577,7 +723,12 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         card.setConnectionStatus(false, DeviceCard.CONNECTION_NONE);
         Log.d(TAG, "onClick: device disconnected");
         //allow switch to recall requestConnect
-        countDownLatch.countDown();
+        if (countDownLatch != null) {
+            Log.d(TAG, "disconnectDevice: latch countdown");
+            countDownLatch.countDown();
+        } else {
+            Log.d(TAG, "disconnectDevice: no latch to countdown");
+        }
     }
 
 
@@ -788,7 +939,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     }
 
 
-    //-check bt is enabled on device
+    //-check bt is enabled on device (prompt user to turn on with dialog box) //todo: could use this to "disable" cards on click if not enabled?
     private void checkBluetoothState() {
         Log.d(TAG, "checkBluetoothState: ");
         // Check device has Bluetooth and that it is turned on
