@@ -46,6 +46,7 @@
  *      //todo: use same getcardlist logic to access specific card ... can this be used to change background color?
  *      //todo: button for proceed to activity or autromatic (automatic: how to handle on return?)
  *      //todo: select TYPE of connection using connect logic, then on final button to next activity: connect to 'both'?
+ *      //todo: add 'collapse recycler' when button clicked 2nd time
  *
  -----------------------------------------------------------------------------*/
 
@@ -183,6 +184,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         text_connectingInfo.setVisibility(View.GONE);
         //check if both are still connected: show/remove button to next activity
         checkDevicesConnected();
+        //check if bt enabled and set toggle as needed
+        toggle_enableBT.setChecked(checkBluetoothState());
 
         //testing: moved from onCreate::
         registerReceiverStatusChange();
@@ -244,19 +247,19 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 //check if bt enabled
                 if (checkBluetoothState()) {
                     Log.d(TAG, "onClick: BT enabled.");
-                    createDiscoveredList();
                 } else {
                     Log.d(TAG, "onClick: BT not enabled: user prompted.");
                 }
+                createDiscoveredList();
                 break;
             case R.id.button_bluetoothactions_paireddevices:
                 //check if bt enabled
                 if (checkBluetoothState()) {
                     Log.d(TAG, "onClick: BT enabled.");
-                    createPairedList();
                 } else {
                     Log.d(TAG, "onClick: BT not enabled: user prompted.");
                 }
+                createPairedList();
                 break;
             case R.id.button_bluetoothactions_start_activity:
                 //hide button, replace with connecting message
