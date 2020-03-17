@@ -45,6 +45,7 @@
  *      //todo: add set device type to switch prompt
  *      //todo: use same getcardlist logic to access specific card ... can this be used to change background color?
  *      //todo: button for proceed to activity or autromatic (automatic: how to handle on return?)
+ *      //todo: select TYPE of connection using connect logic, then on final button to next activity: connect to 'both'?
  *
  -----------------------------------------------------------------------------*/
 
@@ -109,36 +110,31 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     private RecyclerView recyc_pairedDevices;
     private Button button_moveActivity;
 
-    //---VARIABLES---
+    /*------------------
+        Card List Variables
+    ------------------*/
     private BluetoothAdapter bluetoothAdapter;
     private Set<BluetoothDevice> set_pairedDevices;
-
-    private CardAdapterDevice recycAdapter;  //only provide items currently needed (performance)
+    //only provide items currently needed (performance)
+    private CardAdapterDevice recycAdapter;
     private RecyclerView.LayoutManager recycLayoutManager;
-
     //collection of device cards to populate recycler lists
     private ArrayList<DeviceCard> deviceCardList;
 
-    //-check both devices have been connected
-//    private boolean helmetConnected = false;
-//    private boolean bikeConnected = false;
-
-    //switch device latch: wait for disconnect complete before reconnecting
-    CountDownLatch countDownLatch;
-
-    //watched booleans to trigger activity change
-    private WatchedBool helmetWatchedBool = new WatchedBool();
-    private WatchedBool bikeWatchedBool = new WatchedBool();
-
     /*------------------
-        Connection Variables
+        Connection Logic Variables
     ------------------*/
     //EXTRA string to send on to mainActivity
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
     //intent to move activities when selected both devices
     Intent bluetoothActivityIntent;
-
+    //address of 'bike' bluetooth module to pass as extra with intent
     private String bikeMacAddress;
+    //watched booleans to trigger activity change
+    private WatchedBool helmetWatchedBool = new WatchedBool();
+    private WatchedBool bikeWatchedBool = new WatchedBool();
+    //switch device latch: wait for disconnect complete before reconnecting
+    CountDownLatch countDownLatch;
 
 
     /*--------------------------------------
@@ -176,12 +172,22 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
 
         //---EXECUTE---
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+
+        //check if both are still connected: show/remove button to next activity
+        checkDevicesConnected();
+
+        //testing: moved from create
         registerReceiverStatusChange();
         registerReceiverDiscover();
-//todo: move to resume?
 
-        //set bool changed listeners
-
+        //set bool listeners
         helmetWatchedBool.setBooleanChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
@@ -199,22 +205,18 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             }
         });
 
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-
-        //check if both are still connected: show/remove button to next activity
-        checkDevicesConnected();
-
 
         //(re) check if bluetooth enabled
         //todo: once selecting cards is possible: move this there as a 'check' before moving to next activity- leave bt to toggle button here
         //cannot use here as will enter loop if not granted.
 //        checkBluetoothState();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //todo: close release any resources (might not be needed if not sockets in activity
     }
 
 
@@ -238,8 +240,12 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 enableBluetooth();
                 break;
             case R.id.button_bluetoothactions_discoverdevices:
-                createDiscoveredList();
-                break;
+                //check if bt enabled
+                if ( checkBluetoothState();){
+
+            }
+            createDiscoveredList();
+            break;
             case R.id.button_bluetoothactions_paireddevices:
                 createPairedList();
                 break;
@@ -855,20 +861,23 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
 
     //-check bt is enabled on device (prompt user to turn on with dialog box) //todo: could use this to "disable" cards on click if not enabled?
-    private void checkBluetoothState() {
+    private boolean checkBluetoothState() {
         Log.d(TAG, "checkBluetoothState: ");
         // Check device has Bluetooth and that it is turned on
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Toast.makeText(getBaseContext(), "Device does not support Bluetooth",
                     Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             if (bluetoothAdapter.isEnabled()) {
                 Log.d(TAG, "...Bluetooth ON...");
+                return true;
             } else {
                 //Prompt user to turn on Bluetooth
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, 1);
+                return false;
             }
         }
     }
