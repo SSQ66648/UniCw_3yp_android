@@ -179,11 +179,12 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
-
+        //remove any connecting message if displayed
+        text_connectingInfo.setVisibility(View.GONE);
         //check if both are still connected: show/remove button to next activity
         checkDevicesConnected();
 
-        //testing: moved from create
+        //testing: moved from onCreate::
         registerReceiverStatusChange();
         registerReceiverDiscover();
 
@@ -241,15 +242,24 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.button_bluetoothactions_discoverdevices:
                 //check if bt enabled
-                if ( checkBluetoothState();){
-
-            }
-            createDiscoveredList();
-            break;
+                if (checkBluetoothState()) {
+                    Log.d(TAG, "onClick: BT enabled.");
+                    createDiscoveredList();
+                } else {
+                    Log.d(TAG, "onClick: BT not enabled: user prompted.");
+                }
+                break;
             case R.id.button_bluetoothactions_paireddevices:
-                createPairedList();
+                //check if bt enabled
+                if (checkBluetoothState()) {
+                    Log.d(TAG, "onClick: BT enabled.");
+                    createPairedList();
+                } else {
+                    Log.d(TAG, "onClick: BT not enabled: user prompted.");
+                }
                 break;
             case R.id.button_bluetoothactions_start_activity:
+                //hide button, replace with connecting message
                 button_moveActivity.setVisibility(View.GONE);
                 startActivity(bluetoothActivityIntent);
                 break;
