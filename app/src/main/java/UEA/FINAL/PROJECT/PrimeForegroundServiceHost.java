@@ -22,12 +22,12 @@
  *              v1.5    200313  added broadcast to send intent with method choice as extra (avoid
  *                              binding: as either unbinding kills service, or cannot reconnect
  *                              (bind is new instance every time), removed many dead lines.
- *              v2.0    200317  Added incoming bluetooth address from BluetoothActions class.
+ *              v1.6    200317  Added incoming bluetooth address from BluetoothActions class.
  *------------------------------------------------------------------------------
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
  *              to another app or notification for example)
- *              todo: will need to consider how to handle this if it is a problem?
+ *              todo: will need to consider how to handle this if it is a problem? - ie if activity gone, have to reopen to get to stop button -tie ervice stop to application lifecycle somehow?
  *          +   will be attempting (200223) to not include any binding of service as previous
  *              experiment did not show much (if any) need for it: will return to this if problems
  *              are encountered.
@@ -44,6 +44,7 @@
  *      //todo: add status display for bt devices
  *      //todo: checking for bt connections?
  *      //todo: consider enum for method choices (const)?
+ *      //todo: COMBINE BTACTIONS ACTIVITY??
  *
  -----------------------------------------------------------------------------*/
 package UEA.FINAL.PROJECT;
