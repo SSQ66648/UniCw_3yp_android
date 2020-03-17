@@ -22,9 +22,9 @@
  *              v1.5    200313  added broadcast to send intent with method choice as extra (avoid
  *                              binding: as either unbinding kills service, or cannot reconnect
  *                              (bind is new instance every time), removed many dead lines.
- *
+ *              v2.0    200317  Added incoming bluetooth address from BluetoothActions class.
+ *------------------------------------------------------------------------------
  * NOTES:
- *          +
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
  *              to another app or notification for example)
  *              todo: will need to consider how to handle this if it is a problem?
@@ -41,8 +41,9 @@
  *
  *------------------------------------------------------------------------------
  * TO DO LIST:  
- *              todo:
- *              todo:   consider enum for method choices (const)?
+ *      //todo: add status display for bt devices
+ *      //todo: checking for bt connections?
+ *      //todo: consider enum for method choices (const)?
  *
  -----------------------------------------------------------------------------*/
 package UEA.FINAL.PROJECT;
@@ -88,6 +89,8 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
 
     //---VARIABLES---
     Intent foregroundIntent;
+    //local copy of bluetoothActions intent-passed device address
+    String bike_MAC;
 
 
     /*--------------------------------------
@@ -158,6 +161,14 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     protected void onResume() {
         Log.d(TAG, "onResume: ");
         super.onResume();
+        //todo: add handling in event of intent lost? (back button / testing shortcut?)
+        //get bluetooth address (plural, possibly with UUIDs as well if they can be obtained later):
+        Intent intent = getIntent();
+        bike_MAC = intent.getStringExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS);
+        Log.d(TAG, "onResume: obtained MAC address: " + bike_MAC + "\n" +
+                "Adding bike address to foreground service intent...");
+        //add address to foreground intent
+        foregroundIntent.putExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS, bike_MAC);
     }
 
 
@@ -208,7 +219,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     }
 
 
-    //-send broadcast to running service with service method to trigger from activity
+    //-send broadcast to running service with service method to trigger from activity (primarily for testing)
     public void sendMsg() {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         Intent intent = new Intent(PrimeForegroundService.SERVICE_BROADCASTRECEIVER_ACTION);

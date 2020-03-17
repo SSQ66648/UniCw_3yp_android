@@ -17,7 +17,7 @@
  *              v1.2    200316  Added card click connect/disconnect logic, solved switch device
  *                              logic, added watchedBooleans and listeners to trigger the added
  *                              create activity intent method, also show/hiding start intent button
- *
+ *              v1.3    200317  Added enabled checking for buttons, moved some checks to onResume.
  *------------------------------------------------------------------------------
  * NOTES:       
  *      +   logcat records "errors" of no adapter attached, however attempting to solve this has
@@ -47,6 +47,9 @@
  *      //todo: button for proceed to activity or autromatic (automatic: how to handle on return?)
  *      //todo: select TYPE of connection using connect logic, then on final button to next activity: connect to 'both'?
  *      //todo: add 'collapse recycler' when button clicked 2nd time
+ *      //todo: add countdown/bool listener for list button bt check fallthrough
+ *      //todo: reword helmet assumption toast
+ *      //todo: add toasts re status - bt enabled etc
  *
  -----------------------------------------------------------------------------*/
 
@@ -264,6 +267,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             case R.id.button_bluetoothactions_start_activity:
                 //hide button, replace with connecting message
                 button_moveActivity.setVisibility(View.GONE);
+                text_connectingInfo.setVisibility(View.VISIBLE);
                 startActivity(bluetoothActivityIntent);
                 break;
         }
