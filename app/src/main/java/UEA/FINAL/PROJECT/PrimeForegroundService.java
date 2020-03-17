@@ -39,8 +39,10 @@
  *      v1.0    200314  Copied to own project from testing project to reduce build time and
  *                      complexity of app through omission of the 50 test classes and activities
  *                      (see previous version history below and test files included in portfolio)
+ *      v2.0    200317  Added code to establish bluetooth connection with bike on start command:
+ *                      -currently unhandled if no device/if service stops/if restarted/etc)
  *--------------------------------------------------------------------------------------------------
- *PREVIOUS HISTORY:
+ * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
  *                              mean/median as doesnt work, still getting time travelling locations:
  *                              to test with only one provider running when mean median working)
@@ -137,9 +139,13 @@ package UEA.FINAL.PROJECT;
 --------------------------------------*/
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -159,6 +165,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -173,12 +180,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
@@ -286,6 +295,30 @@ public class PrimeForegroundService extends Service implements LocationListener,
         Audio variables
     ------------------*/
 
+    /*------------------
+        Bluetooth Variables
+    ------------------*/
+    //handles incoming serial messages from bluetooth transmission
+    private Handler bluetoothInputHandler;
+    private final int handlerState = 0;
+    private BluetoothAdapter bluetoothAdapter = null;
+    //thread dealing with bluetooth connection
+//    private ConnectedThread connectedThread;
+    //assembly of recieved data
+    private StringBuilder stringBuilder_input = new StringBuilder();
+    // SPP UUID service for Hc05 module - this should work for most devices (replace if able to obtain UUID programmatically)
+    private static final UUID BtModuleUUID =
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    //intent-passed bike address (again, include headset if able to obtain it later)
+    private static String bikeAddress;
+    //received data-values (aka 'bike statuses')
+    private String[] receivedValues = new String[7];
+    //current/previous serial transmission number (to check for dropped transmission)
+    private int seqNew;
+    private int seqOld;
+    private BluetoothSocket bluetoothSocket_bike = null;
+    private ConnectedThread mConnectedThread;
+
 
     /*--------------------------------------
         LIFECYCLE
@@ -335,7 +368,13 @@ public class PrimeForegroundService extends Service implements LocationListener,
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: ");
-
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ////todo: TESTING
+        //setup handler to deal with incoming serial data
+        createInputHandler();
+        //setup bluetooth connection to bike
+        setupBluetoothSockets(intent);
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //send to calling activity on click of notification
         Intent notificationIntent = new Intent(this,
                 PrimeForegroundServiceHost.class);
@@ -421,6 +460,16 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //unregister receiver for activity messages
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceBroadcastReceiver);
+
+        Log.d(TAG, "onDestroy: closing bluetooth sockets:");
+        if (bluetoothSocket_bike != null) {
+            try {
+                bluetoothSocket_bike.close();
+            } catch (IOException e) {
+                Log.e(TAG, "onDestroy: Error: closing bluetooth sockets");
+                //handle?
+            }
+        }
 
         Log.d(TAG, "onDestroy: stopping self...");
         stopSelf();
@@ -721,7 +770,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    //------------------------------------------------------------------------------------------------------------------------
+    ////todo: sorth methods from listeners/classes etc!------------------------------------------------------------------------------------------
+
     //testing: to sort later:
     //todo: check final doesnt break anything
     MediaPlayer mediaPlayer;
@@ -812,7 +862,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             Log.w(TAG, "stopPlayer: no player exists to stop");
         }
     }
-    //------------------------------------------------------------------------------------------------------------------------
 
 
     /*--------------------------------------
@@ -1449,9 +1498,205 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
+    //-thread for bluetooth connection(s)
+    private class ConnectedThread extends Thread {
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+
+        //creation of the connect thread
+        public ConnectedThread(BluetoothSocket socket) {
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+
+            try {
+                //Create I/O streams for connection
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) {
+                //todo: insert code to handle exception
+            }
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+        }
+
+        public void run() {
+            byte[] buffer = new byte[256];
+            int bytes;
+
+            // Keep looping to listen for received messages
+            while (true) {
+                try {
+                    //read bytes from input buffer
+                    bytes = mmInStream.read(buffer);
+                    String readMessage = new String(buffer, 0, bytes);
+                    // Send the obtained bytes to the UI Activity via handler
+                    bluetoothInputHandler.obtainMessage(handlerState, bytes, -1,
+                            readMessage).sendToTarget();
+                } catch (IOException e) {
+                    break;
+                }
+            }
+        }
+
+        //write to remote device
+        public void write(String input) {
+            //convert String into bytes
+            byte[] msgBuffer = input.getBytes();
+            try {
+                //write bytes over bluetooth outStream
+                mmOutStream.write(msgBuffer);
+            } catch (IOException e) {
+                //if you cannot write, close application
+                Toast.makeText(getBaseContext(), "Connection Failure",
+                        Toast.LENGTH_LONG).show();
+//                finish();
+            }
+        }
+    }
+
     /*--------------------------------------
         METHODS
     --------------------------------------*/
+    //-setup bluetooth adapter and sockets
+    public void setupBluetoothSockets(Intent intent) {
+        Log.d(TAG, "onStartCommand: obtaining bluetooth adapter");
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        //todo: check bluetooth state?
+        bikeAddress = intent.getStringExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS);
+        Log.d(TAG, "onStartCommand: received bluetooth address: " + bikeAddress);
+
+        //create device and set the MAC address
+        try {
+            BluetoothDevice device = bluetoothAdapter.getRemoteDevice(bikeAddress);
+            Log.d(TAG, "onResume: device created: " + device.getName() + " : "
+                    + device.getAddress());
+            try {
+                bluetoothSocket_bike = createBluetoothSocket(device);
+                Log.d(TAG, "onResume: create bluetooth socket");
+            } catch (IOException e) {
+                Log.d(TAG, "onResume: Socket creation failed.");
+                Toast.makeText(getBaseContext(), "Socket creation failed",
+                        Toast.LENGTH_LONG).show();
+            }
+            // Establish the Bluetooth socket connection.
+            try {
+                bluetoothSocket_bike.connect();
+                Log.d(TAG, "onResume: socket connect...");
+            } catch (IOException e) {
+                Log.d(TAG, "onResume: socket connection error.");
+                try {
+                    bluetoothSocket_bike.close();
+                    Log.d(TAG, "onResume: socket closed");
+                } catch (IOException e2) {
+                    Log.d(TAG, "onResume: Error on closing socket during establish failure!");
+                    //insert code to deal with this
+                }
+            }
+
+            mConnectedThread = new ConnectedThread(bluetoothSocket_bike);
+            mConnectedThread.start();
+            //send character when resuming.beginning transmission to check device is connected
+            mConnectedThread.write("x");
+        } catch (Exception e) {
+            Log.d(TAG, "onResume: error creating device.");
+        }
+    }
+
+
+    //creates secure outgoing connection with BT device using UUID
+    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
+        return device.createRfcommSocketToServiceRecord(BtModuleUUID);
+    }
+
+
+    //-create handler for incoming bluetooth serial data todo: move to static class to prevent leaks (warning suppressed)
+    //todo: rename sensorvalues
+    //todo: change print to logd
+    @SuppressLint("HandlerLeak")
+    public void createInputHandler() {
+        Log.d(TAG, "createInputHandler: ");
+        bluetoothInputHandler = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                Log.d(TAG, "handleMessage: ");
+                if (msg.what == handlerState) {
+                    // msg.arg1 = bytes from connect thread
+                    String readMessage = (String) msg.obj;
+                    //appending to string until find end of message char (~)
+                    stringBuilder_input.append(readMessage);
+                    //set index for end of message
+                    int endOfLineIndex = stringBuilder_input.indexOf("~");
+                    //check any data exists before ~
+                    if (endOfLineIndex > 0) {
+                        //extract string (currently only used to get length after splitString)
+                        String dataInPrint = stringBuilder_input.substring(0, endOfLineIndex);
+                        Log.d(TAG, "handleMessage: Data Received = " + dataInPrint);
+                        //get length of data received (25char initially, grows with triple digits)
+                        int dataLength = dataInPrint.length();
+                        Log.d(TAG, "handleMessage: String Length = " + String.valueOf(dataLength));
+
+                        //check for beginning character of '#' -signifies desired transmission
+                        if (stringBuilder_input.charAt(0) == '#') {
+                            //string array for sensor values
+                            String sensorValues[] = new String[7];
+
+                            //remove first character ('#') to simplify splitting string
+                            stringBuilder_input.deleteCharAt(0);
+
+                            //convert stringBuilder to string array
+                            receivedValues = stringBuilder_input.toString().split("\\+");
+
+                            //assign and check result of splitString
+                            for (int i = 0; i < receivedValues.length - 1; i++) {
+                                sensorValues[i] = receivedValues[i];
+//                                System.out.println("array pos " + i + " value: "
+//                                        + sensorValues[i]);
+                            }
+
+
+                            //todo: implement logging output to test incoming data----------------------------------------------------------------------------------------------------
+
+                            //(testing): values to views
+//                            txt_sequence.setText("SEQ No. = " + sensorValues[0]);
+//                            txt_speedView.setText(" Speed = " + sensorValues[1] + " mph");
+//                            txt_indicatorL.setText("LEFT indicator = " + sensorValues[2]);
+//                            txt_indicatorR.setText("RIGHT indicator = " + sensorValues[3]);
+//                            txt_lowbeam.setText("LOWbeams = " + sensorValues[4]);
+//                            txt_highbeam.setText("HIGHbeams = " + sensorValues[5]);
+//                            txt_revcount.setText("REVCOUNTER = " + sensorValues[6]);
+
+
+                            //todo: better catch for non-sequential data
+                            //convert string to int
+                            try {
+                                seqNew = Integer.parseInt(sensorValues[0]);
+                            } catch (Exception e) {
+                                Log.e(TAG, "handleMessage: string to int parse error");
+                                e.printStackTrace();
+                            }
+
+                            System.out.println("OLD sequence no. = " + seqOld);
+                            System.out.println("NEW sequence no. = " + seqNew);
+
+                            //check if new message is exactly one more than previous
+                            if (seqNew - seqOld != 1) {
+                                //testing
+                                Log.e(TAG, "handleMessage: incorrect message sequence");
+                                //todo: add handling for incorrect input sequence
+                            }
+                            //assign current to old sequence variable
+                            seqOld = seqNew;
+                        }
+
+                        //clear all string data
+                        //todo:need to delete splitstring as seen here?
+                        stringBuilder_input.delete(0, stringBuilder_input.length());
+                    }
+                }
+            }
+        };
+    }
+
+
     //-method to reset status of class in event of unhandled error/exception (attempt to continue after logging to file)
     public void errorReset(String methodName) {
         //pass method name that called this method to identify origin of error
