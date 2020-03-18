@@ -50,10 +50,17 @@
  *      //todo: add countdown/bool listener for list button bt check fallthrough
  *      //todo: reword helmet assumption toast
  *      //todo: add toasts re status - bt enabled etc
+ *      //todo: add check that paired device has address in it. and/or begin discovery for paired devices too: (how to show if found or not: need to change card: back to how to change background of card)
+ *      //todo: pair discovered device connecting to
+ *      //todo: add bike icon if module name
+ *
  *
  -----------------------------------------------------------------------------*/
 
 package UEA.FINAL.PROJECT;
+/*--------------------------------------
+    IMPORT LIST
+--------------------------------------*/
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -74,7 +81,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AlertDialog;
@@ -92,9 +99,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
-/*--------------------------------------
-    IMPORT LIST
---------------------------------------*/
 public class BluetoothActions extends AppCompatActivity implements View.OnClickListener {
     /*--------------------------------------
         CONSTANTS
@@ -335,8 +339,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             makeVisible();
         } else {
             Log.w(TAG, "enableBluetooth: notChecked. ");
-            Toast.makeText(getApplicationContext(),
-                    " Bluetooth turned off", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(),
+//                    " Bluetooth turned off", Toast.LENGTH_LONG).show();
             if (bluetoothAdapter.isEnabled()) {
                 Log.d(TAG, "enableBluetooth: disabling adapter. ");
                 //disable the bt
@@ -391,8 +395,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             bluetoothAdapter.cancelDiscovery();
         }
         bluetoothAdapter.startDiscovery();
-        Toast.makeText(this, "Discovering devices...",
-                Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), "Discovering devices...",
+//                Toast.LENGTH_LONG).show();
     }
 
 
@@ -411,10 +415,16 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
         //each paired device found:
         for (int i = 0; i < set_pairedDevices.size(); i++) {
-            //get type of device (pass icon and name from methods) (testing: add device to card itself for connecting...?)
-            deviceCardList.add(new DeviceCard(chooseIcon(arrayDevices.get(i)), arrayDevices.get(i).getName(), arrayDevices.get(i)));
+            //todo: test device exists check
+            if (arrayDevices.get(i) != null) {
+                //get type of device (pass icon and name from methods) (testing: add device to card itself for connecting...?)
+                deviceCardList.add(new DeviceCard(chooseIcon(arrayDevices.get(i)), arrayDevices.get(i).getName(), arrayDevices.get(i)));
+            } else {
+                //paired device does not have any data found (not (re)discovered if not requested)
+                Log.e(TAG, "createPairedList: Error: device not included in card");
+//                Toast.makeText(getApplicationContext(), "ERROR: paired device has not been discovered!", Toast.LENGTH_SHORT).show();
+            }
         }
-
         buildRecyclerView(deviceCardList, recyc_pairedDevices);
     }
 
@@ -502,7 +512,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 //todo: connect code
 //TODO: LOOK INTO THIS IF HAVE TIME: CURRENTLY HAVE TO ASSUME PAIRED AND CONNECTD BY SELF - use for testing??
                     //demo measures:
-                    Toast.makeText(this, "THIS PROGRAM HAS TO ASSUME YOUR HEADSET IS ALREADY CONNECTED", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "THIS PROGRAM HAS TO ASSUME YOUR HEADSET IS ALREADY CONNECTED", Toast.LENGTH_SHORT).show();
 
                     //set color (ABANDONED DUE TO IMPOSSIBILITY OF TASK)
 //            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
@@ -526,6 +536,16 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     card.setConnectionStatus(true, DeviceCard.CONNECTION_BIKE);
                     //get bluetooth address
                     bikeMacAddress = card.getDevice().getAddress();
+
+
+                    //todo: ensure device exists here?
+                    Log.d(TAG, "requestConnectDevice: bike address: " + bikeMacAddress);
+                    if (card.getDevice().getAddress() == null) {
+                        Log.e(TAG, "requestConnectDevice: Error: BIKE ADDRESS IS NULL: employing work-around of hard coded value for development.");
+                        bikeMacAddress = "FC:A8:9A:00:4A:DF";
+                    }
+
+
                     Log.d(TAG, "requestConnectDevice: BIKE \"CONNECTED:\"");
                 } else {
                     Log.w(TAG, "requestConnectDevice: Warning: bike device already connected: prompt for disconnect");
@@ -765,10 +785,10 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         Log.d(TAG, "listConnected: listing connected devices...");
         //Todo: list connected devices: getConnectedDevices() does not work: why?
         if (isConnected()) {
-            Toast.makeText(this, "IS CONNECTED", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "IS CONNECTED", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "listConnected: IS connected");
         } else {
-            Toast.makeText(this, "NOT CONNECTED", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "NOT CONNECTED", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "listConnected: NOT connected");
         }
 
@@ -883,8 +903,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         // Check device has Bluetooth and that it is turned on
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-            Toast.makeText(getBaseContext(), "Device does not support Bluetooth",
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Device does not support Bluetooth",
+//                    Toast.LENGTH_SHORT).show();
             return false;
         } else {
             if (bluetoothAdapter.isEnabled()) {
@@ -910,8 +930,8 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
             retval = (Integer) method.invoke(bluetoothAdapter, 1) != 0;
         } catch (Exception e) {
-            Toast.makeText(this, "something broke in isConnected()...",
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "something broke in isConnected()...",
+//                    Toast.LENGTH_SHORT).show();
             Log.e(TAG, "listConnected: ERROR exception occurred. debugging needed!");
             e.printStackTrace();
         }

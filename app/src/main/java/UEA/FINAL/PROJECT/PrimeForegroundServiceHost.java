@@ -115,7 +115,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: start service");
-                Toast.makeText(getApplicationContext(), "Starting Service...", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Starting Service...", Toast.LENGTH_SHORT).show();
                 startGpsService();
             }
         });
@@ -126,7 +126,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "onClick: stop service");
                 stopGpsService();
-                Toast.makeText(getApplicationContext(), "Stopping Service...", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Stopping Service...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -216,7 +216,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
                 this.startActivity(intent);
             } else {
                 Log.d(TAG, "checkOptimization: manager ignoring optimisation");
-                Toast.makeText(getApplicationContext(), "battery optimisation successfully ignored", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "battery optimisation successfully ignored", Toast.LENGTH_SHORT).show();
             }
         }
     }

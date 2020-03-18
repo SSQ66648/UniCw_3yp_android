@@ -120,6 +120,7 @@
  *              TODO:   radius input option for testing (textinput view?)
  *              TODO:   sequential no-road-value warning (if no usable data for x seconds: treat as no location update warning)
  *              TODO:   ADD PROPER HANDLING FOR NO MAXSPEED: COULD BE ROAD DOESNT HAVE ONE SPECIFIED IN API
+ *              TODO:   have to work around address issue taking too long: (not fixed by check on activity)
  *              TODO:
  *------------------------------------------------------------------------------
  * CODE HOUSEKEEPING TO DO LIST:
@@ -1553,7 +1554,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 mmOutStream.write(msgBuffer);
             } catch (IOException e) {
                 //if you cannot write, close application
-                Toast.makeText(getBaseContext(), "Connection Failure",
+                Toast.makeText(getApplicationContext(), "Connection Failure",
                         Toast.LENGTH_LONG).show();
 //                finish();
             }
@@ -1581,7 +1582,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 Log.d(TAG, "onResume: create bluetooth socket");
             } catch (IOException e) {
                 Log.d(TAG, "onResume: Socket creation failed.");
-                Toast.makeText(getBaseContext(), "Socket creation failed",
+                Toast.makeText(getApplicationContext(), "Socket creation failed",
                         Toast.LENGTH_LONG).show();
             }
             // Establish the Bluetooth socket connection.
