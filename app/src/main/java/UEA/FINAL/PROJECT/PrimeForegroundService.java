@@ -133,6 +133,11 @@
  *              todo:
  * ---------------------------------------------------------------------------*/
 
+////todo: --------------------------------------------------------------------------------------------------------------
+////todo: MAC ADDRESS IS NULL....?
+////todo: --------------------------------------------------------------------------------------------------------------
+
+
 package UEA.FINAL.PROJECT;
 /*--------------------------------------
     IMPORT LIST
@@ -431,6 +436,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         }
         //get median delay value
         Collections.sort(medianTime);
+//todo: add index out of bound checking
         int median = medianTime.get(medianTime.size() / 2);
 
         Log.d(TAG, "MEAN DELAY: " + meanTime + "\n" +
@@ -1598,7 +1604,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             //send character when resuming.beginning transmission to check device is connected
             mConnectedThread.write("x");
         } catch (Exception e) {
-            Log.d(TAG, "onResume: error creating device.");
+            Log.e(TAG, "onResume: error creating device.");
         }
     }
 
