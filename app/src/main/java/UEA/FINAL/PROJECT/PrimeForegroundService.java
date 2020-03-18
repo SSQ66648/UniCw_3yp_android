@@ -40,7 +40,10 @@
  *                      complexity of app through omission of the 50 test classes and activities
  *                      (see previous version history below and test files included in portfolio)
  *      v2.0    200317  Added code to establish bluetooth connection with bike on start command:
- *                      -currently unhandled if no device/if service stops/if restarted/etc)
+ *                      -incomplete: untested & unhandled unexpected behaviour
+ *      v2.1    200318  Completed (potentially) debugging bluetooth socket connection :
+ *                      displaying each bluetooth update to logcat for testing (warning level logs
+ *                      to filter out debug of other logs)
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug

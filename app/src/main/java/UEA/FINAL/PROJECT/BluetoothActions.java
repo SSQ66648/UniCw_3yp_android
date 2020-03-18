@@ -18,6 +18,7 @@
  *                              logic, added watchedBooleans and listeners to trigger the added
  *                              create activity intent method, also show/hiding start intent button
  *              v1.3    200317  Added enabled checking for buttons, moved some checks to onResume.
+ *              v1.3.1  200317  Added default value for device address: workaround for development.
  *------------------------------------------------------------------------------
  * NOTES:       
  *      +   logcat records "errors" of no adapter attached, however attempting to solve this has

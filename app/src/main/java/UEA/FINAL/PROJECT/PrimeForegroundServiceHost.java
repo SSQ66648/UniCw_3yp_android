@@ -23,6 +23,7 @@
  *                              binding: as either unbinding kills service, or cannot reconnect
  *                              (bind is new instance every time), removed many dead lines.
  *              v1.6    200317  Added incoming bluetooth address from BluetoothActions class.
+ *              v1.6.1  200318  Added workaround-default check for intent extra bike address.
  *------------------------------------------------------------------------------
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
