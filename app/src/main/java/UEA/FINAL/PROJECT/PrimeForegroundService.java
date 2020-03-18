@@ -1572,6 +1572,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
         bikeAddress = intent.getStringExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS);
         Log.d(TAG, "onStartCommand: received bluetooth address: " + bikeAddress);
 
+        //todo: fix workaround: hard coded address if intent extra is lost enroute: why/ how can this happen??
+        if (bikeAddress == null) {
+            Log.e(TAG, "requestConnectDevice: Error: BIKE ADDRESS IS NULL: employing work-around of hard coded value for development.");
+            bikeAddress = "FC:A8:9A:00:4A:DF";
+        }
+
         //create device and set the MAC address
         try {
             BluetoothDevice device = bluetoothAdapter.getRemoteDevice(bikeAddress);
@@ -1636,7 +1642,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     if (endOfLineIndex > 0) {
                         //extract string (currently only used to get length after splitString)
                         String dataInPrint = stringBuilder_input.substring(0, endOfLineIndex);
-                        Log.d(TAG, "handleMessage: Data Received = " + dataInPrint);
+                        Log.d(TAG, "handleMessage: Data Received = \n" + dataInPrint);
                         //get length of data received (25char initially, grows with triple digits)
                         int dataLength = dataInPrint.length();
                         Log.d(TAG, "handleMessage: String Length = " + String.valueOf(dataLength));
@@ -1644,7 +1650,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         //check for beginning character of '#' -signifies desired transmission
                         if (stringBuilder_input.charAt(0) == '#') {
                             //string array for sensor values
-                            String sensorValues[] = new String[7];
+                            String[] sensorValues = new String[7];
 
                             //remove first character ('#') to simplify splitting string
                             stringBuilder_input.deleteCharAt(0);
@@ -1670,6 +1676,17 @@ public class PrimeForegroundService extends Service implements LocationListener,
 //                            txt_lowbeam.setText("LOWbeams = " + sensorValues[4]);
 //                            txt_highbeam.setText("HIGHbeams = " + sensorValues[5]);
 //                            txt_revcount.setText("REVCOUNTER = " + sensorValues[6]);
+
+                            //testing send values to logcat via warning (allows filtering of debug level logs and below)
+                            Log.w(TAG, "----------------------------------------");
+                            Log.w(TAG, "handleMessage: SEQ No. = " + sensorValues[0]);
+                            Log.w(TAG, "handleMessage: Speed = " + sensorValues[1] + " mph");
+                            Log.w(TAG, "handleMessage: LEFT indicator = " + sensorValues[2]);
+                            Log.w(TAG, "handleMessage: RIGHT indicator = \" + sensorValues[3]");
+                            Log.w(TAG, "handleMessage: LOW beams = \" + sensorValues[4]");
+                            Log.w(TAG, "handleMessage: HIGHbeams = " + sensorValues[5]);
+                            Log.w(TAG, "handleMessage: REVCOUNTER = " + sensorValues[6]);
+                            Log.w(TAG, "----------------------------------------");
 
 
                             //todo: better catch for non-sequential data

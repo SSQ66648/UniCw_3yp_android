@@ -170,6 +170,13 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         bike_MAC = intent.getStringExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS);
         Log.d(TAG, "onResume: obtained MAC address: " + bike_MAC + "\n" +
                 "Adding bike address to foreground service intent...");
+
+        //todo: fix work around: (dont know why intent is losing the address en-route?
+        if (bike_MAC == null) {
+            Log.e(TAG, "requestConnectDevice: Error: BIKE ADDRESS IS NULL: employing work-around of hard coded value for development.");
+            bike_MAC = "FC:A8:9A:00:4A:DF";
+        }
+
         //add address to foreground intent
         foregroundIntent.putExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS, bike_MAC);
     }
