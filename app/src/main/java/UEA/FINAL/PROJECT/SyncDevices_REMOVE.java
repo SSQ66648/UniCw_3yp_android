@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class SyncDevices extends AppCompatActivity {
+public class SyncDevices_REMOVE extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_sync_devices);
+//        setContentView(R.layout.activity_sync_devices_toremove);
     }
 }

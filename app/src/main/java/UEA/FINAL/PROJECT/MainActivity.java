@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //todo: change code to class when created...
-                startActivity(new Intent(MainActivity.this, SyncDevices.class));
+                startActivity(new Intent(MainActivity.this, SyncDevices_REMOVE.class));
             }
         });
 

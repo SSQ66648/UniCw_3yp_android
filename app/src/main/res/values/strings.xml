@@ -5,6 +5,7 @@
     <string name="none_paired">none paired</string>
 
     <!-- labels -->
+    <string name="bike_status"><u>Bike Status:</u></string>
 
     <!-- buttons -->
 </resources>
