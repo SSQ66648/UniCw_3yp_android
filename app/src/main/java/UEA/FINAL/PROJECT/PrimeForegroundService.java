@@ -13,10 +13,12 @@
  *              bluetooth connection to headset if current speed exceeds the limit at location.
  *--------------------------------------------------------------------------------------------------
  * NOTES:
- *      +   Relies on AppNotificationWrapper class to create the channels used for notification.
+ *      +   Relies on AppNotificationWrapper class to create the channels used for notification
+ *          (only in API>=26 - higher than test device (25): this causes the warning message to
+ *          logcat but does not impede its functionality).
  *      +   Services run on main thread of application so major workload has been moved to AsyncTask
- *          as they are own thread and have built in controls regarding execution.
- *      +   Testing for exact values of queries (eg radius size and rate of location updates) are
+ *          (as they are run in own thread and have built in controls regarding execution).
+ *      +   Testing for best values of queries (eg radius size and rate of location updates) are
  *          still ongoing.
  *      +   Some of the testing code has been left in place to help with the demonstration of
  *          functionality (see logcat).
@@ -30,6 +32,9 @@
  *      +   Selection of road from JSON response (if more than one) as been to use the first result
  *          in the list (pending a way to order the results from the API by distance from exact
  *          coordinates queried)
+ *      +   Bike status input of "rev counter" is currently always zero (as usage has not been
+ *          implemented yet in app nor emulation-of in Arduino: planned usage to deliver red-line
+ *          warning to user or possibly suggest gearshift)
  *      +   Dates are recorded in YYMMDD notation.
  *--------------------------------------------------------------------------------------------------
  * OUTSTANDING ISSUES:
@@ -44,6 +49,8 @@
  *      v2.1    200318  Completed (potentially) debugging bluetooth socket connection :
  *                      displaying each bluetooth update to logcat for testing (warning level logs
  *                      to filter out debug of other logs)
+ *      v2.1.1  200319  Changed bike status vector indicators and headlights to bool (makes more
+ *                      mental-model sense and can reuse watchedBool class to trigger audio.
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -286,7 +293,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //use same AsyncCompleteListener
 
     /*------------------
-        Speed Checking Variables
+        Speed-Check Variables
     ------------------*/
     String currentRoadName;
     int currentSpeedLimit = 0;
@@ -327,6 +334,19 @@ public class PrimeForegroundService extends Service implements LocationListener,
     private int seqOld;
     private BluetoothSocket bluetoothSocket_bike = null;
     private ConnectedThread mConnectedThread;
+
+    /*------------------
+        Bike Status Variables
+    ------------------*/
+    private float currentSpeed;
+    //indicators
+    private WatchedBool indicatorR;
+    private WatchedBool indicatorL;
+    //low/high beams
+    private WatchedBool headlightL;
+    private WatchedBool headlightH;
+    //revCounter is currently always zero: no use implemented as of yet)
+    private int revCounter = 0;
 
 
     /*--------------------------------------
@@ -1685,8 +1705,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             Log.w(TAG, "handleMessage: SEQ No. = " + sensorValues[0]);
                             Log.w(TAG, "handleMessage: Speed = " + sensorValues[1] + " mph");
                             Log.w(TAG, "handleMessage: LEFT indicator = " + sensorValues[2]);
-                            Log.w(TAG, "handleMessage: RIGHT indicator = \" + sensorValues[3]");
-                            Log.w(TAG, "handleMessage: LOW beams = \" + sensorValues[4]");
+                            Log.w(TAG, "handleMessage: RIGHT indicator = " + sensorValues[3]);
+                            Log.w(TAG, "handleMessage: LOW beams = " + sensorValues[4]);
                             Log.w(TAG, "handleMessage: HIGHbeams = " + sensorValues[5]);
                             Log.w(TAG, "handleMessage: REVCOUNTER = " + sensorValues[6]);
                             Log.w(TAG, "----------------------------------------");

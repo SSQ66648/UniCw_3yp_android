@@ -46,6 +46,7 @@
  *      //todo: checking for bt connections?
  *      //todo: consider enum for method choices (const)?
  *      //todo: COMBINE BTACTIONS ACTIVITY??
+ *      //todo: DISPLAY VALUES IF THEY ARE AVAILABLE OTHERWISE DONT CRASH SERVICE
  *
  -----------------------------------------------------------------------------*/
 package UEA.FINAL.PROJECT;
