@@ -38,6 +38,10 @@
  *      +   While soundPool seems the better choice for the SFX playback, there have been far too
  *          many issues with it and time wasted in debugging it, so (as have been advised by
  *          multiple people online) mediaPlayer has been re-used in its place.
+ *      +   Desired implementation of a 'word-library' to select from when new phrase was needed for
+ *          voice feedback has been paused (due to intolerable delay in each word: fix planned as
+ *          two players, one playing while the other queues the next file). For time constraint
+ *          reasons, additional whole-sentences have been used in their place for now.
  *      +   Dates are recorded in YYMMDD notation.
  *--------------------------------------------------------------------------------------------------
  * OUTSTANDING ISSUES:
@@ -56,6 +60,7 @@
  *                      mental-model sense and can reuse watchedBool class to trigger audio.
  *      v2.2    200319  Added completion of intake of bluetooth data, broadcast sending values to
  *                      activity for UI updates, mediaPlayer version of indicator audio feedback.
+ *      v2.3    200319  Added network connectivity change listener (early testing version).
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -248,6 +253,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //triggers of methods broadcast from activity (default is zero: do nothing)
     public static final int METHODTRIGGER_TESTAUDIO = 1;
     public static final int METHODTRIGGER_TESTPRINT = 2;
+    //audio file identifiers : warnings
+    public static final String TTS_LOLA_WARNING_NETWORK_LOST = "networkLost";
+    //audio file identifiers : notifications
+    public static final String TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE = "networkOnline";
+    //audio file identifiers : prompts/info
+    public static final String TTS_FULL_LOLA_PROMPT_VOICETEST = "voiceTest";
 
 
     /*--------------------------------------
@@ -323,6 +334,21 @@ public class PrimeForegroundService extends Service implements LocationListener,
         Audio variables
     ------------------*/
     MediaPlayer mediaPlayer_sfx_indicator;
+    //detection of network connection
+    private ConnectivityManager connectivityManager;
+    MediaPlayer mediaPlayer_voice;
+    private final String[] tts_lola_NetworkConnectionLost = {
+            "tts_mp3_lola_warning_warning.mp3",
+            "tts_mp3_lola_connection_network.mp3",
+            "tts_mp3_lola_connection_connection.mp3",
+            "tts_mp3_lola_connection_lost.mp3"
+    };
+
+
+    //position in media player array
+    int playIndex = 0;
+    //variable array of resource file IDs (copied to per array choice)
+    String[] resourceFilenameArray = new String[0];
 
 
     /*------------------
@@ -841,28 +867,24 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     ////todo: sorth methods from listeners/classes etc!------------------------------------------------------------------------------------------
 
-    //testing: to sort later:
-    //todo: check final doesnt break anything
-    MediaPlayer mediaPlayer_voice;
-    private final String[] tts_lola_NetworkConnectionLost = {
-            "tts_mp3_lola_warning_warning.mp3",
-            "tts_mp3_lola_connection_network.mp3",
-            "tts_mp3_lola_connection_connection.mp3",
-            "tts_mp3_lola_connection_lost.mp3"
-    };
-
-    public static final String TTS_LOLA_WARNING_NETWORK_LOST = "networkLost";
-    //position in media player array
-    int playIndex = 0;
-    //variable array of resource file IDs (copied to per array choice)
-    String[] resourceFilenameArray = new String[0];
 
     //-selects audio array to play
     public void playAudio(String playChoice) {
+        //clear any existing content
+        resourceFilenameArray = new String[0];
         switch (playChoice) {
             case TTS_LOLA_WARNING_NETWORK_LOST:
                 resourceFilenameArray = tts_lola_NetworkConnectionLost;
-                //todo: add more choices
+                break;
+            case TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE:
+                resourceFilenameArray[0] = "tts_lola_notify_networkconnectiononline.mp3";
+                break;
+            case TTS_FULL_LOLA_PROMPT_VOICETEST:
+                resourceFilenameArray[0] = "tts_lola_prompt_voicetest.mp3";
+                break;
+
+
+            //todo: add more choices
         }
         play();
     }
@@ -1714,7 +1736,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-create handler for incoming bluetooth serial data todo: move to static class to prevent leaks (warning suppressed)
     //todo: rename sensorvalues
-    //todo: change print to logd
     @SuppressLint("HandlerLeak")
     public void createInputHandler() {
         Log.d(TAG, "createInputHandler: ");
@@ -2376,18 +2397,23 @@ public class PrimeForegroundService extends Service implements LocationListener,
     };
 
 
-    private ConnectivityManager connectivityManager;
+    //-listens for network connection changes
     private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
         @Override
         public void onAvailable(Network network) {
             super.onAvailable(network);
             Log.d(TAG, "onAvailable: CONNECTION");
             if (!connectivityManager.isActiveNetworkMetered()) {
-                //non-metered doesnt confirm wifi but for purposes, can assume it does.
+                //non-metered doesnt confirm -IS- wifi but for purposes, assume it does.
                 Log.d(TAG, "onAvailable: WIFI");
+                //testing: "spare" audio clip to differentiate between networks becoming available
+                playAudio(TTS_FULL_LOLA_PROMPT_VOICETEST);
             } else {
                 Log.d(TAG, "onAvailable: MOBILE");
+                playAudio(TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE);
             }
+//todo: get differing audio clips
+
 
         }
 
