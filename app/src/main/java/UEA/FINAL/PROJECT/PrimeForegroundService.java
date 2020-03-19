@@ -145,7 +145,7 @@
  * ---------------------------------------------------------------------------*/
 
 ////todo: --------------------------------------------------------------------------------------------------------------
-////todo: MAC ADDRESS IS NULL....?
+////todo: SET BOOL LISTENERS
 ////todo: --------------------------------------------------------------------------------------------------------------
 
 
@@ -1711,14 +1711,17 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             Log.w(TAG, "handleMessage: REVCOUNTER = " + sensorValues[6]);
                             Log.w(TAG, "----------------------------------------");
 
-                            //get local copy that can be monitored)
+                            //get local copy (that can be monitored)
                             //todo: !!!! parse this to number that can be monitored!!!!!!!----------------------------------------------------------------------
                             String currentSpeeds = sensorValues[1] + "mph";
-                            indicatorL.setValue(Boolean.parseBoolean(sensorValues[2]));
-                            indicatorR.setValue(Boolean.parseBoolean(sensorValues[3]));
-                            headlightL.setValue(Boolean.parseBoolean(sensorValues[4]));
-                            headlightH.setValue(Boolean.parseBoolean(sensorValues[5]));
+                            //bool value obtained from int (if received value == 1 : true otherwise false (ie 0))
+                            indicatorL.setValue(sensorValues[2].equals("1"));
+                            indicatorR.setValue(sensorValues[3].equals("1"));
+                            headlightL.setValue(sensorValues[4].equals("1"));
+                            headlightH.setValue(sensorValues[5].equals("1"));
 
+                            //testing
+                            //Log.d(TAG, "handleMessage: LEFT INDICATOR RAW VALUE: " + sensorValues[2]);
 
                             sendUiUpdate(currentSpeedLimit, currentSpeeds, indicatorL, indicatorR, headlightL, headlightH);
 

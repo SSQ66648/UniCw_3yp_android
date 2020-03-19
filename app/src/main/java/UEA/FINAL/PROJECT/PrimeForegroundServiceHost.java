@@ -304,8 +304,8 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
             Log.d(TAG, "onReceive:view update broadcast from service...");
 
             //update views from passed extras
-            textIndicateR.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_LEFT));
-            textIndicateL.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_RIGHT));
+            textIndicateL.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_LEFT));
+            textIndicateR.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_RIGHT));
             textLightL.setText(intent.getStringExtra(UI_UPDATE_LIGHTS_LOW));
             textLightH.setText(intent.getStringExtra(UI_UPDATE_LIGHTS_HIGH));
             textSpeedLimit.setText(intent.getStringExtra(UI_UPDATE_SPEED_LIMIT));
