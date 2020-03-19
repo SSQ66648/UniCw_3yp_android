@@ -171,7 +171,9 @@ import android.content.res.AssetFileDescriptor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -205,6 +207,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -348,6 +352,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //revCounter is currently always zero: no use implemented as of yet)
     private int revCounter = 0;
 
+    int indicatorAudio;
+    //handles running of indicator sfx playback
+    Executor indicatorExecutor = Executors.newSingleThreadExecutor();
+    SoundPool soundPool;
+
 
     /*--------------------------------------
         LIFECYCLE
@@ -390,6 +399,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //register receiver for activity reqests to trigger service methods
         LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
                 new IntentFilter(PrimeForegroundService.SERVICE_BROADCASTRECEIVER_ACTION));
+
+        //create SFX player, load resource files
+        loadSoundpool();
+
+        //assign listeners to watchedBooleans
+        assignIndicatorBools();
     }
 
 
@@ -1720,9 +1735,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             headlightL.setValue(sensorValues[4].equals("1"));
                             headlightH.setValue(sensorValues[5].equals("1"));
 
-                            //testing
-                            //Log.d(TAG, "handleMessage: LEFT INDICATOR RAW VALUE: " + sensorValues[2]);
-
                             sendUiUpdate(currentSpeedLimit, currentSpeeds, indicatorL, indicatorR, headlightL, headlightH);
 
 
@@ -2065,6 +2077,66 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*--------------------------------------
         HELPER METHODS
     --------------------------------------*/
+    //-assigning listeners to watchedBooleans
+    public void assignIndicatorBools() {
+        Log.d(TAG, "assignIndicatorLightBools: ");
+        //if indicators are on: play indicator SFX
+        indicatorL.setBooleanChangeListener(new VariableChangeListener() {
+            @Override
+            public void onVariableChanged(Object... newValue) {
+                playIndicatorSFX();
+            }
+        });
+
+        indicatorR.setBooleanChangeListener(new VariableChangeListener() {
+            @Override
+            public void onVariableChanged(Object... newValue) {
+                if (indicatorR.getValue()) {
+                    playIndicatorSFX();
+                }
+            }
+        });
+
+        //todo: ADD WATCHED NUMERIC FOR SPEED COMPARISON--------------------------------------------------------------------------------------------------------------
+    }
+
+    //-creates soundPool and loads required SFX files
+    public void loadSoundpool() {
+        Log.d(TAG, "playIndicator: creating audioAttributes");
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        Log.d(TAG, "playIndicator: building soundPool");
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(10)
+                .setAudioAttributes(audioAttributes)
+                .build();
+
+        Log.d(TAG, "playIndicator: loading audio");
+        indicatorAudio = soundPool.load(this, R.raw.sfx_car_indicator_interior_twolivesleft, 1);
+    }
+
+
+    //-play indicator sfx (prevent duplication of code in both listeners)
+    public void playIndicatorSFX() {
+        if (indicatorL.getValue()) {
+            indicatorExecutor.execute(new Runnable() {
+                int indicatorSfx;
+
+                @Override
+                public void run() {
+                    indicatorSfx = soundPool.play(indicatorAudio, 1, 1, 1, -1, 1);
+                    while (indicatorL.getValue()) {
+                        //pause here while value is still TRUE
+                    }
+                    soundPool.stop(indicatorSfx);
+                }
+            });
+        }
+    }
+
     //-cancels both async tasks (if they exist)
     public void cancelAsyncTasks() {
         Log.d(TAG, "cancelAsyncTasks: ");
