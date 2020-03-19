@@ -171,7 +171,6 @@ import android.content.res.AssetFileDescriptor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.AsyncTask;
@@ -401,10 +400,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 new IntentFilter(PrimeForegroundService.SERVICE_BROADCASTRECEIVER_ACTION));
 
         //create SFX player, load resource files
-        loadSoundpool();
+//        loadSoundpool();
 
         //assign listeners to watchedBooleans
-        assignIndicatorBools();
+        assignWatchedindicatorBools();
     }
 
 
@@ -501,7 +500,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
 //        showToastOnUI("stopping service...");
 
 
-        //todo: test this
+        //release any unreleased mediaPlayers
+        stopPlayers();
 
         //unregister receiver for activity messages
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceBroadcastReceiver);
@@ -819,7 +819,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //testing: to sort later:
     //todo: check final doesnt break anything
-    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer_voice;
     private final String[] tts_lola_NetworkConnectionLost = {
             "tts_mp3_lola_warning_warning.mp3",
             "tts_mp3_lola_connection_network.mp3",
@@ -852,24 +852,24 @@ public class PrimeForegroundService extends Service implements LocationListener,
             playIndex = 0;
             resourceFilenameArray = null;
             //release resources
-            stopPlayer();
+            stopPlayers();
             return;
         } else {
             //repopulate player
             try {
-                if (mediaPlayer == null) {
+                if (mediaPlayer_voice == null) {
                     //iteration 1
-                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer_voice = new MediaPlayer();
                 } else {
                     //iteration 2+
-                    mediaPlayer.reset();
+                    mediaPlayer_voice.reset();
                 }
                 AssetFileDescriptor afd = getAssets().openFd(resourceFilenameArray[playIndex]);
-                mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
+                mediaPlayer_voice.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
                         afd.getLength());
-                mediaPlayer.setOnCompletionListener(this);
-                mediaPlayer.prepare();
-                mediaPlayer.start();
+                mediaPlayer_voice.setOnCompletionListener(this);
+                mediaPlayer_voice.prepare();
+                mediaPlayer_voice.start();
             } catch (IllegalArgumentException e) {
                 Log.e(TAG, "play: Error: resetting/starting player: illegal argument");
                 Log.e(TAG, "message: " + e.getMessage());
@@ -888,6 +888,26 @@ public class PrimeForegroundService extends Service implements LocationListener,
         }
     }
 
+    public void playSfx_indicator() {
+        Log.d(TAG, "playSfx: ");
+        try {
+            if (mediaPlayer_sfx_indicator == null) {
+                mediaPlayer_sfx_indicator = new MediaPlayer();
+            } else {
+                mediaPlayer_sfx_indicator.reset();
+            }
+            AssetFileDescriptor afd = getAssets().openFd("sfx_car_indicator_interior_twolivesleft.wav");
+            mediaPlayer_sfx_indicator.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
+                    afd.getLength());
+            mediaPlayer_sfx_indicator.setLooping(true);
+            mediaPlayer_sfx_indicator.prepare();
+            mediaPlayer_sfx_indicator.start();
+        } catch (Exception e) {
+            Log.e(TAG, "playSfx: Error: playing from indicator SFX mediaplayer");
+            e.printStackTrace();
+        }
+    }
+
 
     //-mediaplayer listener: triggers on currently playing audiofile completion
     @Override
@@ -898,14 +918,22 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
 
     //-release resources assigned to player if it exists
-    public void stopPlayer() {
-        if (mediaPlayer != null) {
-            Log.d(TAG, "stopPlayer: releasing resources for player");
-            mediaPlayer.release();
-            mediaPlayer = null;
-        } else {
-            Log.w(TAG, "stopPlayer: no player exists to stop");
+    public void stopPlayers() {
+        if (mediaPlayer_voice != null) {
+            Log.d(TAG, "stopPlayers: releasing resources for voice player");
+            mediaPlayer_voice.release();
+            mediaPlayer_voice = null;
+            return;
         }
+
+        if (mediaPlayer_sfx_indicator != null) {
+            Log.d(TAG, "stopPlayers: releasing resources for sfx player");
+            mediaPlayer_sfx_indicator.release();
+            mediaPlayer_sfx_indicator = null;
+            return;
+        }
+
+        Log.w(TAG, "stopPlayers: no player exists to stop");
     }
 
 
@@ -2078,21 +2106,37 @@ public class PrimeForegroundService extends Service implements LocationListener,
         HELPER METHODS
     --------------------------------------*/
     //-assigning listeners to watchedBooleans
-    public void assignIndicatorBools() {
+    public void assignWatchedindicatorBools() {
         Log.d(TAG, "assignIndicatorLightBools: ");
         //if indicators are on: play indicator SFX
         indicatorL.setBooleanChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
-                playIndicatorSFX();
+                if (indicatorL.getValue()) {
+                    //play looped SFX
+                    playSfx_indicator();
+                } else {
+                    if (mediaPlayer_sfx_indicator != null) {
+                        mediaPlayer_sfx_indicator.stop();
+                        mediaPlayer_sfx_indicator.release();
+                        mediaPlayer_sfx_indicator = null;
+                    }
+                }
             }
         });
 
+        //repeat of above
         indicatorR.setBooleanChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
                 if (indicatorR.getValue()) {
-                    playIndicatorSFX();
+                    playSfx_indicator();
+                } else {
+                    if (mediaPlayer_sfx_indicator != null) {
+                        mediaPlayer_sfx_indicator.stop();
+                        mediaPlayer_sfx_indicator.release();
+                        mediaPlayer_sfx_indicator = null;
+                    }
                 }
             }
         });
@@ -2100,42 +2144,46 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //todo: ADD WATCHED NUMERIC FOR SPEED COMPARISON--------------------------------------------------------------------------------------------------------------
     }
 
+
+    MediaPlayer mediaPlayer_sfx_indicator;
+
+
     //-creates soundPool and loads required SFX files
-    public void loadSoundpool() {
-        Log.d(TAG, "playIndicator: creating audioAttributes");
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build();
-
-        Log.d(TAG, "playIndicator: building soundPool");
-        soundPool = new SoundPool.Builder()
-                .setMaxStreams(10)
-                .setAudioAttributes(audioAttributes)
-                .build();
-
-        Log.d(TAG, "playIndicator: loading audio");
-        indicatorAudio = soundPool.load(this, R.raw.sfx_car_indicator_interior_twolivesleft, 1);
-    }
+//    public void loadSoundpool() {
+//        Log.d(TAG, "playIndicator: creating audioAttributes");
+//        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+//                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+//                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+//                .build();
+//
+//        Log.d(TAG, "playIndicator: building soundPool");
+//        soundPool = new SoundPool.Builder()
+//                .setMaxStreams(10)
+//                .setAudioAttributes(audioAttributes)
+//                .build();
+//
+//        Log.d(TAG, "playIndicator: loading audio");
+//        indicatorAudio = soundPool.load(this, R.raw.sfx_car_indicator_interior_twolivesleft, 1);
+//    }
 
 
     //-play indicator sfx (prevent duplication of code in both listeners)
-    public void playIndicatorSFX() {
-        if (indicatorL.getValue()) {
-            indicatorExecutor.execute(new Runnable() {
-                int indicatorSfx;
-
-                @Override
-                public void run() {
-                    indicatorSfx = soundPool.play(indicatorAudio, 1, 1, 1, -1, 1);
-                    while (indicatorL.getValue()) {
-                        //pause here while value is still TRUE
-                    }
-                    soundPool.stop(indicatorSfx);
-                }
-            });
-        }
-    }
+//    public void playIndicatorSFX() {
+//        if (indicatorL.getValue()) {
+//            indicatorExecutor.execute(new Runnable() {
+//                int indicatorSfx;
+//
+//                @Override
+//                public void run() {
+//                    indicatorSfx = soundPool.play(indicatorAudio, 0.99f, 0.99f, 1, -1, 0.99f);
+//                    while (indicatorL.getValue()) {
+//                        //pause here while value is still TRUE
+//                    }
+//                    soundPool.stop(indicatorSfx);
+//                }
+//            });
+//        }
+//    }
 
     //-cancels both async tasks (if they exist)
     public void cancelAsyncTasks() {
