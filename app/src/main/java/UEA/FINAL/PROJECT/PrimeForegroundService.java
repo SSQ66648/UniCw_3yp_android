@@ -2113,11 +2113,16 @@ public class PrimeForegroundService extends Service implements LocationListener,
             @Override
             public void onVariableChanged(Object... newValue) {
                 if (indicatorL.getValue()) {
+                    Log.d(TAG, "onVariableChanged: Start Indicator playback");
+                    //testing:
+                    Log.e(TAG, "onVariableChanged: VALUE: " + indicatorL.getValue());
                     //play looped SFX
                     playSfx_indicator();
                 } else {
+                    Log.d(TAG, "onVariableChanged: stop indicator playback");
                     if (mediaPlayer_sfx_indicator != null) {
                         mediaPlayer_sfx_indicator.stop();
+                        mediaPlayer_sfx_indicator.reset();
                         mediaPlayer_sfx_indicator.release();
                         mediaPlayer_sfx_indicator = null;
                     }
@@ -2130,10 +2135,13 @@ public class PrimeForegroundService extends Service implements LocationListener,
             @Override
             public void onVariableChanged(Object... newValue) {
                 if (indicatorR.getValue()) {
+                    Log.d(TAG, "onVariableChanged: Start Indicator playback");
                     playSfx_indicator();
                 } else {
+                    Log.d(TAG, "onVariableChanged: stop indicator playback");
                     if (mediaPlayer_sfx_indicator != null) {
                         mediaPlayer_sfx_indicator.stop();
+                        mediaPlayer_sfx_indicator.reset();
                         mediaPlayer_sfx_indicator.release();
                         mediaPlayer_sfx_indicator = null;
                     }

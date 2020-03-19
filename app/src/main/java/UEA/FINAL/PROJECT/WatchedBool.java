@@ -74,9 +74,10 @@ public class WatchedBool {
     public void setValue(boolean value) {
         if (value != this.value) {
             this.value = value;
-        }
-        if (variableChangeListener != null) {
-            variableChangeListener.onVariableChanged();
+
+            if (variableChangeListener != null) {
+                variableChangeListener.onVariableChanged();
+            }
         }
     }
 
