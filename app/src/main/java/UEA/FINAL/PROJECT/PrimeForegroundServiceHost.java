@@ -25,7 +25,8 @@
  *              v1.6    200317  Added incoming bluetooth address from BluetoothActions class.
  *              v1.6.1  200318  Added workaround-default check for intent extra bike address.
  *              v1.7    200319  Added broadcast listener for UI updates from service (efficient and
- *                              wont crash if no activity loaded to receive message ie screen off).
+ *                              wont crash if no activity loaded to receive message ie screen off),
+ *                              textViews to set with values of received extras.
  *------------------------------------------------------------------------------
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
@@ -60,6 +61,7 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -187,8 +189,8 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         super.onStart();
         Log.d(TAG, "onStart: (re) creating service intent");
         foregroundIntent = new Intent(this, PrimeForegroundService.class);
-
     }
+
 
     @Override
     protected void onResume() {
@@ -209,6 +211,10 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
 
         //add address to foreground intent
         foregroundIntent.putExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS, bike_MAC);
+
+        //register receiver for activity requests to trigger service methods
+        LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
+                new IntentFilter(PrimeForegroundServiceHost.SERVICE_BROADCASTRECEIVER_UI_UPDATE));
     }
 
 
@@ -216,6 +222,9 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     protected void onPause() {
         Log.d(TAG, "onPause: ");
         super.onPause();
+
+        Log.d(TAG, "onPause: unregistering broadcastReceiver");
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceBroadcastReceiver);
     }
 
     @Override

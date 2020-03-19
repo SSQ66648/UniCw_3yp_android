@@ -340,11 +340,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
     ------------------*/
     private float currentSpeed;
     //indicators
-    private WatchedBool indicatorR;
-    private WatchedBool indicatorL;
+    private WatchedBool indicatorR = new WatchedBool();
+    private WatchedBool indicatorL = new WatchedBool();
     //low/high beams
-    private WatchedBool headlightL;
-    private WatchedBool headlightH;
+    private WatchedBool headlightL = new WatchedBool();
+    private WatchedBool headlightH = new WatchedBool();
     //revCounter is currently always zero: no use implemented as of yet)
     private int revCounter = 0;
 
@@ -1743,6 +1743,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             }
                             //assign current to old sequence variable
                             seqOld = seqNew;
+
+
+                            //todo:  parse string to numeric values to watch!!!------------------------------------------------------------
                         }
 
                         //clear all string data
@@ -2040,6 +2043,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-send current values to activity to update UI output (for testing/demo)
     public void sendUiUpdate(int currentLimit, String actualSpeed, WatchedBool indicateLeft, WatchedBool indicateRight, WatchedBool lightLow, WatchedBool lightHigh) {
+        Log.d(TAG, "sendUiUpdate: ");
         //convert current limit
         String currentLimitString = Integer.toString(currentLimit);
 
