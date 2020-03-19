@@ -59,11 +59,16 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
 
-
-
         <service
             android:name=".PrimeForegroundService"
             android:enabled="true" />
+
+        <receiver android:name=".PrimeForegroundService$NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

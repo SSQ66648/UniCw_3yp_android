@@ -35,6 +35,9 @@
  *      +   Bike status input of "rev counter" is currently always zero (as usage has not been
  *          implemented yet in app nor emulation-of in Arduino: planned usage to deliver red-line
  *          warning to user or possibly suggest gearshift)
+ *      +   While soundPool seems the better choice for the SFX playback, there have been far too
+ *          many issues with it and time wasted in debugging it, so (as have been advised by
+ *          multiple people online) mediaPlayer has been re-used in its place.
  *      +   Dates are recorded in YYMMDD notation.
  *--------------------------------------------------------------------------------------------------
  * OUTSTANDING ISSUES:
@@ -51,6 +54,8 @@
  *                      to filter out debug of other logs)
  *      v2.1.1  200319  Changed bike status vector indicators and headlights to bool (makes more
  *                      mental-model sense and can reuse watchedBool class to trigger audio.
+ *      v2.2    200319  Added completion of intake of bluetooth data, broadcast sending values to
+ *                      activity for UI updates, mediaPlayer version of indicator audio feedback.
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -173,6 +178,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -236,6 +244,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public static final String LOGFILE_LINEBREAK_EQAL = "========================================\n";
     //used to receive broadcasts from activity: value unimportant
     public static final String SERVICE_BROADCASTRECEIVER_ACTION = "action";
+    //receiver for connection broadcasts
+    public static final String NETWORK_CONNECTION_STATUS_RECEIVER = "network";
     //triggers of methods broadcast from activity (default is zero: do nothing)
     public static final int METHODTRIGGER_TESTAUDIO = 1;
     public static final int METHODTRIGGER_TESTPRINT = 2;
@@ -313,6 +323,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*------------------
         Audio variables
     ------------------*/
+    MediaPlayer mediaPlayer_sfx_indicator;
+
 
     /*------------------
         Bluetooth Variables
@@ -398,6 +410,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //register receiver for activity reqests to trigger service methods
         LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
                 new IntentFilter(PrimeForegroundService.SERVICE_BROADCASTRECEIVER_ACTION));
+
+        //register network change receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(networkChangeReceiver,
+                new IntentFilter(PrimeForegroundService.NETWORK_CONNECTION_STATUS_RECEIVER));
 
         //create SFX player, load resource files
 //        loadSoundpool();
@@ -503,8 +519,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //release any unreleased mediaPlayers
         stopPlayers();
 
-        //unregister receiver for activity messages
+        //unregister receiver for activity messages & network changes
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(networkChangeReceiver);
+
 
         Log.d(TAG, "onDestroy: closing bluetooth sockets:");
         if (bluetoothSocket_bike != null) {
@@ -2105,6 +2123,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*--------------------------------------
         HELPER METHODS
     --------------------------------------*/
+
+
     //-assigning listeners to watchedBooleans
     public void assignWatchedindicatorBools() {
         Log.d(TAG, "assignIndicatorLightBools: ");
@@ -2152,46 +2172,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //todo: ADD WATCHED NUMERIC FOR SPEED COMPARISON--------------------------------------------------------------------------------------------------------------
     }
 
-
-    MediaPlayer mediaPlayer_sfx_indicator;
-
-
-    //-creates soundPool and loads required SFX files
-//    public void loadSoundpool() {
-//        Log.d(TAG, "playIndicator: creating audioAttributes");
-//        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-//                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-//                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-//                .build();
-//
-//        Log.d(TAG, "playIndicator: building soundPool");
-//        soundPool = new SoundPool.Builder()
-//                .setMaxStreams(10)
-//                .setAudioAttributes(audioAttributes)
-//                .build();
-//
-//        Log.d(TAG, "playIndicator: loading audio");
-//        indicatorAudio = soundPool.load(this, R.raw.sfx_car_indicator_interior_twolivesleft, 1);
-//    }
-
-
-    //-play indicator sfx (prevent duplication of code in both listeners)
-//    public void playIndicatorSFX() {
-//        if (indicatorL.getValue()) {
-//            indicatorExecutor.execute(new Runnable() {
-//                int indicatorSfx;
-//
-//                @Override
-//                public void run() {
-//                    indicatorSfx = soundPool.play(indicatorAudio, 0.99f, 0.99f, 1, -1, 0.99f);
-//                    while (indicatorL.getValue()) {
-//                        //pause here while value is still TRUE
-//                    }
-//                    soundPool.stop(indicatorSfx);
-//                }
-//            });
-//        }
-//    }
 
     //-cancels both async tasks (if they exist)
     public void cancelAsyncTasks() {
@@ -2385,6 +2365,30 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     break;
                 default:
                     Log.w(TAG, "onReceive: Warning: unexpected default methodTrigger encountered");
+            }
+        }
+    };
+
+    //-listen for network connection changes (loss)
+    public BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive: network status changed:");
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo networkMobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            //todo: add null check for both:
+            if (!networkWifi.isAvailable() && !networkMobile.isAvailable()) {
+                Log.w(TAG, "onReceive: neither network available!");
+                playAudio(TTS_LOLA_WARNING_NETWORK_LOST);
+                return;
+            } else if (networkWifi.isAvailable()) {
+                //todo: play msg
+                return;
+            } else if (networkMobile.isAvailable()) {
+                //todo: play msg
+                return;
             }
         }
     };

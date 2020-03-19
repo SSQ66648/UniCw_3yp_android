@@ -26,15 +26,12 @@
  *              v1.6.1  200318  Added workaround-default check for intent extra bike address.
  *              v1.7    200319  Added broadcast listener for UI updates from service (efficient and
  *                              wont crash if no activity loaded to receive message ie screen off),
- *                              textViews to set with values of received extras.
+ *                              layout incl. textViews to set with values of received extras.
  *------------------------------------------------------------------------------
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
  *              to another app or notification for example)
  *              todo: will need to consider how to handle this if it is a problem? - ie if activity gone, have to reopen to get to stop button -tie ervice stop to application lifecycle somehow?
- *          +   will be attempting (200223) to not include any binding of service as previous
- *              experiment did not show much (if any) need for it: will return to this if problems
- *              are encountered.
  *          +   no enabled/etc have been implemented for time (other than debug logs): will include
  *              them in next iteration if this version of the service works
  *
@@ -49,8 +46,9 @@
  *      //todo: checking for bt connections?
  *      //todo: consider enum for method choices (const)?
  *      //todo: COMBINE BTACTIONS ACTIVITY??
- *      //todo: DISPLAY VALUES IF THEY ARE AVAILABLE OTHERWISE DONT CRASH SERVICE
- *
+ *      //todo: hide/collapse bike status until something to view? (visible on connect?)
+ *      //todo: add better notification to user re bt connecting
+ *      //todo: add check for bt connection failure (if fail: notify user and maybe dont start service?) -add testing override of course.
  -----------------------------------------------------------------------------*/
 package UEA.FINAL.PROJECT;
 /*--------------------------------------
