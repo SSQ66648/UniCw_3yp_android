@@ -1711,6 +1711,17 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             Log.w(TAG, "handleMessage: REVCOUNTER = " + sensorValues[6]);
                             Log.w(TAG, "----------------------------------------");
 
+                            //get local copy that can be monitored)
+                            //todo: !!!! parse this to number that can be monitored!!!!!!!----------------------------------------------------------------------
+                            String currentSpeeds = sensorValues[1] + "mph";
+                            indicatorL.setValue(Boolean.parseBoolean(sensorValues[2]));
+                            indicatorR.setValue(Boolean.parseBoolean(sensorValues[3]));
+                            headlightL.setValue(Boolean.parseBoolean(sensorValues[4]));
+                            headlightH.setValue(Boolean.parseBoolean(sensorValues[5]));
+
+
+                            sendUiUpdate(currentSpeedLimit, currentSpeeds, indicatorL, indicatorR, headlightL, headlightH);
+
 
                             //todo: better catch for non-sequential data
                             //convert string to int
@@ -1939,7 +1950,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    //-print current iteration of primary loop logobject to file
+    //-print current iteration of primary loop logObject to file
     public void logIteration() {
         Log.d(TAG, "logIteration:");
         if (logObject == null) {
@@ -2026,6 +2037,23 @@ public class PrimeForegroundService extends Service implements LocationListener,
         }
     }
 
+
+    //-send current values to activity to update UI output (for testing/demo)
+    public void sendUiUpdate(int currentLimit, String actualSpeed, WatchedBool indicateLeft, WatchedBool indicateRight, WatchedBool lightLow, WatchedBool lightHigh) {
+        //convert current limit
+        String currentLimitString = Integer.toString(currentLimit);
+
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        Intent intent = new Intent(PrimeForegroundServiceHost.SERVICE_BROADCASTRECEIVER_UI_UPDATE);
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_INDICATOR_LEFT, indicateLeft.getValueString());
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_INDICATOR_RIGHT, indicateRight.getValueString());
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_LIGHTS_LOW, lightLow.getValueString());
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_LIGHTS_HIGH, lightHigh.getValueString());
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_SPEED_LIMIT, currentLimitString);
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_SPEED_ACTUAL, actualSpeed);
+
+        lbm.sendBroadcast(intent);
+    }
 
     /*--------------------------------------
         HELPER METHODS

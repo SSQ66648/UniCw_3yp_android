@@ -24,6 +24,8 @@
  *                              (bind is new instance every time), removed many dead lines.
  *              v1.6    200317  Added incoming bluetooth address from BluetoothActions class.
  *              v1.6.1  200318  Added workaround-default check for intent extra bike address.
+ *              v1.7    200319  Added broadcast listener for UI updates from service (efficient and
+ *                              wont crash if no activity loaded to receive message ie screen off).
  *------------------------------------------------------------------------------
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
@@ -55,6 +57,7 @@ package UEA.FINAL.PROJECT;
 --------------------------------------*/
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -63,6 +66,7 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -79,16 +83,32 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     --------------------------------------*/
     //name of intent extra sent via broadcast to method receiver in service
     public static final String METHOD_TRIGGER = "methodMessage";
+    //used to receive broadcasts from activity: value unimportant
+    public static final String SERVICE_BROADCASTRECEIVER_UI_UPDATE = "updateUi";
+    //view identifier constants for broadcast listener
+    public static final String UI_UPDATE_INDICATOR_LEFT = "indLeft";
+    public static final String UI_UPDATE_INDICATOR_RIGHT = "indRight";
+    public static final String UI_UPDATE_LIGHTS_LOW = "lightsLow";
+    public static final String UI_UPDATE_LIGHTS_HIGH = "lightsHigh";
+    public static final String UI_UPDATE_SPEED_LIMIT = "speedLimit";
+    public static final String UI_UPDATE_SPEED_ACTUAL = "speedActual";
 
 
     /*--------------------------------------
         MEMBER VARIABLES
     --------------------------------------*/
     //---LAYOUT---
-    Button startService;
-    Button stopService;
-    Button testBatt;
-    Button testAudio;
+    private Button startService;
+    private Button stopService;
+    private Button testBatt;
+    private Button testAudio;
+
+    private TextView textIndicateR;
+    private TextView textIndicateL;
+    private TextView textLightL;
+    private TextView textLightH;
+    private TextView textSpeedLimit;
+    private TextView textSpeedActual;
 
     //---VARIABLES---
     Intent foregroundIntent;
@@ -112,6 +132,14 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //---VIEWS---
+        textIndicateL = findViewById(R.id.textupdate_indicate_left);
+        textIndicateR = findViewById(R.id.textupdate_indicate_right);
+        textLightL = findViewById(R.id.textupdate_lights_low);
+        textLightH = findViewById(R.id.textupdate_lights_high);
+        textSpeedLimit = findViewById(R.id.textupdate_speed_limit);
+        textSpeedActual = findViewById(R.id.textupdate_speed_actual);
+
+        //---BUTTONS---
         startService = findViewById(R.id.button_gpsforegroundservice_start);
         startService.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,6 +283,26 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         Log.d(TAG, "stopGpsService: ");
         stopService(foregroundIntent);
     }
+
+
+    /*--------------------------------------
+        BROADCAST RECEIVERS
+    --------------------------------------*/
+    //-receive instructions to trigger service methods from activity
+    private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive:view update broadcast from service...");
+
+            //update views from passed extras
+            textIndicateR.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_LEFT));
+            textIndicateL.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_RIGHT));
+            textLightL.setText(intent.getStringExtra(UI_UPDATE_LIGHTS_LOW));
+            textLightH.setText(intent.getStringExtra(UI_UPDATE_LIGHTS_HIGH));
+            textSpeedLimit.setText(intent.getStringExtra(UI_UPDATE_SPEED_LIMIT));
+            textSpeedActual.setText(intent.getStringExtra(UI_UPDATE_SPEED_ACTUAL));
+        }
+    };
 
 
 }

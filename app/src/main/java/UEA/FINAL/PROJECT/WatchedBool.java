@@ -11,6 +11,7 @@
  *
  * HISTORY:     v1.0    200316  Initial implementation.
  *              v1.1    200316  Returned to version previously tested as is known working.
+ *              v1.2    200319  Added string accessor for value.
  *------------------------------------------------------------------------------
  * NOTES:       
  *      +   
@@ -59,6 +60,11 @@ public class WatchedBool {
     --------------------------------------*/
     public boolean getValue() {
         return value;
+    }
+
+
+    public String getValueString() {
+        return Boolean.toString(value);
     }
 
 

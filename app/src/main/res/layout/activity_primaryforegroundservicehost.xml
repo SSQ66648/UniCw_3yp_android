@@ -34,23 +34,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.15" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.8" />
+        app:layout_constraintGuide_percent="0.85" />
 
     <!-- CONTAINERS -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/container_placholder_btactions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_label_primeservicehost_bikestatus"
+        app:layout_constraintBottom_toTopOf="@+id/container_primeservicehost_bikestaus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,30 +73,31 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/text_label_primeservicehost_bikestatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/bike_status"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/container_primeservicehost_bikestaus"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_primeservicehost_bikestaus"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/format_border_black"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_label_primeservicehost_bikestatus">
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/container_placholder_btactions">
+
+        <TextView
+            android:id="@+id/text_label_primeservicehost_bikestatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bike_status"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="container_primeservicehost_bikestaus" />
 
         <TextView
             android:id="@+id/textlabel_speedlimit"
@@ -105,14 +106,14 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:text="Speedlimit:"
-            app:layout_constraintBottom_toTopOf="@+id/textView9"
+            app:layout_constraintBottom_toTopOf="@+id/textupdate_speed_limit"
             app:layout_constraintEnd_toStartOf="@+id/textView5"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+            app:layout_constraintTop_toBottomOf="@+id/textupdate_lights_low" />
 
         <TextView
-            android:id="@+id/textView14"
+            android:id="@+id/textupdate_indicate_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -135,7 +136,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView4" />
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/textupdate_speed_limit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -148,7 +149,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textlabel_speedlimit" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/textupdate_lights_high"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -164,14 +165,14 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:text="Headlights: LOW"
-            app:layout_constraintBottom_toTopOf="@+id/textView11"
+            app:layout_constraintBottom_toTopOf="@+id/textupdate_lights_low"
             app:layout_constraintEnd_toStartOf="@+id/textView7"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+            app:layout_constraintTop_toBottomOf="@+id/textupdate_indicate_left" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/textupdate_indicate_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -203,15 +204,15 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:text="Indicator: LEFT"
-            app:layout_constraintBottom_toTopOf="@+id/textView13"
+            app:layout_constraintBottom_toTopOf="@+id/textupdate_indicate_left"
             app:layout_constraintEnd_toStartOf="@+id/textView3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_label_primeservicehost_bikestatus"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/textupdate_speed_actual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -221,7 +222,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/textupdate_lights_low"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -251,10 +252,9 @@
         android:id="@+id/constraintLayout3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/format_border_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.5"
