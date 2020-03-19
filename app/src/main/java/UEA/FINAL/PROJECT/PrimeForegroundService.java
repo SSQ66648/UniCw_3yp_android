@@ -179,8 +179,7 @@ import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.NetworkRequest;
+import android.net.Network;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -411,9 +410,15 @@ public class PrimeForegroundService extends Service implements LocationListener,
         LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
                 new IntentFilter(PrimeForegroundService.SERVICE_BROADCASTRECEIVER_ACTION));
 
-        //register network change receiver
-        LocalBroadcastManager.getInstance(this).registerReceiver(networkChangeReceiver,
-                new IntentFilter(PrimeForegroundService.NETWORK_CONNECTION_STATUS_RECEIVER));
+        //register network change receiver //todo: did not work review/remove
+
+
+        //testing----------------------------------------------------------------------------------------------------------------------------------
+
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        connectivityManager.registerDefaultNetworkCallback(networkCallback);
+        //testing----------------------------------------------------------------------------------------------------------------------------------
+
 
         //create SFX player, load resource files
 //        loadSoundpool();
@@ -521,7 +526,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //unregister receiver for activity messages & network changes
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceBroadcastReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(networkChangeReceiver);
+
+        connectivityManager.unregisterNetworkCallback(networkCallback);
 
 
         Log.d(TAG, "onDestroy: closing bluetooth sockets:");
@@ -2369,27 +2375,27 @@ public class PrimeForegroundService extends Service implements LocationListener,
         }
     };
 
-    //-listen for network connection changes (loss)
-    public BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "onReceive: network status changed:");
-            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            NetworkInfo networkMobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            //todo: add null check for both:
-            if (!networkWifi.isAvailable() && !networkMobile.isAvailable()) {
-                Log.w(TAG, "onReceive: neither network available!");
-                playAudio(TTS_LOLA_WARNING_NETWORK_LOST);
-                return;
-            } else if (networkWifi.isAvailable()) {
-                //todo: play msg
-                return;
-            } else if (networkMobile.isAvailable()) {
-                //todo: play msg
-                return;
+    private ConnectivityManager connectivityManager;
+    private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
+        @Override
+        public void onAvailable(Network network) {
+            super.onAvailable(network);
+            Log.d(TAG, "onAvailable: CONNECTION");
+            if (!connectivityManager.isActiveNetworkMetered()) {
+                //non-metered doesnt confirm wifi but for purposes, can assume it does.
+                Log.d(TAG, "onAvailable: WIFI");
+            } else {
+                Log.d(TAG, "onAvailable: MOBILE");
             }
+
+        }
+
+        @Override
+        public void onLost(Network network) {
+            super.onLost(network);
+            Log.d(TAG, "losing active connection");
+            playAudio(TTS_LOLA_WARNING_NETWORK_LOST);
         }
     };
 
