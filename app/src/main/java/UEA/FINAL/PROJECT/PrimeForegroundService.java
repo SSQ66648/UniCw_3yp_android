@@ -42,6 +42,9 @@
  *          voice feedback has been paused (due to intolerable delay in each word: fix planned as
  *          two players, one playing while the other queues the next file). For time constraint
  *          reasons, additional whole-sentences have been used in their place for now.
+ *      +   The online source of the TTS audio clips changed format during development resulting in
+ *          a slightly different sounding voice for later full sentence files (these files are
+ *          marked by a trailing '_' before their file type (.mp3).
  *      +   Dates are recorded in YYMMDD notation.
  *--------------------------------------------------------------------------------------------------
  * OUTSTANDING ISSUES:
@@ -61,6 +64,7 @@
  *      v2.2    200319  Added completion of intake of bluetooth data, broadcast sending values to
  *                      activity for UI updates, mediaPlayer version of indicator audio feedback.
  *      v2.3    200319  Added network connectivity change listener (early testing version).
+ *      v2.4    200320  Tidied Code. Added bulk of audio files, Const identifiers (also to switch).
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -166,7 +170,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.os.AsyncTask;
@@ -202,8 +205,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -219,14 +220,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
         CONSTANTS
     --------------------------------------*/
     private static final String TAG = "PrimeForegroundService";
-    //overpassAPI radius request value (const for easy changing during debug)
+    //overpassAPI radius request value (const for easy changing during debug) todo: add UI change of value for testing
     public static final int API_RADIUS_VALUE = 20;
-    //max seconds allowed to prioritise accuracy over newest location in locationchanged
+    //max seconds allowed to prioritise accuracy over newest location in locationChanged
     public static final int LOCATION_DELAY_THRESHOLD = 15;
     //async task completion listener identification flags
     public static final String TASK_COMPLETION_FLAG_HTTP = "httpComplete";
     public static final String TASK_COMPLETION_FLAG_PARSE = "httpParse";
-    //line breaks for logging to file
+    //line breaks for logging to file (remove duplicate code) todo: add line directly to method: (as always passing same one?)
     public static final String LOGFILE_LINEBREAK_STAR =
             "****************************************\n";
     public static final String LOGFILE_LINEBREAK_DASH =
@@ -235,17 +236,53 @@ public class PrimeForegroundService extends Service implements LocationListener,
             "========================================\n";
     //used to receive broadcasts from activity: value unimportant
     public static final String SERVICE_BROADCASTRECEIVER_ACTION = "action";
-    //receiver for connection broadcasts
-    public static final String NETWORK_CONNECTION_STATUS_RECEIVER = "network";
-    //triggers of methods broadcast from activity (default is zero: do nothing)
+    //triggers of service methods, broadcast from activity (default is zero: do nothing)
     public static final int METHODTRIGGER_TESTAUDIO = 1;
     public static final int METHODTRIGGER_TESTPRINT = 2;
-    //audio file identifiers : warnings
+
+    /*------------------
+        Audio Identification Strings (used for selection of corresponding (fragmented) audio arrays
+    ------------------*/
     public static final String TTS_LOLA_WARNING_NETWORK_LOST = "networkLost";
-    //audio file identifiers : notifications
-    public static final String TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE = "networkOnline";
-    //audio file identifiers : prompts/info
-    public static final String TTS_FULL_LOLA_PROMPT_VOICETEST = "voiceTest";
+
+    /*------------------
+        Audio Identification Strings (used for selection of corresponding (full) audio files
+    ------------------*/
+    //alerts (urgent prompt to user)
+    public static final String TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED = "limitExceeded";
+    //notifications (system status / update information)
+    public static final String TTS_LOLA_NOTIFY_WIFI_ONLINE = "wifiOnline";
+    public static final String TTS_LOLA_NOTIFY_LIMIT_CHANGE_20 = "limit20";
+    public static final String TTS_LOLA_NOTIFY_LIMIT_CHANGE_30 = "limit30";
+    public static final String TTS_LOLA_NOTIFY_LIMIT_CHANGE_40 = "limit40";
+    public static final String TTS_LOLA_NOTIFY_LIMIT_CHANGE_50 = "limit50";
+    public static final String TTS_LOLA_NOTIFY_LIMIT_CHANGE_60 = "limit60";
+    public static final String TTS_LOLA_NOTIFY_LIMIT_CHANGE_70 = "limit70";
+    public static final String TTS_LOLA_NOTIFY_BEGIN_LOCATION_UPDATES = "beginLocation";
+    public static final String TTS_LOLA_NOTIFY_BLUETOOTH_ESTABLISHED = "bluetoothLinked";
+    public static final String TTS_LOLA_NOTIFY_NETWORK_ONLINE = "networkOnline";
+    public static final String TTS_LOLA_NOTIFY_GPS_ONLINE = "gpsOnline";
+    public static final String TTS_LOLA_NOTIFY_MOBILE_ONLINE = "mobileOnline";
+    public static final String TTS_LOLA_NOTIFY_SPEEDLIMIT_CHANGED = "limitChanged";
+    public static final String TTS_LOLA_NOTIFY_START_SERVICE = "startService";
+    //prompts (background information or instructions to user) //todo: consider splitting info from prompts
+    public static final String TTS_LOLA_PROMPT_CHECK_BLUETOOTH = "checkBluetooth";
+    public static final String TTS_LOLA_PROMPT_DEV_VERSION = "developmentVersion";
+    public static final String TTS_LOLA_PROMPT_DISCLAIMER = "disclaimer";
+    public static final String TTS_LOLA_PROMPT_HELMET_TEST = "helmetTest";
+    public static final String TTS_LOLA_PROMPT_CONFIRM_VOICE = "confirmVoiceSelection";
+    public static final String TTS_LOLA_PROMPT_ENABLE_PERMISSIONS = "enablePermissions";
+    public static final String TTS_LOLA_PROMPT_SERVICE_DEVICE_SETTINGS = "troubleshootingService";
+    public static final String TTS_LOLA_PROMPT_VOICETEST = "voiceTest";
+    //warnings (important (system) status update to user)
+    public static final String TTS_LOLA_WARNING_CONNECTIONS_REQUIRED = "connectionsRequired";
+    public static final String TTS_LOLA_WARNING_BLUETOOTH_LOST = "bluetoothLost";
+    public static final String TTS_LOLA_WARNING_ERROR_OCCURRED = "miscErrorOccurred";
+    public static final String TTS_LOLA_WARNING_GPS_LOST = "gpsLost";
+    public static final String TTS_LOLA_WARNING_NETWORK_LOST_FULL = "networkLost";
+    public static final String TTS_LOLA_WARNING_NO_ROAD_DATA = "noRoadData";
+    public static final String TTS_LOLA_WARNING_NO_SPEED_DATA = "noSpeedData";
+    public static final String TTS_LOLA_WARNING_UNABLE_TO_CONTINUE = "criticalError";
 
 
     /*--------------------------------------
@@ -837,10 +874,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         //non-metered doesnt confirm -IS- wifi but for purposes, assume it does.
                         Log.d(TAG, "onAvailable: WIFI");
                         //testing: "spare" clip to differentiate between networks becoming available
-                        playAudio(TTS_FULL_LOLA_PROMPT_VOICETEST);
+                        playAudio(TTS_LOLA_NOTIFY_WIFI_ONLINE);
                     } else {
                         Log.d(TAG, "onAvailable: MOBILE");
-                        playAudio(TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE);
+                        playAudio(TTS_LOLA_NOTIFY_MOBILE_ONLINE);
                     }
                 }
 
@@ -1535,22 +1572,116 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*--------------------------------------
         METHODS
     --------------------------------------*/
-    //-selects audio array to play
+    //-selects audio array to play (mostly implemented with FULL single files, however kept method
+    // in this format in event there is time to debug the delay in 'word-pool' version
     public void playAudio(String playChoice) {
         //clear any existing content
         resourceFilenameArray = new String[1];
         switch (playChoice) {
-            case TTS_LOLA_WARNING_NETWORK_LOST:
-                resourceFilenameArray = tts_lola_NetworkConnectionLost;
+            //alerts
+            case TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_alert_speedlimitexceeded.mp3";
                 break;
-            case TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE:
+            //notifications
+            case TTS_LOLA_NOTIFY_LIMIT_CHANGE_20:
+                //todo: revisit idea of fall-through array assignment: ie create array with 2 items, 1st file is update and 2nd file specific number value?
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_notify_20mph.mp3";
+                break;
+            case TTS_LOLA_NOTIFY_LIMIT_CHANGE_30:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_notify_30mph.mp3";
+                break;
+            case TTS_LOLA_NOTIFY_BEGIN_LOCATION_UPDATES:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_notify_beginninglocationupdates.mp3";
+                break;
+            case TTS_LOLA_NOTIFY_BLUETOOTH_ESTABLISHED:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_notify_bluetoothestablished.mp3";
+                break;
+            case TTS_LOLA_NOTIFY_MOBILE_ONLINE:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_notify_mobileonline_.mp3";
+                break;
+            case TTS_LOLA_NOTIFY_NETWORK_ONLINE:
+                //todo: implment / test
+                //not currently used (as opted for wifi mobile data -specific feedback,
+                //kept to possibly reuse later if user-preferred (not much wifi outside)
                 resourceFilenameArray[0] = "tts_lola_notify_networkconnectiononline.mp3";
                 break;
-            case TTS_FULL_LOLA_PROMPT_VOICETEST:
+            case TTS_LOLA_NOTIFY_SPEEDLIMIT_CHANGED:
+                //used in conjunction with numeric value: //todo: review combining idea
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_notify_speedlimitchangedto.mp3";
+                break;
+            case TTS_LOLA_NOTIFY_START_SERVICE:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_notify_startingservice.mp3";
+                break;
+            case TTS_LOLA_NOTIFY_WIFI_ONLINE:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_notify_wifionline_.mp3";
+                break;
+            //prompts
+            case TTS_LOLA_PROMPT_CHECK_BLUETOOTH:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_prompt_checkbluetoothconnected.mp3";
+                break;
+            case TTS_LOLA_PROMPT_DEV_VERSION:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_prompt_developmentbuildversion.mp3";
+                break;
+            case TTS_LOLA_PROMPT_DISCLAIMER:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_prompt_disclaimer.mp3";
+                break;
+            case TTS_LOLA_PROMPT_HELMET_TEST:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_prompt_helmetbluetoothtest.mp3";
+                break;
+            case TTS_LOLA_PROMPT_ENABLE_PERMISSIONS:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_prompt_pleaseenablepermissions.mp3";
+                break;
+            case TTS_LOLA_PROMPT_VOICETEST:
+                //currently unused
                 resourceFilenameArray[0] = "tts_lola_prompt_voicetest.mp3";
                 break;
-
-            //todo: add more choices
+            //warnings
+            case TTS_LOLA_WARNING_CONNECTIONS_REQUIRED:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_warning_appconnectionstofunction.mp3";
+                break;
+            case TTS_LOLA_WARNING_BLUETOOTH_LOST:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_warning_bluetoothtobikelost.mp3";
+                break;
+            case TTS_LOLA_WARNING_ERROR_OCCURRED:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_warning_erroroccurred.mp3";
+                break;
+            case TTS_LOLA_WARNING_GPS_LOST:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_warning_gpssignallost.mp3";
+                break;
+            case TTS_LOLA_WARNING_NETWORK_LOST:
+                //original 'word-pool' implementation (kept unacceptable delay for reference)
+                resourceFilenameArray = tts_lola_NetworkConnectionLost;
+                break;
+            case TTS_LOLA_WARNING_NO_ROAD_DATA:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_warning_noroaddatafound.mp3";
+                break;
+            case TTS_LOLA_WARNING_NO_SPEED_DATA:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_warning_nospeedlimitavailable.mp3";
+                break;
+            case TTS_LOLA_WARNING_UNABLE_TO_CONTINUE:
+                //todo: implment / test
+                resourceFilenameArray[0] = "tts_lola_warning_unabletocontinue.mp3";
+                break;
         }
         play();
     }
