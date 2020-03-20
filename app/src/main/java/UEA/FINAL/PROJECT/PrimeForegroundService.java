@@ -2411,24 +2411,28 @@ public class PrimeForegroundService extends Service implements LocationListener,
         currentSpeed.setFloatChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
+
                 //check if exceeding limit (ignore limit of zero: no data)
                 if (currentSpeed.get() > currentSpeedLimit.get() && currentSpeedLimit.get() > 0) {
-                    Log.w(TAG, "onVariableChanged: Warning: speed limit exceeded!");
-                    speedingInProgress = true;
+                    //prevent re-triggering every update
+                    if (!speedingInProgress) {
+                        Log.w(TAG, "onVariableChanged: Warning: speed limit exceeded!");
+                        speedingInProgress = true;
 
-                    //changed to non-queue version //todo: check this
-                    //as this is priority feedback: interrupt any playing media
-                    if ((mediaPlayer_voice != null && mediaPlayer_voice.isPlaying()) ||
-                            (mediaPlayer_sfx_indicator != null &&
-                                    mediaPlayer_sfx_indicator.isPlaying())) {
-                        stopPlayers();
-                        playAudio(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+                        //changed to non-queue version //todo: check this
+                        //as this is priority feedback: interrupt any playing media
+                        if ((mediaPlayer_voice != null && mediaPlayer_voice.isPlaying()) ||
+                                (mediaPlayer_sfx_indicator != null &&
+                                        mediaPlayer_sfx_indicator.isPlaying())) {
+                            stopPlayers();
+                            playAudio(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+                        }
+                        //todo: add some sort of timer here: start on exceed, stop on below.
+                        //todo: -use to trigger audio again in x seconds if still speeding?
+                    } else {
+                        //allow speeding trigger to happen again
+                        speedingInProgress = false;
                     }
-                    //todo: add some sort of timer here: start on exceed, stop on below.
-                    //todo: -use to trigger audio again in x seconds if still speeding?
-                } else {
-                    //allow speeding trigger to happen again
-                    speedingInProgress = false;
                 }
             }
         });
@@ -2586,7 +2590,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "onReceive: method action broadcast from activity...");
+            Log.v(TAG, "onReceive: method action broadcast from activity...");
             //get number value of constant (to trigger switch method choice below)
             int broadcastMsg = intent.getIntExtra(PrimeForegroundServiceHost.METHOD_TRIGGER,
                     0);
