@@ -117,41 +117,29 @@
  *              todo:   add checks for permissions etc (additional to auto generated ones)
  *              todo:   add notifiaction to user / redirect on permission enable request etc
  *              todo:   add exceptions to else statements as part of error handling
- *              todo:   investigate benefit/drawbacks of asyncTask using global values rather than returning to next section
  *              todo:   change http lock logic from equal location object to equal lat/lon values
- *              todo:   add more lyfecycle (esp on pause/resume?
- *              todo:   service preservation tactic: (calling broadcast when dying, 2 part article!): https://fabcirablog.weebly.com/blog/creating-a-never-ending-background-service-in-android
- *              todo:   write exception clssses to remove try catch block and use throws customexception
  *              todo:   add start 1st update using distance travelled?
  *              todo:   add permission redirect to settings
  *              TODO:   address service re-creation steps/behaviour
- *              todo:   remove asset copied mp3s if not needed.
  *              todo:   add vairious voice responses eg bluetooth connected
  *              todo:
  *------------------------------------------------------------------------------
  * MAJOR ADDITIONS NEEDED:
  *              TODO:   retain/check time of last actual update used (override the accuracy selection of oldLocation)
  *              TODO:   if-exceed limit trigger logic
- *              TODO:   bluetooth bike-vector receipt
- *              TODO:   internet connection lost warning
- *              TODO:   audio playback code (debug why certain RAW files were static?)
- *              TODO:   bluetooth connectivity : use wingood activities to launch service from button
  *              TODO:   accuracy threshold warning
  *              TODO:   radius input option for testing (textinput view?)
  *              TODO:   sequential no-road-value warning (if no usable data for x seconds: treat as no location update warning)
  *              TODO:   ADD PROPER HANDLING FOR NO MAXSPEED: COULD BE ROAD DOESNT HAVE ONE SPECIFIED IN API
- *              TODO:   have to work around address issue taking too long: (not fixed by check on activity)
  *              TODO:
  *------------------------------------------------------------------------------
  * CODE HOUSEKEEPING TO DO LIST:
  *              todo:   change all toast notification to method: pass string
  *              todo:   prevent multiple logging error to file (task chain knock-on)
  *              todo:   change all errors in async task to concat strings format
- *              todo:   reorder lifecycle/methods
  *              todo:   default lbs if arg not provided?
  *              todo:   find need for/remove othererrcount var
  *              todo:   combine error log and reset methods?
- *              todo:   FOR THE LOVE OF GOD: CHANGE THE BLUTOOTH VECTOR INPUT LOGS TO VERBOSE!!!!!!
  *              //todo: clean up finished todo items
  * ---------------------------------------------------------------------------*/
 
@@ -296,8 +284,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     Double queryLongitude;
     OkHttpClient httpClient = new OkHttpClient();
     AsyncHTTP httpTask;
-    AsyncCompleteListener httpCompleteListener;
-    //todo: remove possible duplicate listener?
     //used in start httpAsync: if location has not changed, do not bother making http request
     Location apiCheckDuplicateLocation;
     //lock to prevent unnecessary http queries (true = prevent execution)
@@ -888,7 +874,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //replace last check location with current location
         apiCheckDuplicateLocation = finalLocation;
 
-        //todo: may need null checking HERE not in preExecute...?
         httpTask = new AsyncHTTP(this, this, httpClient, queryLatitude,
                 queryLongitude);
 
@@ -942,7 +927,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             //check if cancelled: do not execute
             if (isCancelled()) {
                 Log.d(TAG, "onPreExecute: is cancelled: abort");
-                //todo: follow this and observe behaviour
                 activity.errorReset("AsyncHTTP: onPreExecute: cancelled");
                 return;
             }
@@ -980,7 +964,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             //check if task has been cancelled
             if (isCancelled()) {
                 Log.d(TAG, "AsyncHTTP: doInBackground: isCancelled(PRE-execute): exiting");
-                //todo: follow this and check behaviour
                 return null;
             }
 
@@ -1174,7 +1157,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             //update error msg
             errorMessageMethod = "onPreExecute: ";
 
-            //check if cancelled todo: follow behaviour
             if (isCancelled()) {
                 activity.errorReset(errorMessageClass.concat(
                         errorMessageMethod.concat("cancelled:")));
@@ -1286,12 +1268,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     Log.d(TAG, "----------------------------------------");
                 }
             } catch (JSONException e) {
-                //todo: replace
                 Log.e(TAG, "AsyncPARSE: doInBackground: Error: parsing response string.");
                 //debugging cause of killed service: print error to log
                 activity.logErrorToFile("AsyncPARSE: doInBackground: JSON exception " +
                         "occurred: outer JSON try brace.", LOGFILE_LINEBREAK_STAR);
-                //todo: check if reset is even needed here?
                 activity.errorReset("outer JSON parsing exception: reset");
                 e.getMessage();
                 e.printStackTrace();
@@ -1832,7 +1812,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //log error cause to file
         logErrorToFile(localMethodName, LOGFILE_LINEBREAK_STAR);
-        //todo: complete reset item list
         //cancel any async tasks if running:
         cancelAsyncTasks();
         //release lock for awaiting next iteration
@@ -1952,7 +1931,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 String error_beginLogging_ApiVersionTooLow = "Error: begin logging to file:\n" +
                         "Api version too low and alternative not in place:\n" +
                         "TO BE IMPLEMENTED";
-                //todo: this may crash(?) -not on UI thread?
 //                Toast.makeText(this, "API TOO LOW TO USE LOGGING METHOD IN PLACE",
 //                        Toast.LENGTH_SHORT).show();
                 //todo: implement send to settings
@@ -2035,7 +2013,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 e.printStackTrace();
             }
 
-            //TODO: ADD ROAD ARRAY INDEX TO LOGFILE!
             //append to log file:
             try {
                 Log.d(TAG, "logIteration: logging object contnents to file");
@@ -2214,7 +2191,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
         if (asyncLocked) {
             //boolean lock in place: do not execute
             Log.w(TAG, "checkAsyncLock: asyncTask(s) in progress, prevent execution");
-            //todo: not logging to file (yet)...may be needed for debugging?
             return;
         } else {
             //lock async asap (attempt to control conditions)
