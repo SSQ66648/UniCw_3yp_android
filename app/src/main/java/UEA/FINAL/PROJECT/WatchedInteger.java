@@ -13,6 +13,7 @@
  *
  * HISTORY:     v1.0    200108  Initial implementation.
  *              v1.0.1  200110  Tidied code slightly.
+ *              v1.1    200320  Added value must have actually changed condition.
  *
  * NOTES:       date notation: YYMMDD
  *              comment format:
@@ -55,11 +56,13 @@ public class WatchedInteger {
     --------------------------------------*/
     //set value of object and trigger listener
     public void set(int value) {
-        this.value = value;
-
-        if (listener != null) {
-            //no "ignore if value same as current" logic: trigger every time regardless
-            listener.onVariableChanged(value);
+        //only notify changed if value has actually changed
+        if (value != this.value) {
+            this.value = value;
+            if (listener != null) {
+                //no "ignore if value same as current" logic: trigger every time regardless
+                listener.onVariableChanged(value);
+            }
         }
     }
 

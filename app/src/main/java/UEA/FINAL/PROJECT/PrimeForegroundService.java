@@ -138,7 +138,8 @@
  *              TODO:   radius input option for testing (textinput view?)
  *              TODO:   sequential no-road-value warning (if no usable data for x seconds: treat as no location update warning)
  *              TODO:   ADD PROPER HANDLING FOR NO MAXSPEED: COULD BE ROAD DOESNT HAVE ONE SPECIFIED IN API
- *              TODO:
+ *              TODO:   if bluetooth connection error: show button to retry? (instead of stop-starting service)
+ *              //todo: find way of prompting user to stop service? (some way of adding a clickable kill button to notification display?)
  *------------------------------------------------------------------------------
  * CODE HOUSEKEEPING TO DO LIST:
  *              todo:   change all toast notification to method: pass string
@@ -344,9 +345,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*------------------
         Speed-Check Variables
     ------------------*/
+    private WatchedFloat currentSpeed = new WatchedFloat();
+    WatchedInteger currentSpeedLimit = new WatchedInteger();
     String currentRoadName;
-    //    int currentSpeedLimit = 0;
-    WatchedInteger currentSpeedLimit;
 
     /*------------------
         Testing/Log Variables
@@ -370,10 +371,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     String[] resourceFilenameArray = new String[0];
     //lock to control playQueue
     WatchedBool mediaLock = new WatchedBool();
-    //todo: lock bool on 1st playback
-    //todo: unlock on final play
-    //todo: set loistener
-    //todo: listen for true to resume next queued item
     //container of queued audio playback
     ArrayList<String> playQueue;
 
@@ -415,7 +412,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*------------------
         Bike Status Variables
     ------------------*/
-    private WatchedFloat currentSpeed;
     //indicators
     private WatchedBool indicatorR = new WatchedBool();
     private WatchedBool indicatorL = new WatchedBool();
@@ -1623,19 +1619,17 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 resourceFilenameArray[0] = "tts_lola_notify_20mph.mp3";
                 break;
             case TTS_LOLA_NOTIFY_LIMIT_CHANGE_30:
-                //todo: implment / test
+                //todo: test
                 resourceFilenameArray[0] = "tts_lola_notify_30mph.mp3";
                 break;
             case TTS_LOLA_NOTIFY_BEGIN_LOCATION_UPDATES:
-                //todo: implment / test
+                //todo: test
                 resourceFilenameArray[0] = "tts_lola_notify_beginninglocationupdates.mp3";
                 break;
             case TTS_LOLA_NOTIFY_BLUETOOTH_ESTABLISHED:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_notify_bluetoothestablished.mp3";
                 break;
             case TTS_LOLA_NOTIFY_MOBILE_ONLINE:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_notify_mobileonline_.mp3";
                 break;
             case TTS_LOLA_NOTIFY_NETWORK_ONLINE:
@@ -1650,7 +1644,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 resourceFilenameArray[0] = "tts_lola_notify_speedlimitchangedto.mp3";
                 break;
             case TTS_LOLA_NOTIFY_START_SERVICE:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_notify_startingservice.mp3";
                 break;
             case TTS_LOLA_NOTIFY_STOP_SERVICE:
@@ -1713,7 +1706,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 resourceFilenameArray[0] = "tts_lola_warning_noroaddatafound.mp3";
                 break;
             case TTS_LOLA_WARNING_NO_SPEED_DATA:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_warning_nospeedlimitavailable.mp3";
                 break;
             case TTS_LOLA_WARNING_UNABLE_TO_CONTINUE:
@@ -1887,7 +1879,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         Log.d(TAG, "createInputHandler: ");
         bluetoothInputHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
-                Log.d(TAG, "handleMessage: ");
+                Log.v(TAG, "handleMessage: ");
                 if (msg.what == handlerState) {
                     // msg.arg1 = bytes from connect thread
                     String readMessage = (String) msg.obj;
@@ -1899,10 +1891,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     if (endOfLineIndex > 0) {
                         //extract string (currently only used to get length after splitString)
                         String dataInPrint = stringBuilder_input.substring(0, endOfLineIndex);
-                        Log.d(TAG, "handleMessage: Data Received = \n" + dataInPrint);
+                        Log.v(TAG, "handleMessage: Data Received = \n" + dataInPrint);
                         //get length of data received (25char initially, grows with triple digits)
                         int dataLength = dataInPrint.length();
-                        Log.d(TAG, "handleMessage: String Length = " +
+                        Log.v(TAG, "handleMessage: String Length = " +
                                 String.valueOf(dataLength));
 
                         //check for beginning character of '#' -signifies desired transmission
@@ -1969,8 +1961,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
                                 e.printStackTrace();
                             }
 
-                            System.out.println("OLD sequence no. = " + seqOld);
-                            System.out.println("NEW sequence no. = " + seqNew);
+                            Log.v(TAG, "OLD sequence no. = " + seqOld);
+                            Log.v(TAG, "NEW sequence no. = " + seqNew);
 
                             //check if new message is exactly one more than previous
                             if (seqNew - seqOld != 1) {
@@ -2410,17 +2402,33 @@ public class PrimeForegroundService extends Service implements LocationListener,
         });
     }
 
+    //prevent infinite loop of start-stop audio playback from speeding feedback
+    boolean speedingInProgress = false;
+
 
     public void assignWatchedFloats() {
         Log.d(TAG, "assignWatchedFloats: ");
         currentSpeed.setFloatChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
-                if (currentSpeed.get() > currentSpeedLimit.get()) {
+                //check if exceeding limit (ignore limit of zero: no data)
+                if (currentSpeed.get() > currentSpeedLimit.get() && currentSpeedLimit.get() > 0) {
                     Log.w(TAG, "onVariableChanged: Warning: speed limit exceeded!");
-                    queuePlayback(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+                    speedingInProgress = true;
+
+                    //changed to non-queue version //todo: check this
+                    //as this is priority feedback: interrupt any playing media
+                    if ((mediaPlayer_voice != null && mediaPlayer_voice.isPlaying()) ||
+                            (mediaPlayer_sfx_indicator != null &&
+                                    mediaPlayer_sfx_indicator.isPlaying())) {
+                        stopPlayers();
+                        playAudio(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+                    }
                     //todo: add some sort of timer here: start on exceed, stop on below.
                     //todo: -use to trigger audio again in x seconds if still speeding?
+                } else {
+                    //allow speeding trigger to happen again
+                    speedingInProgress = false;
                 }
             }
         });
