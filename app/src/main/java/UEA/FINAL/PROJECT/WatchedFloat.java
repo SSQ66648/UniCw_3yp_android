@@ -60,7 +60,7 @@ public class WatchedFloat {
         METHODS
     --------------------------------------*/
     //set listener
-    public void setIntChangeListener(VariableChangeListener listener) {
+    public void setFloatChangeListener(VariableChangeListener listener) {
         this.listener = listener;
     }
 }

@@ -479,6 +479,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //assign listeners to watchedIntegers
         assignWatchedIntegers();
+
+        //assign listeners to watchedIntegers
+        assignWatchedFloats();
     }
 
 
@@ -2292,7 +2295,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
 
     //-compares current moving speed against current location's speed limit
-    public void checkSpeedAgainstLimit() {
+    public void compareSpeedAndLimit() {
         Log.d(TAG, "checkSpeedAgainstLimit: ");
 
     }
@@ -2402,6 +2405,22 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         //unrecognised/no speed value (may need to add other legal variations)
                         queuePlayback(TTS_LOLA_WARNING_NO_SPEED_DATA);
                         break;
+                }
+            }
+        });
+    }
+
+
+    public void assignWatchedFloats() {
+        Log.d(TAG, "assignWatchedFloats: ");
+        currentSpeed.setFloatChangeListener(new VariableChangeListener() {
+            @Override
+            public void onVariableChanged(Object... newValue) {
+                if (currentSpeed.get() > currentSpeedLimit.get()) {
+                    Log.w(TAG, "onVariableChanged: Warning: speed limit exceeded!");
+                    queuePlayback(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+                    //todo: add some sort of timer here: start on exceed, stop on below.
+                    //todo: -use to trigger audio again in x seconds if still speeding?
                 }
             }
         });
