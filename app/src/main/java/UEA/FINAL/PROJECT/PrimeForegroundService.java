@@ -42,6 +42,8 @@
  *          voice feedback has been paused (due to intolerable delay in each word: fix planned as
  *          two players, one playing while the other queues the next file). For time constraint
  *          reasons, additional whole-sentences have been used in their place for now.
+ *      +   The above is the same reason that the audio file string constants are not simply the
+ *          filename: retention of format used for the array selection (cant pass array to switch).
  *      +   The online source of the TTS audio clips changed format during development resulting in
  *          a slightly different sounding voice for later full sentence files (these files are
  *          marked by a trailing '_' before their file type (.mp3).
@@ -65,6 +67,7 @@
  *                      activity for UI updates, mediaPlayer version of indicator audio feedback.
  *      v2.3    200319  Added network connectivity change listener (early testing version).
  *      v2.4    200320  Tidied Code. Added bulk of audio files, Const identifiers (also to switch).
+ *      v2.4.1  200320  Added audio prompts throughout setup phase of service.
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -266,6 +269,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public static final String TTS_LOLA_NOTIFY_MOBILE_ONLINE = "mobileOnline";
     public static final String TTS_LOLA_NOTIFY_SPEEDLIMIT_CHANGED = "limitChanged";
     public static final String TTS_LOLA_NOTIFY_START_SERVICE = "startService";
+    public static final String TTS_LOLA_NOTIFY_STOP_SERVICE = "stopService";
     //prompts (background information or instructions to user) //todo: consider splitting info from prompts
     public static final String TTS_LOLA_PROMPT_BLUETOOTH_ERROR = "bluetoothConnectingError";
     public static final String TTS_LOLA_PROMPT_CHECK_BLUETOOTH = "checkBluetooth"; //todo: remove this one?
@@ -341,7 +345,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
         Speed-Check Variables
     ------------------*/
     String currentRoadName;
-    int currentSpeedLimit = 0;
+    //    int currentSpeedLimit = 0;
+    WatchedInteger currentSpeedLimit;
 
     /*------------------
         Testing/Log Variables
@@ -447,6 +452,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
             Log.e(TAG, "onCreate: Error: PERMISSIONS NOT GRANTED");
             return;
         }
+
+        queuePlayback(TTS_LOLA_NOTIFY_BEGIN_LOCATION_UPDATES);
         //begin location updates from both providers
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 5000,
@@ -469,6 +476,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //assign listeners to watchedBooleans
         assignWatchedBooleans();
+
+        //assign listeners to watchedIntegers
+        assignWatchedIntegers();
     }
 
 
@@ -510,6 +520,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //---BEGIN LOGGING---
         beginLoggingToFile();
 
+        queuePlayback(TTS_LOLA_NOTIFY_START_SERVICE);
         //restart asap with last intent given (though unlikely to be killed) - testing sticky as redeliver did not work
         return START_STICKY;
     }
@@ -518,6 +529,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy: ");
+        queuePlayback(TTS_LOLA_NOTIFY_STOP_SERVICE);
 
         Log.d(TAG, "onDestroy: cancelling any active tasks...");
         cancelAsyncTasks();
@@ -815,7 +827,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
                 //testing:
                 currentRoadName = ((RoadTags) localProduct).getRoadName();
-                currentSpeedLimit = ((RoadTags) localProduct).getRoadSpeed();
+                //todo: test this works with watched int
+                currentSpeedLimit.set(((RoadTags) localProduct).getRoadSpeed());
                 Log.d(TAG, "onTaskComplete: service now has access to:\n" +
                         "road: " + currentRoadName + " with limit: " + currentSpeedLimit);
 
@@ -875,7 +888,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    //-listens for network connection changes
+    //-listens for network connection changes (not strictly listener, but provides same function)
     private final ConnectivityManager.NetworkCallback networkCallback =
             new ConnectivityManager.NetworkCallback() {
                 @Override
@@ -1637,6 +1650,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_notify_startingservice.mp3";
                 break;
+            case TTS_LOLA_NOTIFY_STOP_SERVICE:
+                resourceFilenameArray[0] = "tts_lola_notify_stopping_service_.mp3";
+                break;
             case TTS_LOLA_NOTIFY_WIFI_ONLINE:
                 resourceFilenameArray[0] = "tts_lola_notify_wifionline_.mp3";
                 break;
@@ -1803,26 +1819,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    //-release resources assigned to player if it exists
-    public void stopPlayers() {
-        if (mediaPlayer_voice != null) {
-            Log.d(TAG, "stopPlayers: releasing resources for voice player");
-            mediaPlayer_voice.release();
-            mediaPlayer_voice = null;
-            return;
-        }
-
-        if (mediaPlayer_sfx_indicator != null) {
-            Log.d(TAG, "stopPlayers: releasing resources for sfx player");
-            mediaPlayer_sfx_indicator.release();
-            mediaPlayer_sfx_indicator = null;
-            return;
-        }
-
-        Log.w(TAG, "stopPlayers: no player exists to stop");
-    }
-
-
     //-setup bluetooth adapter and sockets
     public void setupBluetoothSockets(Intent intent) {
         Log.d(TAG, "onStartCommand: obtaining bluetooth adapter");
@@ -1955,8 +1951,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             headlightL.setValue(incomingStatusValues[4].equals("1"));
                             headlightH.setValue(incomingStatusValues[5].equals("1"));
 
-                            sendUiUpdate(currentSpeedLimit, currentSpeeds, indicatorL, indicatorR,
-                                    headlightL, headlightH);
+                            sendUiUpdate(currentSpeedLimit.get(), currentSpeeds, indicatorL,
+                                    indicatorR, headlightL, headlightH);
 
 
                             //todo: better catch for non-sequential data
@@ -2165,7 +2161,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //-update the current speed limit in memory
     public void updateCurrentSpeedInfo(RoadTags product) {
         Log.d(TAG, "updateCurrentSpeedInfo: ");
-        currentSpeedLimit = product.getRoadSpeed();
+        //update speed (in local variable)
+        //todo: address assumed duplicate update (additional in onComplete listener)
+        currentSpeedLimit.set(product.getRoadSpeed());
         currentRoadName = product.getRoadName();
 
         //testing:
@@ -2359,8 +2357,45 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 }
             }
         });
+    }
 
-        //todo: ADD WATCHED NUMERIC FOR SPEED COMPARISON--------------------------------------------------------------------------------------------------------------
+
+    public void assignWatchedIntegers() {
+        Log.d(TAG, "assignWatchedIntegers: ");
+        currentSpeedLimit.setIntChangeListener(new VariableChangeListener() {
+            @Override
+            public void onVariableChanged(Object... newValue) {
+                Log.d(TAG, "onVariableChanged: speed updated to [" +
+                        currentSpeedLimit.get() + "]mph");
+                //notify user
+                queuePlayback(TTS_LOLA_NOTIFY_SPEEDLIMIT_CHANGED);
+                //specific value:
+                switch (currentSpeedLimit.get()) {
+                    case 20:
+                        queuePlayback(TTS_LOLA_NOTIFY_LIMIT_CHANGE_20);
+                        break;
+                    case 30:
+                        queuePlayback(TTS_LOLA_NOTIFY_LIMIT_CHANGE_30);
+                        break;
+                    case 40:
+                        queuePlayback(TTS_LOLA_NOTIFY_LIMIT_CHANGE_40);
+                        break;
+                    case 50:
+                        queuePlayback(TTS_LOLA_NOTIFY_LIMIT_CHANGE_50);
+                        break;
+                    case 60:
+                        queuePlayback(TTS_LOLA_NOTIFY_LIMIT_CHANGE_60);
+                        break;
+                    case 70:
+                        queuePlayback(TTS_LOLA_NOTIFY_LIMIT_CHANGE_70);
+                        break;
+                    default:
+                        //unrecognised/no speed value (may need to add other legal variations)
+                        queuePlayback(TTS_LOLA_WARNING_NO_SPEED_DATA);
+                        break;
+                }
+            }
+        });
     }
 
 
@@ -2387,6 +2422,26 @@ public class PrimeForegroundService extends Service implements LocationListener,
         } else {
             Log.d(TAG, "cancelAsyncTasks: no parse task to cancel");
         }
+    }
+
+
+    //-release resources assigned to player if it exists
+    public void stopPlayers() {
+        if (mediaPlayer_voice != null) {
+            Log.d(TAG, "stopPlayers: releasing resources for voice player");
+            mediaPlayer_voice.release();
+            mediaPlayer_voice = null;
+            return;
+        }
+
+        if (mediaPlayer_sfx_indicator != null) {
+            Log.d(TAG, "stopPlayers: releasing resources for sfx player");
+            mediaPlayer_sfx_indicator.release();
+            mediaPlayer_sfx_indicator = null;
+            return;
+        }
+
+        Log.w(TAG, "stopPlayers: no player exists to stop");
     }
 
 

@@ -58,7 +58,7 @@ public class WatchedInteger {
         this.value = value;
 
         if (listener != null) {
-//            Log.d(TAG, "set: listener is not null: triggering onVariableChanged.");
+            //no "ignore if value same as current" logic: trigger every time regardless
             listener.onVariableChanged(value);
         }
     }
