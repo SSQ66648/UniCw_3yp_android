@@ -1539,7 +1539,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
-                queuePlayback(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
+                Log.e(TAG, "ConnectedThread: Error: creating I/O streams for socket");
                 //todo: insert code to handle exception
             }
             mmInStream = tmpIn;
@@ -1560,13 +1560,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     bluetoothInputHandler.obtainMessage(handlerState, bytes, -1,
                             readMessage).sendToTarget();
                 } catch (IOException e) {
-                    queuePlayback(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
+                    Log.e(TAG, "run: Error: failed to obtain message");
                     break;
                 }
             }
+
         }
 
-        //write to remote device
+        //write to remote device (used as test for successful connection)
         public void write(String input) {
             //convert String into bytes
             byte[] msgBuffer = input.getBytes();
@@ -1574,7 +1575,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 //write bytes over bluetooth outStream
                 mmOutStream.write(msgBuffer);
             } catch (IOException e) {
+                //single instance of audio feedback re various connection stages failing
                 queuePlayback(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
+                Log.e(TAG, "write: Error: failed to write to remote device");
                 //if you cannot write, close application
                 Toast.makeText(getApplicationContext(), "Connection Failure",
                         Toast.LENGTH_LONG).show();
@@ -1635,7 +1638,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 resourceFilenameArray[0] = "tts_lola_notify_startingservice.mp3";
                 break;
             case TTS_LOLA_NOTIFY_WIFI_ONLINE:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_notify_wifionline_.mp3";
                 break;
             //prompts
@@ -1845,7 +1847,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 bluetoothSocket_bike = createBluetoothSocket(device);
                 Log.d(TAG, "onResume: create bluetooth socket");
             } catch (IOException e) {
-                queuePlayback(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
                 Log.d(TAG, "onResume: Socket creation failed.");
                 Toast.makeText(getApplicationContext(), "Socket creation failed",
                         Toast.LENGTH_LONG).show();
@@ -1855,7 +1856,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 bluetoothSocket_bike.connect();
                 Log.d(TAG, "onResume: socket connect...");
             } catch (IOException e) {
-                queuePlayback(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
+                //todo: specific audio for errors (maybe not applicable to users: dont care re specifics of bluetooth issue)?
                 Log.d(TAG, "onResume: socket connection error.");
                 try {
                     bluetoothSocket_bike.close();
@@ -1871,10 +1872,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             //send character when resuming.beginning transmission to check device is connected
             mConnectedThread.write("x");
 
-            //todo: check this is where connection is established...?
-            queuePlayback(TTS_LOLA_NOTIFY_BLUETOOTH_ESTABLISHED);
         } catch (Exception e) {
-            queuePlayback(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
             Log.e(TAG, "onResume: error creating device.");
         }
     }
