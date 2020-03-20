@@ -145,6 +145,7 @@
  *              todo:   find need for/remove othererrcount var
  *              todo:   combine error log and reset methods?
  *              //todo: clean up finished todo items
+ *              //todo: change prioriies of logs as needed
  * ---------------------------------------------------------------------------*/
 
 package UEA.FINAL.PROJECT;
@@ -362,6 +363,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
     int playIndex = 0;
     //variable array of resource file IDs (copied to per array choice)
     String[] resourceFilenameArray = new String[0];
+    //lock to control playQueue
+    WatchedBool mediaLock = new WatchedBool();
+    //todo: lock bool on 1st playback
+    //todo: unlock on final play
+    //todo: set loistener
+    //todo: listen for true to resume next queued item
+    //container of queued audio playback
+    ArrayList<String> playQueue;
 
     /*------------------
         Audio Array Variables
@@ -459,7 +468,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         connectivityManager.registerDefaultNetworkCallback(networkCallback);
 
         //assign listeners to watchedBooleans
-        assignWatchedindicatorBools();
+        assignWatchedBooleans();
     }
 
 
@@ -1695,6 +1704,21 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
+    //-naive attempt to prevent two requests crashing mediaPlayer
+    public void queuePlayback(String selection) {
+        if (mediaLock.getValue()) {
+            //mediaPlayer locked:queue play request
+            if (playQueue == null) {
+                playQueue = new ArrayList<>();
+            }
+            playQueue.add(selection);
+        } else {
+            //directly proceed with playback
+            playAudio(selection);
+        }
+    }
+
+
     //-play audio at index in array or cease
     public void play() {
         if (playIndex > resourceFilenameArray.length - 1) {
@@ -1704,8 +1728,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
             resourceFilenameArray = null;
             //release resources
             stopPlayers();
+            //playback complete
+            mediaLock.setValue(false);
             return;
         } else {
+            //engage lock if not already
+            mediaLock.setValue(true);
             //repopulate player
             try {
                 if (mediaPlayer_voice == null) {
@@ -2249,7 +2277,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         HELPER METHODS
     --------------------------------------*/
     //-assigning listeners to watchedBooleans
-    public void assignWatchedindicatorBools() {
+    public void assignWatchedBooleans() {
         Log.d(TAG, "assignIndicatorLightBools: ");
         //if indicators are on: play indicator SFX
         indicatorL.setBooleanChangeListener(new VariableChangeListener() {
@@ -2288,6 +2316,28 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         mediaPlayer_sfx_indicator.release();
                         mediaPlayer_sfx_indicator = null;
                     }
+                }
+            }
+        });
+
+        //mediaPlayer locked/released (multiple playback prevents .isPlaying or conComplete use)
+        mediaLock.setBooleanChangeListener(new VariableChangeListener() {
+            @Override
+            public void onVariableChanged(Object... newValue) {
+                if (mediaLock.getValue()) {
+                    Log.d(TAG, "onVariableChanged: voice mediaPlayer is now locked");
+                } else {
+                    Log.d(TAG, "onVariableChanged: voice mediaPlayer is now released");
+                    //play next queued item if one exists
+                    if (playQueue != null && playQueue.size() > 0) {
+                        //todo: test if this works or need to make a copy?
+                        playAudio(playQueue.remove(playQueue.size() - 1));
+                        //destroy queue object if empty
+                        if (playQueue.size() == 0) {
+                            playQueue = null;
+                        }
+                    }
+
                 }
             }
         });
