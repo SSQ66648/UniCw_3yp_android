@@ -123,7 +123,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_primaryforegroundservicehost);
-        Log.d(TAG, "onCreate: ");
+        Log.v(TAG, "onCreate: ");
 
         //---TOOLBAR---
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -144,7 +144,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         startService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: start service");
+                Log.v(TAG, "onClick: start service");
 //                Toast.makeText(getApplicationContext(), "Starting Service...", Toast.LENGTH_SHORT).show();
                 startGpsService();
             }
@@ -154,7 +154,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         stopService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: stop service");
+                Log.v(TAG, "onClick: stop service");
                 stopGpsService();
 //                Toast.makeText(getApplicationContext(), "Stopping Service...", Toast.LENGTH_SHORT).show();
             }
@@ -165,7 +165,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         testBatt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: check batter optimization");
+                Log.v(TAG, "onClick: check batter optimization");
                 checkOptimization();
             }
         });
@@ -175,7 +175,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         testAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: test audio");
+                Log.v(TAG, "onClick: test audio");
                 sendMsg();
             }
         });
@@ -185,20 +185,20 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart: (re) creating service intent");
+        Log.v(TAG, "onStart: (re) creating service intent");
         foregroundIntent = new Intent(this, PrimeForegroundService.class);
     }
 
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume: ");
+        Log.v(TAG, "onResume: ");
         super.onResume();
         //todo: add handling in event of intent lost? (back button / testing shortcut?)
         //get bluetooth address (plural, possibly with UUIDs as well if they can be obtained later):
         Intent intent = getIntent();
         bike_MAC = intent.getStringExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS);
-        Log.d(TAG, "onResume: obtained MAC address: " + bike_MAC + "\n" +
+        Log.v(TAG, "onResume: obtained MAC address: " + bike_MAC + "\n" +
                 "Adding bike address to foreground service intent...");
 
         //todo: fix work around: (dont know why intent is losing the address en-route?
@@ -218,22 +218,22 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        Log.d(TAG, "onPause: ");
+        Log.v(TAG, "onPause: ");
         super.onPause();
 
-        Log.d(TAG, "onPause: unregistering broadcastReceiver");
+        Log.v(TAG, "onPause: unregistering broadcastReceiver");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceBroadcastReceiver);
     }
 
     @Override
     protected void onStop() {
-        Log.d(TAG, "onStop: ");
+        Log.v(TAG, "onStop: ");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
+        Log.v(TAG, "onDestroy: ");
         super.onDestroy();
 
         //todo: review how to stop "rouge" service is app no longer exists? (stopping it here causes issues when activity interrupted)
@@ -247,11 +247,11 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     //-check battery optimisation (testing: check for cause of process death)
     @SuppressLint({"NewApi", "BatteryLife"})
     private void checkOptimization() {
-        Log.d(TAG, "checkOptimization: ");
+        Log.v(TAG, "checkOptimization: ");
         String packageName = getApplicationContext().getPackageName();
         PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
         if (pm != null) {
-            Log.d(TAG, "checkOptimization: pwermanager found");
+            Log.v(TAG, "checkOptimization: pwermanager found");
             if (!pm.isIgnoringBatteryOptimizations(packageName)) {
                 Log.w(TAG, "checkOptimization: Warning: manager not ignoring optimisation");
                 Intent intent = new Intent();
@@ -259,7 +259,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
                 intent.setData(Uri.parse("package:" + this.getPackageName()));
                 this.startActivity(intent);
             } else {
-                Log.d(TAG, "checkOptimization: manager ignoring optimisation");
+                Log.v(TAG, "checkOptimization: manager ignoring optimisation");
 //                Toast.makeText(getApplicationContext(), "battery optimisation successfully ignored", Toast.LENGTH_SHORT).show();
             }
         }
@@ -280,14 +280,14 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     --------------------------------------*/
     //-starts the foreground service
     public void startGpsService() {
-        Log.d(TAG, "startGpsService: ");
+        Log.v(TAG, "startGpsService: ");
         startService(foregroundIntent);
     }
 
 
     //-stops the foreground service
     public void stopGpsService() {
-        Log.d(TAG, "stopGpsService: ");
+        Log.v(TAG, "stopGpsService: ");
         stopService(foregroundIntent);
     }
 
@@ -299,7 +299,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "onReceive:view update broadcast from service...");
+            Log.v(TAG, "onReceive:view update broadcast from service...");
 
             //update views from passed extras
             textIndicateL.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_LEFT));

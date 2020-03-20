@@ -428,11 +428,13 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //-called ONCE when service is first created
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate: ");
+        Log.v(TAG, "onCreate: ");
         super.onCreate();
 
         handler = new Handler(Looper.getMainLooper());
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //set lock so unlocking it in first call to queue can start process
+        mediaLock.setValue(true);
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -449,6 +451,23 @@ public class PrimeForegroundService extends Service implements LocationListener,
             return;
         }
 
+        //assign listeners to watchedBooleans
+        assignWatchedBooleans();
+
+        //assign listeners to watchedIntegers
+        assignWatchedIntegers();
+
+        //assign listeners to watchedIntegers
+        assignWatchedFloats();
+
+        //register receiver for activity reqests to trigger service methods
+        LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
+                new IntentFilter(PrimeForegroundService.SERVICE_BROADCASTRECEIVER_ACTION));
+
+        //register network changes
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        connectivityManager.registerDefaultNetworkCallback(networkCallback);
+
         queuePlayback(TTS_LOLA_NOTIFY_BEGIN_LOCATION_UPDATES);
         //begin location updates from both providers
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
@@ -462,29 +481,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 this,
                 Looper.getMainLooper());
 
-        //register receiver for activity reqests to trigger service methods
-        LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
-                new IntentFilter(PrimeForegroundService.SERVICE_BROADCASTRECEIVER_ACTION));
 
-        //register network changes
-        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        connectivityManager.registerDefaultNetworkCallback(networkCallback);
-
-        //assign listeners to watchedBooleans
-        assignWatchedBooleans();
-
-        //assign listeners to watchedIntegers
-        assignWatchedIntegers();
-
-        //assign listeners to watchedIntegers
-        assignWatchedFloats();
     }
 
 
     //-start service with "new" passed intent: repeatable (called on UI thread)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand: ");
+        Log.v(TAG, "onStartCommand: ");
         //setup handler to deal with incoming serial data
         createInputHandler();
         //setup bluetooth connection to bike
@@ -527,17 +531,17 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
+        Log.v(TAG, "onDestroy: ");
         queuePlayback(TTS_LOLA_NOTIFY_STOP_SERVICE);
 
-        Log.d(TAG, "onDestroy: cancelling any active tasks...");
+        Log.v(TAG, "onDestroy: cancelling any active tasks...");
         cancelAsyncTasks();
-        Log.d(TAG, "onDestroy: stopping updates...");
+        Log.v(TAG, "onDestroy: stopping updates...");
         stopUpdates();
-        Log.d(TAG, "onDestroy: completing log to file...");
+        Log.v(TAG, "onDestroy: completing log to file...");
         endLoggingToFile();
 
-        Log.d(TAG, "onDestroy: time difference values:");
+        Log.v(TAG, "onDestroy: time difference values:");
         //get average delay value
         //avoid divide by zero errors
         if (updateCount == 0) {
@@ -551,23 +555,23 @@ public class PrimeForegroundService extends Service implements LocationListener,
 //todo: add index out of bound checking
         int median = medianTime.get(medianTime.size() / 2);
 
-        Log.d(TAG, "MEAN DELAY: " + meanTime + "\n" +
+        Log.v(TAG, "MEAN DELAY: " + meanTime + "\n" +
                 "MEDIAN DELAY:" + median + "\n" +
                 "number of updates: " + updateCount + "\n" +
                 "\tgps total: " + gpsCount + "\n" +
                 "\tnetwork total: " + netCount + "\n" +
                 "time travel count: " + timeErrCount + "\n" +
                 "other error total: " + otherErrCount);
-        Log.d(TAG, "_");
-        Log.d(TAG, "onDestroy: delay array:\n" +
+        Log.v(TAG, "_");
+        Log.v(TAG, "onDestroy: delay array:\n" +
                 medianTime);
 
         //check if any open oStream still exists
         if (oStream != null) {
-            Log.d(TAG, "onDestroy: nullifying oStream.");
+            Log.v(TAG, "onDestroy: nullifying oStream.");
             oStream = null;
         } else {
-            Log.d(TAG, "onDestroy: no oStream to nullify.");
+            Log.v(TAG, "onDestroy: no oStream to nullify.");
         }
 
         //notify user
@@ -580,7 +584,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceBroadcastReceiver);
         connectivityManager.unregisterNetworkCallback(networkCallback);
 
-        Log.d(TAG, "onDestroy: closing bluetooth sockets:");
+        Log.v(TAG, "onDestroy: closing bluetooth sockets:");
         if (bluetoothSocket_bike != null) {
             try {
                 bluetoothSocket_bike.close();
@@ -590,7 +594,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             }
         }
 
-        Log.d(TAG, "onDestroy: stopping self...");
+        Log.v(TAG, "onDestroy: stopping self...");
         stopSelf();
 
         super.onDestroy();
@@ -602,11 +606,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
     --------------------------------------*/
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "onLocationChanged: ");
+        Log.v(TAG, "onLocationChanged: ");
         //immediately get time since boot as location update time (.getTime() is NOT reliable)
         long locationRealTime = SystemClock.elapsedRealtime();
         long locationRealTimeSeconds = locationRealTime / 1000;
-        Log.d(TAG, "onLocationChanged: location updated at " + locationRealTimeSeconds +
+        Log.v(TAG, "onLocationChanged: location updated at " + locationRealTimeSeconds +
                 " seconds since system boot\n_");
 
         if (ContextCompat.checkSelfPermission(this,
@@ -629,11 +633,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //check provider (for clarity / debugging)
         if (location.getProvider().equals("gps")) {
-            Log.d(TAG, "onLocationChanged: GPS location passed");
+            Log.v(TAG, "onLocationChanged: GPS location passed");
             gpsCount++;
             //             gpsLocation = location;
         } else if (location.getProvider().equals("network")) {
-            Log.d(TAG, "onLocationChanged: NETWORK location passed");
+            Log.v(TAG, "onLocationChanged: NETWORK location passed");
             netCount++;
             //             networkLocation = location;
         } else {
@@ -645,14 +649,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //use first location if previous does not exist yet, stop further execution
         if (oldFinalLocation == null) {
-            Log.d(TAG, "onLocationChanged: no prior location yet: using first update.");
+            Log.v(TAG, "onLocationChanged: no prior location yet: using first update.");
             //assign updated location and associated time
             oldFinalLocation = location;
             oldFinalLocationRealTime = locationRealTime;
             oldFinalLocationRealTimeSeconds = oldFinalLocationRealTime / 1000;
             diffSeconds_location_oldLocation = 0;
-            Log.d(TAG, "onLocationChanged: update number: " + updateCount);
-            Log.d(TAG, "onLocationChanged: ----------------------------------------\n_");
+            Log.v(TAG, "onLocationChanged: update number: " + updateCount);
+            Log.v(TAG, "onLocationChanged: ----------------------------------------\n_");
             updateCount++;
             medianTime.add(0);
 
@@ -668,29 +672,29 @@ public class PrimeForegroundService extends Service implements LocationListener,
         diffSeconds_location_oldLocation = (locationRealTimeSeconds -
                 oldFinalLocationRealTimeSeconds);
         //debugging:
-        Log.d(TAG, "DIFF SECONDS TESTING: \n" +
+        Log.v(TAG, "DIFF SECONDS TESTING: \n" +
                 "new seconds: " + locationRealTimeSeconds + "\n" +
                 "old seconds: " + oldFinalLocationRealTimeSeconds + "\n" +
                 "dif: " + diffSeconds_location_oldLocation);
 
         //ensure new value is more recent than old value
         if (diffSeconds_location_oldLocation > 0) {
-            Log.d(TAG, "onLocationChanged: newLocation is [" +
+            Log.v(TAG, "onLocationChanged: newLocation is [" +
                     (diffSeconds_location_oldLocation + "] seconds newer"));
 
             //ensure difference between last update is within limit (prioritise accuracy)
             if (diffSeconds_location_oldLocation < LOCATION_DELAY_THRESHOLD) {
-                Log.d(TAG, "onLocationChanged: new location within " +
+                Log.v(TAG, "onLocationChanged: new location within " +
                         LOCATION_DELAY_THRESHOLD + " seconds: " + "prioritise accuracy");
                 if (location.getAccuracy() < oldFinalLocation.getAccuracy()) {
-                    Log.d(TAG, "onLocationChanged: new location more accurate:\n" +
+                    Log.v(TAG, "onLocationChanged: new location more accurate:\n" +
                             "old: " + oldFinalLocation.getAccuracy() +
                             " --- new: " + location.getAccuracy());
                     finalLocation = location;
                     finalLocationRealTime = locationRealTime;
                     finalLocationRealTimeSeconds = locationRealTimeSeconds;
                 } else {
-                    Log.d(TAG, "onLocationChanged: old location more accurate and within " +
+                    Log.v(TAG, "onLocationChanged: old location more accurate and within " +
                             "time window:\n" +
                             "new: " + location.getAccuracy() +
                             " --- old: " + oldFinalLocation.getAccuracy());
@@ -699,9 +703,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     finalLocationRealTimeSeconds = oldFinalLocationRealTimeSeconds;
                 }
             } else {
-                Log.d(TAG, "onLocationChanged: new location took longer than ten seconds " +
+                Log.v(TAG, "onLocationChanged: new location took longer than ten seconds " +
                         "to arrive: prioritise newer value");
-                Log.d(TAG, "debug:\n" +
+                Log.v(TAG, "debug:\n" +
                         "old accuracy: " + oldFinalLocation.getAccuracy() + "\n" +
                         "new accuracy: " + location.getAccuracy());
 
@@ -728,15 +732,15 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //debug print to log
         if (finalLocation != null) {
             //debugging info to logcat:
-            Log.d(TAG, "_");
-            Log.d(TAG, "----------------------------------------");
-            Log.d(TAG, "final location found:\n" +
+            Log.v(TAG, "_");
+            Log.v(TAG, "----------------------------------------");
+            Log.v(TAG, "final location found:\n" +
                     "Provider: " + finalLocation.getProvider() + "\n" +
                     "Time: " + finalLocationRealTime + "\n" +
                     "Lat: " + finalLocation.getLatitude() + "\n" +
                     "Lon: " + finalLocation.getLongitude() + "\n");
-            Log.d(TAG, "onLocationChanged: update number: " + updateCount);
-            Log.d(TAG, "----------------------------------------\n_");
+            Log.v(TAG, "onLocationChanged: update number: " + updateCount);
+            Log.v(TAG, "----------------------------------------\n_");
         } else {
             Log.w(TAG, "********************");
             Log.e(TAG, "onLocationChanged: Error: finalLocation is null.");
@@ -744,7 +748,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             logErrorToFile("onLocationChanged: finalLocation is NULL",
                     LOGFILE_LINEBREAK_STAR);
         }
-        Log.d(TAG, "_");
+        Log.v(TAG, "_");
 
         //testing: add time difference (seconds) to mean/median testing
         updateCount++;
@@ -770,7 +774,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //asyncTask post-execute notification to continue
     @Override
     public void onTaskComplete(String flag, Object product) {
-        Log.d(TAG, "onTaskComplete:");
+        Log.v(TAG, "onTaskComplete:");
         //copy product to prevent orphan data
         Object localProduct = product;
         String localFlag = flag;
@@ -790,13 +794,13 @@ public class PrimeForegroundService extends Service implements LocationListener,
             httpStopTime = SystemClock.elapsedRealtime();
             //add response time to log
             logObject.setQueryResponseTime(httpStopTime);
-            Log.d(TAG, "onTaskComplete: httpTask flag found:");
+            Log.v(TAG, "onTaskComplete: httpTask flag found:");
 
             //testing:
-            Log.d(TAG, "onTaskComplete: returned httpQuery string reads: \n" + localProduct);
-            Log.d(TAG, "onTaskComplete: check if task still exists: " + httpTask);
+            Log.v(TAG, "onTaskComplete: returned httpQuery string reads: \n" + localProduct);
+            Log.v(TAG, "onTaskComplete: check if task still exists: " + httpTask);
 
-            Log.d(TAG, "onTaskComplete: time taken for httpAsyncTask to complete: \n" +
+            Log.v(TAG, "onTaskComplete: time taken for httpAsyncTask to complete: \n" +
                     "Start time: " + httpStartTime + "\n" +
                     "Stop time: " + httpStopTime + "\n" +
                     "nanoseconds taken :" + (httpStopTime - httpStartTime) + "\n" +
@@ -804,7 +808,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
             //check that response is string as expected
             if (localProduct instanceof String) {
-                Log.d(TAG, "onTaskComplete: response IS string: continue:");
+                Log.v(TAG, "onTaskComplete: response IS string: continue:");
                 //http complete: start parsing of road list
                 startAsyncTaskParse((String) localProduct);
             } else {
@@ -813,10 +817,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 errorReset("onTaskComplete: HTTP flag found: not string: reset.");
             }
         } else if (localFlag == TASK_COMPLETION_FLAG_PARSE) {
-            Log.d(TAG, "onTaskComplete: parseTask flag found:");
+            Log.v(TAG, "onTaskComplete: parseTask flag found:");
             //check product is of roadTag as expected
             if (localProduct instanceof RoadTags) {
-                Log.d(TAG, "onTaskComplete: rechecking road values:\n" +
+                Log.v(TAG, "onTaskComplete: rechecking road values:\n" +
                         "road name: " + ((RoadTags) localProduct).getRoadName() + "\n" +
                         "road speed: " + ((RoadTags) localProduct).getRoadSpeed());
 
@@ -828,7 +832,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 currentRoadName = ((RoadTags) localProduct).getRoadName();
                 //todo: test this works with watched int
                 currentSpeedLimit.set(((RoadTags) localProduct).getRoadSpeed());
-                Log.d(TAG, "onTaskComplete: service now has access to:\n" +
+                Log.v(TAG, "onTaskComplete: service now has access to:\n" +
                         "road: " + currentRoadName + " with limit: " + currentSpeedLimit);
 
                 //add parse completion time to log
@@ -863,7 +867,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        Log.d(TAG, "onLowMemory: ");
+        Log.v(TAG, "onLowMemory: ");
         //print memory warning to logfile
         String lowMemoryWarninglog = "****************************************\n" +
                 "*************** LOW MEMORY WARNING! **************\n" +
@@ -877,7 +881,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        Log.d(TAG, "onTrimMemory: ");
+        Log.v(TAG, "onTrimMemory: ");
         //print memory warning to logfile
         String lowMemoryWarninglog = "****************************************\n" +
                 "*************** LOW MEMORY WARNING! **************\n" +
@@ -893,14 +897,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 @Override
                 public void onAvailable(Network network) {
                     super.onAvailable(network);
-                    Log.d(TAG, "onAvailable: CONNECTION");
+                    Log.v(TAG, "onAvailable: CONNECTION");
                     if (!connectivityManager.isActiveNetworkMetered()) {
                         //non-metered doesnt confirm -IS- wifi but for purposes, assume it does.
-                        Log.d(TAG, "onAvailable: WIFI");
+                        Log.v(TAG, "onAvailable: WIFI");
                         //testing: "spare" clip to differentiate between networks becoming available
                         queuePlayback(TTS_LOLA_NOTIFY_WIFI_ONLINE);
                     } else {
-                        Log.d(TAG, "onAvailable: MOBILE");
+                        Log.v(TAG, "onAvailable: MOBILE");
                         queuePlayback(TTS_LOLA_NOTIFY_MOBILE_ONLINE);
                     }
                 }
@@ -908,7 +912,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 @Override
                 public void onLost(Network network) {
                     super.onLost(network);
-                    Log.d(TAG, "losing active connection");
+                    Log.v(TAG, "losing active connection");
                     queuePlayback(TTS_LOLA_WARNING_NETWORK_LOST);
                 }
             };
@@ -917,7 +921,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //-mediaplayer listener: triggers on currently playing audiofile completion
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Log.d(TAG, "onCompletion: ");
+        Log.v(TAG, "onCompletion: ");
         play();
     }
 
@@ -927,8 +931,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
     --------------------------------------*/
     //-preparation and triggers execution of http api query asyncTask
     public void startAsyncTaskHTTP() {
-        Log.d(TAG, "startAsyncTaskHTTP: ");
-        Log.d(TAG, "startAsyncTaskHTTP: location counter = " + updateCount);
+        Log.v(TAG, "startAsyncTaskHTTP: ");
+        Log.v(TAG, "startAsyncTaskHTTP: location counter = " + updateCount);
         //get current location values
         queryLatitude = oldFinalLocation.getLatitude();
         queryLongitude = oldFinalLocation.getLongitude();
@@ -967,7 +971,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //-pass service (activity) reference and coordinates
         AsyncHTTP(PrimeForegroundService activity, AsyncCompleteListener listener,
                   OkHttpClient client, double lat, double lon) {
-            Log.d(TAG, "constructed: AsyncHTTP");
+            Log.v(TAG, "constructed: AsyncHTTP");
             weakReference = new WeakReference<>(activity);
             this.listener = listener;   //callback
             this.client = client;
@@ -982,12 +986,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
         @Override
         protected void onPreExecute() {
             PrimeForegroundService activity = weakReference.get();
-            Log.d(TAG, "onPreExecute: AsyncHTTP");
+            Log.v(TAG, "onPreExecute: AsyncHTTP");
             super.onPreExecute();
 
             //check if cancelled: do not execute
             if (isCancelled()) {
-                Log.d(TAG, "onPreExecute: is cancelled: abort");
+                Log.v(TAG, "onPreExecute: is cancelled: abort");
                 activity.errorReset("AsyncHTTP: onPreExecute: cancelled");
                 return;
             }
@@ -1009,7 +1013,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 activity.errorReset("AsyncHttp: onPreExecute: variable null");
                 return;
             } else {
-                Log.d(TAG, "onPreExecute: all variables exist");
+                Log.v(TAG, "onPreExecute: all variables exist");
             }
         }
 
@@ -1019,12 +1023,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
         ------------------*/
         @Override
         protected String doInBackground(Void... voids) {
-            Log.d(TAG, "doInBackground: AsyncHTTP");
+            Log.v(TAG, "doInBackground: AsyncHTTP");
             PrimeForegroundService activity = weakReference.get();
 
             //check if task has been cancelled
             if (isCancelled()) {
-                Log.d(TAG, "AsyncHTTP: doInBackground: isCancelled(PRE-execute): exiting");
+                Log.v(TAG, "AsyncHTTP: doInBackground: isCancelled(PRE-execute): exiting");
                 return null;
             }
 
@@ -1036,7 +1040,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             final CountDownLatch countDownLatch = new CountDownLatch(1);
             //log start of query request
             activity.logObject.setQuerySentTime(SystemClock.elapsedRealtime());
-            Log.d(TAG, "doInBackground: beginning request...");
+            Log.v(TAG, "doInBackground: beginning request...");
 
             //make http request
             client.newCall(request).enqueue(new Callback() {
@@ -1054,7 +1058,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 public void onResponse(@NotNull Call call, @NotNull Response response)
                         throws IOException {
                     if (response.isSuccessful()) {
-                        Log.d(TAG, "onResponse: ");
+                        Log.v(TAG, "onResponse: ");
                         //data retrieved from query
                         responseString = response.body().string();
                     } else {
@@ -1068,7 +1072,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             });
 
             try {
-                Log.d(TAG, "doInBackground: API: awaiting response latch");
+                Log.v(TAG, "doInBackground: API: awaiting response latch");
                 //pause further execution of thread until response (or failure) has been obtained
                 countDownLatch.await();
             } catch (InterruptedException e) {
@@ -1081,7 +1085,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
             //testing
             if (isCancelled()) {
-                Log.d(TAG, "AsyncHTTP: doInBackground: isCancelled(POST-execute): exiting");
+                Log.v(TAG, "AsyncHTTP: doInBackground: isCancelled(POST-execute): exiting");
                 activity.errorReset("AsyncHTTP: doInBackground: isCancelled:");
                 return null;
             }
@@ -1105,12 +1109,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
         @Override
         protected void onPostExecute(String responseString) {
             super.onPostExecute(responseString);
-            Log.d(TAG, "onPostExecute: AsyncHTTP");
+            Log.v(TAG, "onPostExecute: AsyncHTTP");
             PrimeForegroundService activity = weakReference.get();
 
             //cancel check: exit regardless of string status
             if (isCancelled()) {
-                Log.d(TAG, "AsyncHTTP: onPostExecute: cancelled: reset and return null.");
+                Log.v(TAG, "AsyncHTTP: onPostExecute: cancelled: reset and return null.");
                 activity.errorReset("AsyncHTTP: onPostExecute: cancelled: " +
                         "reset and exit.");
                 return;
@@ -1124,8 +1128,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     return;
                 } else {
                     //testing
-                    Log.d(TAG, "onPostExecute: listener value: " + listener);
-                    Log.d(TAG, "onPostExecute: flag value: " + TASK_COMPLETION_FLAG_HTTP);
+                    Log.v(TAG, "onPostExecute: listener value: " + listener);
+                    Log.v(TAG, "onPostExecute: flag value: " + TASK_COMPLETION_FLAG_HTTP);
                     listener.onTaskComplete(TASK_COMPLETION_FLAG_HTTP, responseString);
                 }
             }
@@ -1137,7 +1141,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         ------------------*/
         @Override
         protected void onCancelled() {
-            Log.d(TAG, "onCancelled: AsyncHTTP");
+            Log.v(TAG, "onCancelled: AsyncHTTP");
             super.onCancelled();
         }
 
@@ -1147,7 +1151,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         ------------------*/
         //-creates URL string from desired parameters and current lat/lon variables
         public void combineURL() {
-            Log.d(TAG, "combineURL: ");
+            Log.v(TAG, "combineURL: ");
 
             String url_A = "http://overpass-api.de/api/interpreter?data=[out:json];way[";
             //list of tags required in response from API :
@@ -1160,14 +1164,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
             url = url_A + tag + url_B + API_RADIUS_VALUE + "," + lat + ","
                     + lon + url_C;
 
-            Log.d(TAG, "combineUrl: URL concatenated reads:\n" + url);
+            Log.v(TAG, "combineUrl: URL concatenated reads:\n" + url);
         }
     }
 
 
     //-preparation and execution of AsyncPARSE
     public void startAsyncTaskParse(String roadList) {
-        Log.d(TAG, "startAsyncTaskParse: ");
+        Log.v(TAG, "startAsyncTaskParse: ");
         parseTask = new AsyncPARSE(this, this, roadList);
         parseTask.execute();
     }
@@ -1200,7 +1204,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //-pass service (activity) reference
         AsyncPARSE(PrimeForegroundService activity, AsyncCompleteListener listener,
                    String response) {
-            Log.d(TAG, "constructed: AsyncPARSE:");
+            Log.v(TAG, "constructed: AsyncPARSE:");
             weakReference = new WeakReference<>(activity);
             this.listener = listener;
             this.response = response;
@@ -1212,7 +1216,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         ------------------*/
         @Override
         protected void onPreExecute() {
-            Log.d(TAG, "onPreExecute: AsyncPARSE");
+            Log.v(TAG, "onPreExecute: AsyncPARSE");
             super.onPreExecute();
             PrimeForegroundService activity = weakReference.get();
             //update error msg
@@ -1242,7 +1246,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         @Override
         protected Void doInBackground(Void... voids) {
             PrimeForegroundService activity = weakReference.get();
-            Log.d(TAG, "doInBackground: AsyncPARSE");
+            Log.v(TAG, "doInBackground: AsyncPARSE");
             errorMessageMethod = "doInBackground: ";
 
             if (isCancelled()) {
@@ -1265,7 +1269,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 JSONObject responseObj = new JSONObject(response);
                 //get array of elements from object
                 JSONArray responseArr = responseObj.getJSONArray("elements");
-                Log.d(TAG, "doInBackground: PARSE: elements:\n" +
+                Log.v(TAG, "doInBackground: PARSE: elements:\n" +
                         responseArr);
 
                 for (int i = 0; i < responseArr.length(); i++) {
@@ -1273,16 +1277,16 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     String elementString = responseArr.getString(i);
                     JSONObject elementObj = new JSONObject(elementString);
                     //logcat:
-                    Log.d(TAG, "----------------------------------------");
+                    Log.v(TAG, "----------------------------------------");
 
                     //add road name(s) to array list
                     try {
                         //for each element, get string of name
                         roadNames.add(elementObj.getJSONObject("tags").getString("name"));
-                        Log.d(TAG, "AsyncPARSE: ROADNAME RETRIEVED:");
+                        Log.v(TAG, "AsyncPARSE: ROADNAME RETRIEVED:");
 
                         //testing:
-                        Log.d(TAG, "doInBackground: NAME: " + roadNames.get(i));
+                        Log.v(TAG, "doInBackground: NAME: " + roadNames.get(i));
                     } catch (JSONException e) {
                         Log.w(TAG, "AsyncPARSE: JSON exception occurred: no NAME for road");
                         roadNames.add("No name found");
@@ -1291,7 +1295,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     //add max speed to array list
                     try {
                         //debugging:
-                        Log.d(TAG, "doInBackground: debug: speed string contents: ["
+                        Log.v(TAG, "doInBackground: debug: speed string contents: ["
                                 + elementObj.getJSONObject("tags").getString("maxspeed")
                                 + "]");
 
@@ -1310,11 +1314,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             roadSpeeds.add(-1);
                         } else {
                             roadSpeeds.add(Integer.parseInt(charlessSpeedString));
-                            Log.d(TAG, "AsyncPARSE: SPEED RETRIEVED:");
+                            Log.v(TAG, "AsyncPARSE: SPEED RETRIEVED:");
                         }
 
                         //testing:
-                        Log.d(TAG, "AsyncPARSE: doInBackground: SPEED: " + roadSpeeds.get(i));
+                        Log.v(TAG, "AsyncPARSE: doInBackground: SPEED: " + roadSpeeds.get(i));
                     } catch (JSONException e) {
                         Log.w(TAG, "AsyncPARSE: doInBackground: JSONException occurred: " +
                                 "no speed for road.");
@@ -1326,7 +1330,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         roadSpeeds.add(-1);
                     }
                     //logcat clarity:
-                    Log.d(TAG, "----------------------------------------");
+                    Log.v(TAG, "----------------------------------------");
                 }
             } catch (JSONException e) {
                 Log.e(TAG, "AsyncPARSE: doInBackground: Error: parsing response string.");
@@ -1341,13 +1345,13 @@ public class PrimeForegroundService extends Service implements LocationListener,
             //add number of roads found in radius to logfile
             activity.logObject.setRadiusTotal(roadNames.size());
             //testing:
-            Log.d(TAG, "doInBackground: roadnames size = " + roadNames.size());
+            Log.v(TAG, "doInBackground: roadnames size = " + roadNames.size());
 
             //more than one road returned: choose one to use
             if (roadNames.size() > 1) {
-                Log.d(TAG, "doInBackground: roadnames.size > 1");
+                Log.v(TAG, "doInBackground: roadnames.size > 1");
             } else if (roadNames.size() == 1) {
-                Log.d(TAG, "doInBackground: roadNames size = 1");
+                Log.v(TAG, "doInBackground: roadNames size = 1");
                 //todo: potential to skip chooseroad? (ensure not further function called?)
             } else if (roadNames.size() == 0) {
                 Log.w(TAG, "doInBackground: Warning: roadsize = 0: check IDE claim this " +
@@ -1379,7 +1383,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         protected void onPostExecute(Void aVoid) {
             PrimeForegroundService activity = weakReference.get();
             super.onPostExecute(aVoid);
-            Log.d(TAG, "AsyncPARSE: onPostExecute: ");
+            Log.v(TAG, "AsyncPARSE: onPostExecute: ");
             errorMessageMethod = "onPostExecute: ";
 
             //RE check for missing information (ie no roads returned from query)
@@ -1394,10 +1398,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
             }
 
             //logcat:
-            Log.d(TAG, "--------------------");
+            Log.v(TAG, "--------------------");
 
             //debug:
-            Log.d(TAG, "AsyncPARSE: onPostExecute: task complete: ");
+            Log.v(TAG, "AsyncPARSE: onPostExecute: task complete: ");
             //check if cancelled: prevent further work
             if (isCancelled()) {
                 errorMessageString = errorMessageClass.concat(errorMessageMethod.concat(
@@ -1417,7 +1421,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         ------------------*/
         @Override
         protected void onCancelled() {
-            Log.d(TAG, "onCancelled: AsyncPARSE");
+            Log.v(TAG, "onCancelled: AsyncPARSE");
             super.onCancelled();
         }
 
@@ -1449,7 +1453,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //-selection logic for values to return if more than one in API response
         private void chooseRoad() {
             PrimeForegroundService activity = weakReference.get();
-            Log.d(TAG, "AsyncPARSE: chooseRoad: ");
+            Log.v(TAG, "AsyncPARSE: chooseRoad: ");
             errorMessageMethod = "chooseRoad: ";
 
             //debugging:
@@ -1480,7 +1484,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 //todo: further logic checks (eg first speed value that exists?)
 
                 //TESTING VERSION: return first value found: todo: better selection method:
-                Log.d(TAG, "AsyncPARSE: chooseRoad: road chosen from API returned list:\n"
+                Log.v(TAG, "AsyncPARSE: chooseRoad: road chosen from API returned list:\n"
                         + roadNames.get(0) + " @ " + roadSpeeds.get(0) + "mph");
                 returnedRoad = new RoadTags(roadNames.get(0), roadSpeeds.get(0));
 
@@ -1496,7 +1500,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 }
 
                 //testing:
-                Log.d(TAG, "chooseRoad: returnedRoad values:\n" +
+                Log.v(TAG, "chooseRoad: returnedRoad values:\n" +
                         "\troad name: " + returnedRoad.getRoadName() + "\n" +
                         "\troad speed: " + returnedRoad.getRoadSpeed() + "\n");
             }
@@ -1719,26 +1723,34 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-naive attempt to prevent two requests crashing mediaPlayer
     public void queuePlayback(String selection) {
-        Log.d(TAG, "queuePlayback: ");
-        if (mediaLock.getValue()) {
-            //mediaPlayer locked:queue play request
-            if (playQueue == null) {
-                playQueue = new ArrayList<>();
-            }
-            Log.d(TAG, "queuePlayback: queued selection");
+        Log.v(TAG, "queuePlayback: ");
+//
+        if (playQueue == null) {
+            playQueue = new ArrayList<>();
+            //begin process?
             playQueue.add(selection);
+            mediaLock.setValue(false);
         } else {
-            Log.d(TAG, "queuePlayback: no queue needed: play");
-            //directly proceed with playback
-            playAudio(selection);
+            if (mediaLock.getValue()) {
+                //mediaPlayer locked:queue play request
+                Log.v(TAG, "queuePlayback: queued selection");
+                playQueue.add(selection);
+            } else {
+                Log.v(TAG, "queuePlayback: no queue needed: play");
+                //directly proceed with playback
+                playAudio(selection);
+            }
         }
+//        } else {
+//
+//        }
     }
 
 
     //-play audio at index in array or cease
     public void play() {
         if (playIndex > resourceFilenameArray.length - 1) {
-            Log.d(TAG, "play: playlist finished.");
+            Log.v(TAG, "play: playlist finished.");
             //reset counter, array
             playIndex = 0;
             resourceFilenameArray = null;
@@ -1793,7 +1805,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
 
     public void playSfx_indicator() {
-        Log.d(TAG, "playSfx: ");
+        Log.v(TAG, "playSfx: ");
         try {
             if (mediaPlayer_sfx_indicator == null) {
                 mediaPlayer_sfx_indicator = new MediaPlayer();
@@ -1816,11 +1828,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-setup bluetooth adapter and sockets
     public void setupBluetoothSockets(Intent intent) {
-        Log.d(TAG, "onStartCommand: obtaining bluetooth adapter");
+        Log.v(TAG, "onStartCommand: obtaining bluetooth adapter");
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         //todo: check bluetooth state?
         bikeAddress = intent.getStringExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS);
-        Log.d(TAG, "onStartCommand: received bluetooth address: " + bikeAddress);
+        Log.v(TAG, "onStartCommand: received bluetooth address: " + bikeAddress);
 
         //todo: fix workaround: hard coded address if intent extra is lost : how can this happen?
         if (bikeAddress == null) {
@@ -1832,31 +1844,31 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //create device and set the MAC address
         try {
             BluetoothDevice device = bluetoothAdapter.getRemoteDevice(bikeAddress);
-            Log.d(TAG, "onResume: device created: " + device.getName() + " : "
+            Log.v(TAG, "onResume: device created: " + device.getName() + " : "
                     + device.getAddress());
             try {
                 bluetoothSocket_bike = createBluetoothSocket(device);
-                Log.d(TAG, "onResume: create bluetooth socket");
+                Log.v(TAG, "onResume: create bluetooth socket");
             } catch (IOException e) {
-                Log.d(TAG, "onResume: Socket creation failed.");
+                Log.v(TAG, "onResume: Socket creation failed.");
                 Toast.makeText(getApplicationContext(), "Socket creation failed",
                         Toast.LENGTH_LONG).show();
             }
             // Establish the Bluetooth socket connection.
             try {
                 bluetoothSocket_bike.connect();
-                Log.d(TAG, "onResume: socket connected.");
+                Log.v(TAG, "onResume: socket connected.");
                 queuePlayback(TTS_LOLA_NOTIFY_BLUETOOTH_ESTABLISHED);
                 Toast.makeText(getApplicationContext(), "Connected to bike",
                         Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 //todo: specific audio for errors (maybe not applicable to users: dont care re specifics of bluetooth issue)?
-                Log.d(TAG, "onResume: socket connection error.");
+                Log.v(TAG, "onResume: socket connection error.");
                 try {
                     bluetoothSocket_bike.close();
-                    Log.d(TAG, "onResume: socket closed");
+                    Log.v(TAG, "onResume: socket closed");
                 } catch (IOException e2) {
-                    Log.d(TAG, "onResume: Error on closing socket during establish failure!");
+                    Log.v(TAG, "onResume: Error on closing socket during establish failure!");
                     //insert code to deal with this
                 }
             }
@@ -1876,7 +1888,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     // todo: move to static class to prevent leaks (warning suppressed)
     @SuppressLint("HandlerLeak")
     public void createInputHandler() {
-        Log.d(TAG, "createInputHandler: ");
+        Log.v(TAG, "createInputHandler: ");
         bluetoothInputHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 Log.v(TAG, "handleMessage: ");
@@ -1999,7 +2011,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-log error string to file (tidy code: repeated object creation and writing)
     public void logErrorToFile(String errorMessage, String linebreak) {
-        Log.d(TAG, "logErrorToFile: ");
+        Log.v(TAG, "logErrorToFile: ");
         //get local copy of error message string: in case passing async task is destroyed
         String localErrorMessage = errorMessage;
 
@@ -2039,38 +2051,38 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-handles the initial permission and directory checks to set up logging to file
     public void beginLoggingToFile() {
-        Log.d(TAG, "beginLoggingToFile: ");
+        Log.v(TAG, "beginLoggingToFile: ");
 
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
-            Log.d(TAG, "beginLoggingToFile: media mounted");
+            Log.v(TAG, "beginLoggingToFile: media mounted");
             if (Build.VERSION.SDK_INT >= 23) {
-                Log.d(TAG, "beginLoggingToFile: build version >= 23");
+                Log.v(TAG, "beginLoggingToFile: build version >= 23");
                 if (checkWritePermission()) {
-                    Log.d(TAG, "beginLoggingToFile: permission granted");
+                    Log.v(TAG, "beginLoggingToFile: permission granted");
                     File sdcard = Environment.getExternalStorageDirectory();
                     dir = new File(sdcard.getAbsolutePath() + "/logFiles/");
-                    Log.d(TAG, "beginLoggingToFile: directory to check/ create: \n" + dir);
+                    Log.v(TAG, "beginLoggingToFile: directory to check/ create: \n" + dir);
                     if (!dir.exists()) {
-                        Log.d(TAG, "beginLoggingToFile: directory doesnt exist: creating...");
+                        Log.v(TAG, "beginLoggingToFile: directory doesnt exist: creating...");
                         if (dir.mkdir()) {
-                            Log.d(TAG, "beginLoggingToFile: directory created");
+                            Log.v(TAG, "beginLoggingToFile: directory created");
                         } else {
                             Log.e(TAG, "beginLoggingToFile: Error: directory failed to be " +
                                     "created!");
                             //todo: handle
                         }
                     } else {
-                        Log.d(TAG, "beginLoggingToFile: directory exists");
+                        Log.v(TAG, "beginLoggingToFile: directory exists");
                     }
 
                     //create file name/path from date
                     String filenameByDate = "gpsRoadLogFile_" + getIsoDate() + ".txt";
-                    Log.d(TAG, "beginLoggingToFile: logfile name by date: " + filenameByDate);
+                    Log.v(TAG, "beginLoggingToFile: logfile name by date: " + filenameByDate);
                     file = new File(dir, filenameByDate);
 
                     //debugging
-                    Log.d(TAG, "beginLoggingToFile: current date file already exists = " +
+                    Log.v(TAG, "beginLoggingToFile: current date file already exists = " +
                             file.exists());
 //                    Toast.makeText(this, "confirmation if current date file exists = " +
 //                            file.exists(), Toast.LENGTH_SHORT).show();
@@ -2084,7 +2096,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         oStream.write(("BEGIN LOG: " + isoTimeString + ":\n").getBytes());
                         oStream.write(("---------------------------------------------------------" +
                                 "-----------------------\n").getBytes());
-                        Log.d(TAG, "beginLoggingToFile: Output stream OPENED: log header " +
+                        Log.v(TAG, "beginLoggingToFile: Output stream OPENED: log header " +
                                 "appended.");
                     } catch (IOException e) {
                         Log.e(TAG, "beginLoggingToFile: error creating outputStream");
@@ -2092,7 +2104,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     } finally {
                         try {
                             oStream.close();
-                            Log.d(TAG, "beginLoggingToFile: stream closed");
+                            Log.v(TAG, "beginLoggingToFile: stream closed");
                         } catch (IOException e) {
                             Log.e(TAG, "beginLoggingToFile: error closing stream");
                             e.printStackTrace();
@@ -2125,12 +2137,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-handles the end of the logging to file
     public void endLoggingToFile() {
-        Log.d(TAG, "endLoggingToFile: ");
+        Log.v(TAG, "endLoggingToFile: ");
         //line break at end of current file (multiple same day tests are stored in single file)
         String eof =
                 "********************************************************************************";
         try {
-            Log.d(TAG, "endLog: reopening final log write");
+            Log.v(TAG, "endLog: reopening final log write");
             oStream = new FileOutputStream(file, true);
             oStream.write(("\n\nEND OF LOG:\n" + eof + "\n\n\n").getBytes());
         } catch (IOException e) {
@@ -2138,7 +2150,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             e.printStackTrace();
         } finally {
             try {
-                Log.d(TAG, "endLog: closing stream");
+                Log.v(TAG, "endLog: closing stream");
                 //null fix for debug
                 if (oStream != null) {
                     oStream.close();
@@ -2157,15 +2169,15 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-update the current speed limit in memory
     public void updateCurrentSpeedInfo(RoadTags product) {
-        Log.d(TAG, "updateCurrentSpeedInfo: ");
+        Log.v(TAG, "updateCurrentSpeedInfo: ");
         //update speed (in local variable)
         //todo: address assumed duplicate update (additional in onComplete listener)
         currentSpeedLimit.set(product.getRoadSpeed());
         currentRoadName = product.getRoadName();
 
         //testing:
-        Log.d(TAG, "updateCurrentSpeedInfo: Road name: " + currentRoadName);
-        Log.d(TAG, "updateCurrentSpeedInfo: Road speed: " + currentSpeedLimit);
+        Log.v(TAG, "updateCurrentSpeedInfo: Road name: " + currentRoadName);
+        Log.v(TAG, "updateCurrentSpeedInfo: Road speed: " + currentSpeedLimit);
 
         //complete logging this iteration
         logObject.setLimitUpdateTime(SystemClock.elapsedRealtime());
@@ -2176,7 +2188,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-print current iteration of primary loop logObject to file
     public void logIteration() {
-        Log.d(TAG, "logIteration:");
+        Log.v(TAG, "logIteration:");
         if (logObject == null) {
             Log.e(TAG, "logIteration: Error: logObject is null: cannot continue logging.");
             logErrorToFile("logIteration: logObject is null.", LOGFILE_LINEBREAK_STAR);
@@ -2184,7 +2196,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         }
 
         if (logObject.checkIterationComplete()) {
-            Log.d(TAG, "logIteration: checkiteration complete.");
+            Log.v(TAG, "logIteration: checkiteration complete.");
             try {
                 oStream = new FileOutputStream(file, true);
             } catch (FileNotFoundException e) {
@@ -2195,7 +2207,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
             //append to log file:
             try {
-                Log.d(TAG, "logIteration: logging object contnents to file");
+                Log.v(TAG, "logIteration: logging object contnents to file");
                 //testing:
                 long startLogTime = SystemClock.elapsedRealtime();
 
@@ -2235,7 +2247,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
                 //testing:
                 long endLogTime = SystemClock.elapsedRealtime();
-                Log.d(TAG, "logIteration: TIME TAKEN TO LOG TO FILE: " +
+                Log.v(TAG, "logIteration: TIME TAKEN TO LOG TO FILE: " +
                         (endLogTime - startLogTime));
 
             } catch (IOException e) {
@@ -2265,7 +2277,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public void sendUiUpdate(int currentLimit, String actualSpeed, WatchedBool indicateLeft,
                              WatchedBool indicateRight, WatchedBool lightLow,
                              WatchedBool lightHigh) {
-        Log.d(TAG, "sendUiUpdate: ");
+        Log.v(TAG, "sendUiUpdate: ");
         //convert current limit
         String currentLimitString = Integer.toString(currentLimit);
 
@@ -2288,7 +2300,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-compares current moving speed against current location's speed limit
     public void compareSpeedAndLimit() {
-        Log.d(TAG, "checkSpeedAgainstLimit: ");
+        Log.v(TAG, "checkSpeedAgainstLimit: ");
 
     }
 
@@ -2297,19 +2309,19 @@ public class PrimeForegroundService extends Service implements LocationListener,
     --------------------------------------*/
     //-assigning listeners to watchedBooleans
     public void assignWatchedBooleans() {
-        Log.d(TAG, "assignIndicatorLightBools: ");
+        Log.v(TAG, "assignIndicatorLightBools: ");
         //if indicators are on: play indicator SFX
         indicatorL.setBooleanChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
                 if (indicatorL.getValue()) {
-                    Log.d(TAG, "onVariableChanged: Start Indicator playback");
+                    Log.v(TAG, "onVariableChanged: Start Indicator playback");
                     //testing:
                     Log.e(TAG, "onVariableChanged: VALUE: " + indicatorL.getValue());
                     //play looped SFX
                     playSfx_indicator();
                 } else {
-                    Log.d(TAG, "onVariableChanged: stop indicator playback");
+                    Log.v(TAG, "onVariableChanged: stop indicator playback");
                     if (mediaPlayer_sfx_indicator != null) {
                         mediaPlayer_sfx_indicator.stop();
                         mediaPlayer_sfx_indicator.reset();
@@ -2325,10 +2337,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
             @Override
             public void onVariableChanged(Object... newValue) {
                 if (indicatorR.getValue()) {
-                    Log.d(TAG, "onVariableChanged: Start Indicator playback");
+                    Log.v(TAG, "onVariableChanged: Start Indicator playback");
                     playSfx_indicator();
                 } else {
-                    Log.d(TAG, "onVariableChanged: stop indicator playback");
+                    Log.v(TAG, "onVariableChanged: stop indicator playback");
                     if (mediaPlayer_sfx_indicator != null) {
                         mediaPlayer_sfx_indicator.stop();
                         mediaPlayer_sfx_indicator.reset();
@@ -2344,17 +2356,17 @@ public class PrimeForegroundService extends Service implements LocationListener,
             @Override
             public void onVariableChanged(Object... newValue) {
                 if (mediaLock.getValue()) {
-                    Log.d(TAG, "onVariableChanged: voice mediaPlayer is now locked");
+                    Log.v(TAG, "onVariableChanged: voice mediaPlayer is now locked");
                 } else {
-                    Log.d(TAG, "onVariableChanged: voice mediaPlayer is now released");
+                    Log.v(TAG, "onVariableChanged: voice mediaPlayer is now released");
                     //play next queued item if one exists
                     if (playQueue != null && playQueue.size() > 0) {
                         //todo: test if this works or need to make a copy?
                         playAudio(playQueue.remove(playQueue.size() - 1));
                         //destroy queue object if empty
-                        if (playQueue.size() == 0) {
-                            playQueue = null;
-                        }
+//                        if (playQueue.size() == 0) {
+//                            playQueue = null;
+//                        }
                     }
 
                 }
@@ -2364,11 +2376,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
 
     public void assignWatchedIntegers() {
-        Log.d(TAG, "assignWatchedIntegers: ");
+        Log.v(TAG, "assignWatchedIntegers: ");
         currentSpeedLimit.setIntChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
-                Log.d(TAG, "onVariableChanged: speed updated to [" +
+                Log.v(TAG, "onVariableChanged: speed updated to [" +
                         currentSpeedLimit.get() + "]mph");
                 //notify user
                 queuePlayback(TTS_LOLA_NOTIFY_SPEEDLIMIT_CHANGED);
@@ -2407,29 +2419,42 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
 
     public void assignWatchedFloats() {
-        Log.d(TAG, "assignWatchedFloats: ");
+        Log.v(TAG, "assignWatchedFloats: ");
         currentSpeed.setFloatChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
-
+                Log.v(TAG, "onVariableChanged: ");
                 //check if exceeding limit (ignore limit of zero: no data)
                 if (currentSpeed.get() > currentSpeedLimit.get() && currentSpeedLimit.get() > 0) {
+                    Log.d(TAG, "onVariableChanged: speed above limit");
                     //prevent re-triggering every update
                     if (!speedingInProgress) {
-                        Log.w(TAG, "onVariableChanged: Warning: speed limit exceeded!");
+                        Log.w(TAG, "onVariableChanged: speeding in progress toggled true");
                         speedingInProgress = true;
 
                         //changed to non-queue version //todo: check this
                         //as this is priority feedback: interrupt any playing media
-                        if ((mediaPlayer_voice != null && mediaPlayer_voice.isPlaying()) ||
-                                (mediaPlayer_sfx_indicator != null &&
-                                        mediaPlayer_sfx_indicator.isPlaying())) {
+                        if (mediaPlayer_voice != null ||
+                                mediaPlayer_sfx_indicator != null) {
+                            Log.w(TAG, "onVariableChanged: a mediaPlayer is  currently " +
+                                    "playing: stopping all players");
+                            //todo: find better way of interrupting players not just nuking them like this
+                            if (playQueue != null) {
+                                ///playQueue.clear();
+                            }
                             stopPlayers();
-                            playAudio(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+
                         }
+
+                        Log.d(TAG, "onVariableChanged: playing audio");
+                        playAudio(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+
                         //todo: add some sort of timer here: start on exceed, stop on below.
-                        //todo: -use to trigger audio again in x seconds if still speeding?
-                    } else {
+                        //todo: -use to trigger audio again in x seconds if still speeding? -could be fix to stop warning before finished notifying limit updates?
+                    }
+                } else {
+                    if (speedingInProgress) {
+                        Log.d(TAG, "onVariableChanged: speeding ended: set bool false");
                         //allow speeding trigger to happen again
                         speedingInProgress = false;
                     }
@@ -2447,35 +2472,37 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-cancels both async tasks (if they exist)
     public void cancelAsyncTasks() {
-        Log.d(TAG, "cancelAsyncTasks: ");
+        Log.v(TAG, "cancelAsyncTasks: ");
         //http task check exists
         if (!(httpTask == null)) {
-            Log.d(TAG, "cancelAsyncTasks: cancelling http task...");
+            Log.v(TAG, "cancelAsyncTasks: cancelling http task...");
             httpTask.cancel(true);
         } else {
-            Log.d(TAG, "cancelAsyncTasks: no http task to cancel");
+            Log.v(TAG, "cancelAsyncTasks: no http task to cancel");
         }
         //parse task check exists
         if (!(parseTask == null)) {
-            Log.d(TAG, "cancelAsyncTasks: cancelling parse task...");
+            Log.v(TAG, "cancelAsyncTasks: cancelling parse task...");
             parseTask.cancel(true);
         } else {
-            Log.d(TAG, "cancelAsyncTasks: no parse task to cancel");
+            Log.v(TAG, "cancelAsyncTasks: no parse task to cancel");
         }
     }
 
 
     //-release resources assigned to player if it exists
     public void stopPlayers() {
+        mediaLock.setValue(false);
+
         if (mediaPlayer_voice != null) {
-            Log.d(TAG, "stopPlayers: releasing resources for voice player");
+            Log.v(TAG, "stopPlayers: releasing resources for voice player");
             mediaPlayer_voice.release();
             mediaPlayer_voice = null;
             return;
         }
 
         if (mediaPlayer_sfx_indicator != null) {
-            Log.d(TAG, "stopPlayers: releasing resources for sfx player");
+            Log.v(TAG, "stopPlayers: releasing resources for sfx player");
             mediaPlayer_sfx_indicator.release();
             mediaPlayer_sfx_indicator = null;
             return;
@@ -2487,7 +2514,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-stops updates to gps/network location providers
     public void stopUpdates() {
-        Log.d(TAG, "stopUpdates: ");
+        Log.v(TAG, "stopUpdates: ");
         //*2 to stop both providers:
         locationManager.removeUpdates(this);
         locationManager.removeUpdates(this);
@@ -2507,9 +2534,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
             //check previous location matches last query check location record (treat null as same)
             if (apiCheckDuplicateLocation == null) {
-                Log.d(TAG, "checkAsyncLock: duplicate location is null:");
+                Log.v(TAG, "checkAsyncLock: duplicate location is null:");
                 if (finalLocation != null) {
-                    Log.d(TAG, "checkAsyncLock: setting current location as duplicate " +
+                    Log.v(TAG, "checkAsyncLock: setting current location as duplicate " +
                             "(begin queries next update)");
                     apiCheckDuplicateLocation = finalLocation;
                     //have 'previous location' now, fall through to begin asyncAPI
@@ -2527,7 +2554,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 return;
             }
 
-            Log.d(TAG, "checkAsyncLock: CONDITIONS MET: begin AsyncHttp");
+            Log.v(TAG, "checkAsyncLock: CONDITIONS MET: begin AsyncHttp");
             //create log object(location's fix time and use time)
             logObject = new PrimeServceLogObject(finalLocation.getLatitude(),
                     finalLocation.getLongitude(), finalLocation.getAccuracy(),
@@ -2600,7 +2627,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     testAudioFromButton();
                     break;
                 case METHODTRIGGER_TESTPRINT:
-                    Log.d(TAG, "onReceive: SWITCH TEST PRINT!");
+                    Log.v(TAG, "onReceive: SWITCH TEST PRINT!");
                     break;
                 default:
                     Log.w(TAG, "onReceive: Warning: unexpected default methodTrigger");
@@ -2670,7 +2697,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-display toast to UI (remove repeated code from class)
 //    public void showToastOnUI(final String toastMessage) {
-//        Log.d(TAG, "showToastOnUI: displaying Toast...");
+//        Log.v(TAG, "showToastOnUI: displaying Toast...");
 //        handler.post(new Runnable() {
 //            @Override
 //            public void run() {
