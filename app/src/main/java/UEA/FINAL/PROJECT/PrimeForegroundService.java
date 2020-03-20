@@ -1854,7 +1854,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
             // Establish the Bluetooth socket connection.
             try {
                 bluetoothSocket_bike.connect();
-                Log.d(TAG, "onResume: socket connect...");
+                Log.d(TAG, "onResume: socket connected.");
+                queuePlayback(TTS_LOLA_NOTIFY_BLUETOOTH_ESTABLISHED);
+                Toast.makeText(getApplicationContext(), "Connected to bike",
+                        Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 //todo: specific audio for errors (maybe not applicable to users: dont care re specifics of bluetooth issue)?
                 Log.d(TAG, "onResume: socket connection error.");
@@ -1916,7 +1919,13 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
                             //assign and check result of splitString
                             for (int i = 0; i < receivedValues.length - 1; i++) {
-                                incomingStatusValues[i] = receivedValues[i];
+                                //debugging: trying to find cause of index out of bounds exception:
+                                // (length = 7; index = 7) shouldnt be possible: guessing something to do with debugger?
+                                if (i == incomingStatusValues.length || i == receivedValues.length) {
+                                    Log.e(TAG, "handleMessage: Error: INDEX EQUAL TO LENGTH BUG: debugger is the cause?");
+                                } else {
+                                    incomingStatusValues[i] = receivedValues[i];
+                                }
                             }
 
                             //testing send values to logcat via warning (allows filtering of debug level logs and below)
