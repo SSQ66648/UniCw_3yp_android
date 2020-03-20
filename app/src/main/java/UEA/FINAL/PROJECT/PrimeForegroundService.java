@@ -126,7 +126,7 @@
  *              todo:   add permission redirect to settings
  *              TODO:   address service re-creation steps/behaviour
  *              todo:   remove asset copied mp3s if not needed.
- *              todo:
+ *              todo:   add vairious voice responses eg bluetooth connected
  *              todo:
  *------------------------------------------------------------------------------
  * MAJOR ADDITIONS NEEDED:
@@ -151,13 +151,9 @@
  *              todo:   default lbs if arg not provided?
  *              todo:   find need for/remove othererrcount var
  *              todo:   combine error log and reset methods?
- *              todo:
+ *              todo:   FOR THE LOVE OF GOD: CHANGE THE BLUTOOTH VECTOR INPUT LOGS TO VERBOSE!!!!!!
+ *              //todo: clean up finished todo items
  * ---------------------------------------------------------------------------*/
-
-////todo: --------------------------------------------------------------------------------------------------------------
-////todo: SET BOOL LISTENERS
-////todo: --------------------------------------------------------------------------------------------------------------
-
 
 package UEA.FINAL.PROJECT;
 /*--------------------------------------
@@ -243,9 +239,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public static final String TASK_COMPLETION_FLAG_HTTP = "httpComplete";
     public static final String TASK_COMPLETION_FLAG_PARSE = "httpParse";
     //line breaks for logging to file
-    public static final String LOGFILE_LINEBREAK_STAR = "****************************************\n";
-    public static final String LOGFILE_LINEBREAK_DASH = "----------------------------------------\n";
-    public static final String LOGFILE_LINEBREAK_EQAL = "========================================\n";
+    public static final String LOGFILE_LINEBREAK_STAR =
+            "****************************************\n";
+    public static final String LOGFILE_LINEBREAK_DASH =
+            "----------------------------------------\n";
+    public static final String LOGFILE_LINEBREAK_EQAL =
+            "========================================\n";
     //used to receive broadcasts from activity: value unimportant
     public static final String SERVICE_BROADCASTRECEIVER_ACTION = "action";
     //receiver for connection broadcasts
@@ -274,7 +273,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     Location oldFinalLocation;
     long oldFinalLocationRealTime;
     long oldFinalLocationRealTimeSeconds;
-
     long diffSeconds_location_oldLocation;
     LocationManager locationManager;
     Handler handler;
@@ -302,7 +300,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //todo: remove possible duplicate listener?
     //used in start httpAsync: if location has not changed, do not bother making http request
     Location apiCheckDuplicateLocation;
-    //lock to prevent unnecessary http queries (triggered by location update?) (true = prevent execution)
+    //lock to prevent unnecessary http queries (true = prevent execution)
     boolean asyncLocked = false;
 
     //testing:(timestamp of httpTask beginning and ending to check duration required)
@@ -313,7 +311,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
         PARSE Variables
     ------------------*/
     AsyncPARSE parseTask;
-    //use same AsyncCompleteListener
 
     /*------------------
         Speed-Check Variables
@@ -333,23 +330,24 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*------------------
         Audio variables
     ------------------*/
+    MediaPlayer mediaPlayer_voice;
     MediaPlayer mediaPlayer_sfx_indicator;
     //detection of network connection
     private ConnectivityManager connectivityManager;
-    MediaPlayer mediaPlayer_voice;
+    //position in media player array
+    int playIndex = 0;
+    //variable array of resource file IDs (copied to per array choice)
+    String[] resourceFilenameArray = new String[0];
+
+    /*------------------
+        Audio Array Variables
+    ------------------*/
     private final String[] tts_lola_NetworkConnectionLost = {
             "tts_mp3_lola_warning_warning.mp3",
             "tts_mp3_lola_connection_network.mp3",
             "tts_mp3_lola_connection_connection.mp3",
             "tts_mp3_lola_connection_lost.mp3"
     };
-
-
-    //position in media player array
-    int playIndex = 0;
-    //variable array of resource file IDs (copied to per array choice)
-    String[] resourceFilenameArray = new String[0];
-
 
     /*------------------
         Bluetooth Variables
@@ -358,11 +356,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
     private Handler bluetoothInputHandler;
     private final int handlerState = 0;
     private BluetoothAdapter bluetoothAdapter = null;
-    //thread dealing with bluetooth connection
-//    private ConnectedThread connectedThread;
-    //assembly of recieved data
+    //assembly of received data
     private StringBuilder stringBuilder_input = new StringBuilder();
-    // SPP UUID service for Hc05 module - this should work for most devices (replace if able to obtain UUID programmatically)
+    // SPP UUID service for Hc05 module - this should work for most devices
+    // (replace if able to obtain UUID programmatically)
     private static final UUID BtModuleUUID =
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     //intent-passed bike address (again, include headset if able to obtain it later)
@@ -387,11 +384,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     private WatchedBool headlightH = new WatchedBool();
     //revCounter is currently always zero: no use implemented as of yet)
     private int revCounter = 0;
-
-    int indicatorAudio;
-    //handles running of indicator sfx playback
-    Executor indicatorExecutor = Executors.newSingleThreadExecutor();
-    SoundPool soundPool;
 
 
     /*--------------------------------------
@@ -436,18 +428,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
         LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
                 new IntentFilter(PrimeForegroundService.SERVICE_BROADCASTRECEIVER_ACTION));
 
-        //register network change receiver //todo: did not work review/remove
-
-
-        //testing----------------------------------------------------------------------------------------------------------------------------------
-
+        //register network changes
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         connectivityManager.registerDefaultNetworkCallback(networkCallback);
-        //testing----------------------------------------------------------------------------------------------------------------------------------
-
-
-        //create SFX player, load resource files
-//        loadSoundpool();
 
         //assign listeners to watchedBooleans
         assignWatchedindicatorBools();
@@ -458,14 +441,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: ");
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        ////todo: TESTING
         //setup handler to deal with incoming serial data
         createInputHandler();
         //setup bluetooth connection to bike
         setupBluetoothSockets(intent);
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //send to calling activity on click of notification
+
+        //send user to calling host activity on click of notification
         Intent notificationIntent = new Intent(this,
                 PrimeForegroundServiceHost.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -546,15 +527,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //notify user
 //        showToastOnUI("stopping service...");
 
-
         //release any unreleased mediaPlayers
         stopPlayers();
 
-        //unregister receiver for activity messages & network changes
+        //unregister receivers
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceBroadcastReceiver);
-
         connectivityManager.unregisterNetworkCallback(networkCallback);
-
 
         Log.d(TAG, "onDestroy: closing bluetooth sockets:");
         if (bluetoothSocket_bike != null) {
@@ -614,7 +592,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
             //             networkLocation = location;
         } else {
             Log.e(TAG, "onLocationChanged: Error: unknown provider identified");
-            logErrorToFile("onLocationChanged: unknown provider.", LOGFILE_LINEBREAK_STAR);
+            logErrorToFile("onLocationChanged: unknown provider.",
+                    LOGFILE_LINEBREAK_STAR);
             otherErrCount++;
         }
 
@@ -716,7 +695,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
             Log.w(TAG, "********************");
             Log.e(TAG, "onLocationChanged: Error: finalLocation is null.");
             Log.w(TAG, "********************\n_");
-            logErrorToFile("onLocationChanged: finalLocation is NULL", LOGFILE_LINEBREAK_STAR);
+            logErrorToFile("onLocationChanged: finalLocation is NULL",
+                    LOGFILE_LINEBREAK_STAR);
         }
         Log.d(TAG, "_");
 
@@ -753,7 +733,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
             Log.e(TAG, "onTaskComplete: Error: PRODUCT IS NULL");
             Log.e(TAG, "onTaskComplete: product obtained from: " + localFlag);
 
-            logErrorToFile("onTaskComplete: Error: PRODUCT from [" + localFlag + "]IS NULL", LOGFILE_LINEBREAK_STAR);
+            logErrorToFile("onTaskComplete: Error: PRODUCT from [" + localFlag +
+                    "]IS NULL", LOGFILE_LINEBREAK_STAR);
             errorReset("onTaskCompleted: localProduct is null");
             return;
         }
@@ -781,8 +762,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 //http complete: start parsing of road list
                 startAsyncTaskParse((String) localProduct);
             } else {
-                logErrorToFile("onTaskComplete: Error: API response is NOT string: cannot continue.", LOGFILE_LINEBREAK_STAR);
-                errorReset("onTaskComplete: HTTP flag found: response is not string: reset.");
+                logErrorToFile("onTaskComplete: Error: API response is NOT string: " +
+                        "cannot continue.", LOGFILE_LINEBREAK_STAR);
+                errorReset("onTaskComplete: HTTP flag found: not string: reset.");
             }
         } else if (localFlag == TASK_COMPLETION_FLAG_PARSE) {
             Log.d(TAG, "onTaskComplete: parseTask flag found:");
@@ -810,8 +792,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
             } else {
                 Log.e(TAG, "onTaskComplete: Error: expected RoadTags object, "
                         + localProduct + "received.");
-                logErrorToFile("onTaskComplete: Error: expected RoadTags object", LOGFILE_LINEBREAK_STAR);
-                errorReset("onTaskComplete: PARSE flag found: localProduct is not a RoadTags object");
+                logErrorToFile("onTaskComplete: Error: expected RoadTags object",
+                        LOGFILE_LINEBREAK_STAR);
+                errorReset("onTaskComplete: PARSE flag found: localProduct is not a " +
+                        "RoadTags object");
                 return;
                 //todo: handle?
             }
@@ -820,7 +804,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         } else {
             Log.e(TAG, "onTaskComplete: Error: flag not recognised:\n" + flag);
-            logErrorToFile("onTaskComplete: Error: flag not recognised:", LOGFILE_LINEBREAK_STAR);
+            logErrorToFile("onTaskComplete: Error: flag not recognised:",
+                    LOGFILE_LINEBREAK_STAR);
             errorReset("onTaskComplete: flag not recognised: reset.");
             return;
         }
@@ -855,104 +840,31 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    /*--------------------------------------
-        UNUSED LISTENERS
-    --------------------------------------*/
-    //-required by superclass
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-
-    ////todo: sorth methods from listeners/classes etc!------------------------------------------------------------------------------------------
-
-
-    //-selects audio array to play
-    public void playAudio(String playChoice) {
-        //clear any existing content
-        resourceFilenameArray = new String[0];
-        switch (playChoice) {
-            case TTS_LOLA_WARNING_NETWORK_LOST:
-                resourceFilenameArray = tts_lola_NetworkConnectionLost;
-                break;
-            case TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE:
-                resourceFilenameArray[0] = "tts_lola_notify_networkconnectiononline.mp3";
-                break;
-            case TTS_FULL_LOLA_PROMPT_VOICETEST:
-                resourceFilenameArray[0] = "tts_lola_prompt_voicetest.mp3";
-                break;
-
-
-            //todo: add more choices
-        }
-        play();
-    }
-
-
-    //-play audio at index in array or cease
-    public void play() {
-        if (playIndex > resourceFilenameArray.length - 1) {
-            Log.d(TAG, "play: playlist finished.");
-            //reset counter, array
-            playIndex = 0;
-            resourceFilenameArray = null;
-            //release resources
-            stopPlayers();
-            return;
-        } else {
-            //repopulate player
-            try {
-                if (mediaPlayer_voice == null) {
-                    //iteration 1
-                    mediaPlayer_voice = new MediaPlayer();
-                } else {
-                    //iteration 2+
-                    mediaPlayer_voice.reset();
+    //-listens for network connection changes
+    private final ConnectivityManager.NetworkCallback networkCallback =
+            new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(Network network) {
+                    super.onAvailable(network);
+                    Log.d(TAG, "onAvailable: CONNECTION");
+                    if (!connectivityManager.isActiveNetworkMetered()) {
+                        //non-metered doesnt confirm -IS- wifi but for purposes, assume it does.
+                        Log.d(TAG, "onAvailable: WIFI");
+                        //testing: "spare" clip to differentiate between networks becoming available
+                        playAudio(TTS_FULL_LOLA_PROMPT_VOICETEST);
+                    } else {
+                        Log.d(TAG, "onAvailable: MOBILE");
+                        playAudio(TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE);
+                    }
                 }
-                AssetFileDescriptor afd = getAssets().openFd(resourceFilenameArray[playIndex]);
-                mediaPlayer_voice.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
-                        afd.getLength());
-                mediaPlayer_voice.setOnCompletionListener(this);
-                mediaPlayer_voice.prepare();
-                mediaPlayer_voice.start();
-            } catch (IllegalArgumentException e) {
-                Log.e(TAG, "play: Error: resetting/starting player: illegal argument");
-                Log.e(TAG, "message: " + e.getMessage());
-                e.printStackTrace();
-            } catch (IllegalStateException e) {
-                Log.e(TAG, "play: Error: resetting/starting player: illegal state");
-                Log.e(TAG, "message: " + e.getMessage());
-                e.printStackTrace();
-            } catch (IOException e) {
-                Log.e(TAG, "play: Error: resetting/starting player I/O exception");
-                Log.e(TAG, "message: " + e.getMessage());
-                e.printStackTrace();
-            }
-            //move to next file
-            playIndex++;
-        }
-    }
 
-    public void playSfx_indicator() {
-        Log.d(TAG, "playSfx: ");
-        try {
-            if (mediaPlayer_sfx_indicator == null) {
-                mediaPlayer_sfx_indicator = new MediaPlayer();
-            } else {
-                mediaPlayer_sfx_indicator.reset();
-            }
-            AssetFileDescriptor afd = getAssets().openFd("sfx_car_indicator_interior_twolivesleft.wav");
-            mediaPlayer_sfx_indicator.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
-                    afd.getLength());
-            mediaPlayer_sfx_indicator.setLooping(true);
-            mediaPlayer_sfx_indicator.prepare();
-            mediaPlayer_sfx_indicator.start();
-        } catch (Exception e) {
-            Log.e(TAG, "playSfx: Error: playing from indicator SFX mediaplayer");
-            e.printStackTrace();
-        }
-    }
+                @Override
+                public void onLost(Network network) {
+                    super.onLost(network);
+                    Log.d(TAG, "losing active connection");
+                    playAudio(TTS_LOLA_WARNING_NETWORK_LOST);
+                }
+            };
 
 
     //-mediaplayer listener: triggers on currently playing audiofile completion
@@ -960,42 +872,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public void onCompletion(MediaPlayer mp) {
         Log.d(TAG, "onCompletion: ");
         play();
-    }
-
-
-    //-release resources assigned to player if it exists
-    public void stopPlayers() {
-        if (mediaPlayer_voice != null) {
-            Log.d(TAG, "stopPlayers: releasing resources for voice player");
-            mediaPlayer_voice.release();
-            mediaPlayer_voice = null;
-            return;
-        }
-
-        if (mediaPlayer_sfx_indicator != null) {
-            Log.d(TAG, "stopPlayers: releasing resources for sfx player");
-            mediaPlayer_sfx_indicator.release();
-            mediaPlayer_sfx_indicator = null;
-            return;
-        }
-
-        Log.w(TAG, "stopPlayers: no player exists to stop");
-    }
-
-
-    /*--------------------------------------
-        (UNUSED) LISTENERS
-    --------------------------------------*/
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
     }
 
 
@@ -1072,7 +948,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             }
 
             //check variables are not null
-            //todo: add checks for WHICH is null (and potentially need to set lat/lon to null once used, maybe in oncomplete)?
+            //todo: add checks for WHICH is null
             if (weakReference == null | listener == null | lat == null | lon == null) {
                 Log.e(TAG, "onPreExecute: HTTP: Error: \n" +
                         "passed variable is null: cannot continue.");
@@ -1084,7 +960,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         "latitude: " + lat + "\n" +
                         "longitude: " + lon;
 
-                //todo: be aware this may not work if activity is NULL (will require own oStream in task)
                 activity.logErrorToFile(error_http_preExecute, LOGFILE_LINEBREAK_STAR);
                 activity.errorReset("AsyncHttp: onPreExecute: variable null");
                 return;
@@ -1231,7 +1106,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
             Log.d(TAG, "combineURL: ");
 
             String url_A = "http://overpass-api.de/api/interpreter?data=[out:json];way[";
-            String tag = "maxspeed";    //list of tags required in response from API :todo: investigate if any more are possible/useful to project objective
+            //list of tags required in response from API :
+            // todo: investigate if any more are possible/useful to project objective
+            String tag = "maxspeed";
             String url_B = "](around:";
             String url_C = ");out tags;";
 
@@ -1266,7 +1143,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //container class to return both road and speed to enclosing service
         RoadTags returnedRoad;
 
-        //create error message by class section todo: check if this is preferred version of error string creation or not: replace other version
+        //create error message by class section
+        // todo: check if this is preferred version of error string creation: replace other version
         String errorMessageString = "";
         String errorMessageClass = "Error: AsyncPARSE: ";
         String errorMessageMethod = "";
@@ -1276,7 +1154,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
             CONSTRUCTOR
         ------------------*/
         //-pass service (activity) reference
-        AsyncPARSE(PrimeForegroundService activity, AsyncCompleteListener listener, String response) {
+        AsyncPARSE(PrimeForegroundService activity, AsyncCompleteListener listener,
+                   String response) {
             Log.d(TAG, "constructed: AsyncPARSE:");
             weakReference = new WeakReference<>(activity);
             this.listener = listener;
@@ -1378,8 +1257,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                                 .getString("maxspeed");
                         charlessSpeedString = charlessSpeedString.replaceAll(
                                 "[^\\d.]", "");
-//todo: find why this line was possible to crash parsing "" to int? :
-// included a QUICK FIX AS CANNOT FIND WHY THIS HAPPENED?
                         //find why/how:
                         if (charlessSpeedString.equals("")) {
                             Log.e(TAG, "doInBackground: Error: speedString is EMPTY");
@@ -1434,7 +1311,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             } else if (roadNames.size() == 0) {
                 Log.w(TAG, "doInBackground: Warning: roadsize = 0: check IDE claim this " +
                         "is always true...");
-                //no roads added to list: handle potential errors further in code by substitution of values
+                //no roads added: handle potential errors further in code by substitution of values
                 Log.w(TAG, "doInBackground: Warning: NO ROAD RETURNED");
                 roadNames.add("WARNING: NO ROAD NAME RETURNED (possible error on API retrieval)");
                 roadSpeeds.add(-1);
@@ -1544,7 +1421,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             }
 
             //todo: maybe need null/empty check on arrays?
-            //TODO: RESEARCH IF ANY WAY TO DETERMINE SELECTION LOGIC (ORDER OF API RESULTS?): INSERT HERE
+            //TODO: RESEARCH IF ANY WAY TO DETERMINE SELECTION LOGIC (ORDER OF API RESULTS?):
 
             //ensure name and speed arrays match
             if (roadNames.size() != roadSpeeds.size()) {
@@ -1572,7 +1449,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 if (roadSpeeds.get(0) == -1) {
                     activity.logObject.setRadiusTotal(0);
                 } else {
-                    //set selected road index position in road array todo: replace with logic for however road is selected
+                    //set selected road index position in road array
+                    // todo: replace with logic for however road is selected
                     activity.logObject.setRoadArrayIndex(1);
                 }
 
@@ -1586,9 +1464,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
 
     /*--------------------------------------
-        INNER CLASSES / CONTAINERS
+        CONTAINER CLASSES/ THREADS
     --------------------------------------*/
-    //-container for both road name and speed (and any other tags deemed useful later) back from AsyncPARSE
+    //-container for both road name and speed (other tags deemed useful later) back from AsyncPARSE
     private static class RoadTags {
         /*------------------
              Variables
@@ -1673,9 +1551,118 @@ public class PrimeForegroundService extends Service implements LocationListener,
         }
     }
 
+
     /*--------------------------------------
         METHODS
     --------------------------------------*/
+    //-selects audio array to play
+    public void playAudio(String playChoice) {
+        //clear any existing content
+        resourceFilenameArray = new String[1];
+        switch (playChoice) {
+            case TTS_LOLA_WARNING_NETWORK_LOST:
+                resourceFilenameArray = tts_lola_NetworkConnectionLost;
+                break;
+            case TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE:
+                resourceFilenameArray[0] = "tts_lola_notify_networkconnectiononline.mp3";
+                break;
+            case TTS_FULL_LOLA_PROMPT_VOICETEST:
+                resourceFilenameArray[0] = "tts_lola_prompt_voicetest.mp3";
+                break;
+
+            //todo: add more choices
+        }
+        play();
+    }
+
+
+    //-play audio at index in array or cease
+    public void play() {
+        if (playIndex > resourceFilenameArray.length - 1) {
+            Log.d(TAG, "play: playlist finished.");
+            //reset counter, array
+            playIndex = 0;
+            resourceFilenameArray = null;
+            //release resources
+            stopPlayers();
+            return;
+        } else {
+            //repopulate player
+            try {
+                if (mediaPlayer_voice == null) {
+                    //iteration 1
+                    mediaPlayer_voice = new MediaPlayer();
+                } else {
+                    //iteration 2+
+                    mediaPlayer_voice.reset();
+                }
+                AssetFileDescriptor afd = getAssets().openFd(resourceFilenameArray[playIndex]);
+                mediaPlayer_voice.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
+                        afd.getLength());
+                mediaPlayer_voice.setOnCompletionListener(this);
+                mediaPlayer_voice.prepare();
+                mediaPlayer_voice.start();
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "play: Error: resetting/starting player: illegal argument");
+                Log.e(TAG, "message: " + e.getMessage());
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "play: Error: resetting/starting player: illegal state");
+                Log.e(TAG, "message: " + e.getMessage());
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e(TAG, "play: Error: resetting/starting player I/O exception");
+                Log.e(TAG, "message: " + e.getMessage());
+                e.printStackTrace();
+            }
+            //move to next file
+            playIndex++;
+        }
+    }
+
+
+    public void playSfx_indicator() {
+        Log.d(TAG, "playSfx: ");
+        try {
+            if (mediaPlayer_sfx_indicator == null) {
+                mediaPlayer_sfx_indicator = new MediaPlayer();
+            } else {
+                mediaPlayer_sfx_indicator.reset();
+            }
+            AssetFileDescriptor afd = getAssets().openFd(
+                    "sfx_car_indicator_interior_twolivesleft.wav");
+            mediaPlayer_sfx_indicator.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
+                    afd.getLength());
+            mediaPlayer_sfx_indicator.setLooping(true);
+            mediaPlayer_sfx_indicator.prepare();
+            mediaPlayer_sfx_indicator.start();
+        } catch (Exception e) {
+            Log.e(TAG, "playSfx: Error: playing from indicator SFX mediaplayer");
+            e.printStackTrace();
+        }
+    }
+
+
+    //-release resources assigned to player if it exists
+    public void stopPlayers() {
+        if (mediaPlayer_voice != null) {
+            Log.d(TAG, "stopPlayers: releasing resources for voice player");
+            mediaPlayer_voice.release();
+            mediaPlayer_voice = null;
+            return;
+        }
+
+        if (mediaPlayer_sfx_indicator != null) {
+            Log.d(TAG, "stopPlayers: releasing resources for sfx player");
+            mediaPlayer_sfx_indicator.release();
+            mediaPlayer_sfx_indicator = null;
+            return;
+        }
+
+        Log.w(TAG, "stopPlayers: no player exists to stop");
+    }
+
+
     //-setup bluetooth adapter and sockets
     public void setupBluetoothSockets(Intent intent) {
         Log.d(TAG, "onStartCommand: obtaining bluetooth adapter");
@@ -1684,9 +1671,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
         bikeAddress = intent.getStringExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS);
         Log.d(TAG, "onStartCommand: received bluetooth address: " + bikeAddress);
 
-        //todo: fix workaround: hard coded address if intent extra is lost enroute: why/ how can this happen??
+        //todo: fix workaround: hard coded address if intent extra is lost : how can this happen?
         if (bikeAddress == null) {
-            Log.e(TAG, "requestConnectDevice: Error: BIKE ADDRESS IS NULL: employing work-around of hard coded value for development.");
+            Log.e(TAG, "requestConnectDevice: Error: BIKE ADDRESS IS NULL: employing " +
+                    "work-around of hard coded value for development.");
             bikeAddress = "FC:A8:9A:00:4A:DF";
         }
 
@@ -1734,8 +1722,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    //-create handler for incoming bluetooth serial data todo: move to static class to prevent leaks (warning suppressed)
-    //todo: rename sensorvalues
+    //-create handler for incoming bluetooth serial data
+    // todo: move to static class to prevent leaks (warning suppressed)
     @SuppressLint("HandlerLeak")
     public void createInputHandler() {
         Log.d(TAG, "createInputHandler: ");
@@ -1756,12 +1744,13 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         Log.d(TAG, "handleMessage: Data Received = \n" + dataInPrint);
                         //get length of data received (25char initially, grows with triple digits)
                         int dataLength = dataInPrint.length();
-                        Log.d(TAG, "handleMessage: String Length = " + String.valueOf(dataLength));
+                        Log.d(TAG, "handleMessage: String Length = " +
+                                String.valueOf(dataLength));
 
                         //check for beginning character of '#' -signifies desired transmission
                         if (stringBuilder_input.charAt(0) == '#') {
                             //string array for sensor values
-                            String[] sensorValues = new String[7];
+                            String[] incomingStatusValues = new String[7];
 
                             //remove first character ('#') to simplify splitting string
                             stringBuilder_input.deleteCharAt(0);
@@ -1771,50 +1760,44 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
                             //assign and check result of splitString
                             for (int i = 0; i < receivedValues.length - 1; i++) {
-                                sensorValues[i] = receivedValues[i];
-//                                System.out.println("array pos " + i + " value: "
-//                                        + sensorValues[i]);
+                                incomingStatusValues[i] = receivedValues[i];
                             }
 
-
-                            //todo: implement logging output to test incoming data----------------------------------------------------------------------------------------------------
-
-                            //(testing): values to views
-//                            txt_sequence.setText("SEQ No. = " + sensorValues[0]);
-//                            txt_speedView.setText(" Speed = " + sensorValues[1] + " mph");
-//                            txt_indicatorL.setText("LEFT indicator = " + sensorValues[2]);
-//                            txt_indicatorR.setText("RIGHT indicator = " + sensorValues[3]);
-//                            txt_lowbeam.setText("LOWbeams = " + sensorValues[4]);
-//                            txt_highbeam.setText("HIGHbeams = " + sensorValues[5]);
-//                            txt_revcount.setText("REVCOUNTER = " + sensorValues[6]);
-
                             //testing send values to logcat via warning (allows filtering of debug level logs and below)
-                            Log.w(TAG, "----------------------------------------");
-                            Log.w(TAG, "handleMessage: SEQ No. = " + sensorValues[0]);
-                            Log.w(TAG, "handleMessage: Speed = " + sensorValues[1] + " mph");
-                            Log.w(TAG, "handleMessage: LEFT indicator = " + sensorValues[2]);
-                            Log.w(TAG, "handleMessage: RIGHT indicator = " + sensorValues[3]);
-                            Log.w(TAG, "handleMessage: LOW beams = " + sensorValues[4]);
-                            Log.w(TAG, "handleMessage: HIGHbeams = " + sensorValues[5]);
-                            Log.w(TAG, "handleMessage: REVCOUNTER = " + sensorValues[6]);
-                            Log.w(TAG, "----------------------------------------");
+                            Log.v(TAG, "----------------------------------------");
+                            Log.v(TAG, "handleMessage: SEQ No. = " +
+                                    incomingStatusValues[0]);
+                            Log.v(TAG, "handleMessage: Speed = " +
+                                    incomingStatusValues[1] + " mph");
+                            Log.v(TAG, "handleMessage: LEFT indicator = " +
+                                    incomingStatusValues[2]);
+                            Log.v(TAG, "handleMessage: RIGHT indicator = " +
+                                    incomingStatusValues[3]);
+                            Log.v(TAG, "handleMessage: LOW beams = " +
+                                    incomingStatusValues[4]);
+                            Log.v(TAG, "handleMessage: HIGHbeams = " +
+                                    incomingStatusValues[5]);
+                            Log.v(TAG, "handleMessage: REVCOUNTER = " +
+                                    incomingStatusValues[6]);
+                            Log.v(TAG, "----------------------------------------");
 
                             //get local copy (that can be monitored)
                             //todo: !!!! parse this to number that can be monitored!!!!!!!----------------------------------------------------------------------
-                            String currentSpeeds = sensorValues[1] + "mph";
+                            String currentSpeeds = incomingStatusValues[1] + "mph";
                             //bool value obtained from int (if received value == 1 : true otherwise false (ie 0))
-                            indicatorL.setValue(sensorValues[2].equals("1"));
-                            indicatorR.setValue(sensorValues[3].equals("1"));
-                            headlightL.setValue(sensorValues[4].equals("1"));
-                            headlightH.setValue(sensorValues[5].equals("1"));
+                            indicatorL.setValue(incomingStatusValues[2].equals("1"));
+                            indicatorR.setValue(incomingStatusValues[3].equals("1"));
+                            headlightL.setValue(incomingStatusValues[4].equals("1"));
+                            headlightH.setValue(incomingStatusValues[5].equals("1"));
 
-                            sendUiUpdate(currentSpeedLimit, currentSpeeds, indicatorL, indicatorR, headlightL, headlightH);
+                            sendUiUpdate(currentSpeedLimit, currentSpeeds, indicatorL, indicatorR,
+                                    headlightL, headlightH);
 
 
                             //todo: better catch for non-sequential data
                             //convert string to int
                             try {
-                                seqNew = Integer.parseInt(sensorValues[0]);
+                                seqNew = Integer.parseInt(incomingStatusValues[0]);
                             } catch (Exception e) {
                                 Log.e(TAG, "handleMessage: string to int parse error");
                                 e.printStackTrace();
@@ -1831,13 +1814,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             }
                             //assign current to old sequence variable
                             seqOld = seqNew;
-
-
-                            //todo:  parse string to numeric values to watch!!!------------------------------------------------------------
                         }
-
                         //clear all string data
-                        //todo:need to delete splitstring as seen here?
                         stringBuilder_input.delete(0, stringBuilder_input.length());
                     }
                 }
@@ -1846,7 +1824,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    //-method to reset status of class in event of unhandled error/exception (attempt to continue after logging to file)
+    //-reset status in event of error/exception (attempt to continue after logging to file)
     public void errorReset(String methodName) {
         //pass method name that called this method to identify origin of error
         //(local copy in case asyncTask goes out of scope)
@@ -1859,14 +1837,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
         cancelAsyncTasks();
         //release lock for awaiting next iteration
         asyncLocked = false;
-
-        //todo: revisit task to null idea?
     }
 
 
     //-log error string to file (tidy code: repeated object creation and writing)
     public void logErrorToFile(String errorMessage, String linebreak) {
-//todo: consider adding lbs to method, not ever call
         Log.d(TAG, "logErrorToFile: ");
         //get local copy of error message string: in case passing async task is destroyed
         String localErrorMessage = errorMessage;
@@ -2130,28 +2105,33 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
 
     //-send current values to activity to update UI output (for testing/demo)
-    public void sendUiUpdate(int currentLimit, String actualSpeed, WatchedBool indicateLeft, WatchedBool indicateRight, WatchedBool lightLow, WatchedBool lightHigh) {
+    public void sendUiUpdate(int currentLimit, String actualSpeed, WatchedBool indicateLeft,
+                             WatchedBool indicateRight, WatchedBool lightLow,
+                             WatchedBool lightHigh) {
         Log.d(TAG, "sendUiUpdate: ");
         //convert current limit
         String currentLimitString = Integer.toString(currentLimit);
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         Intent intent = new Intent(PrimeForegroundServiceHost.SERVICE_BROADCASTRECEIVER_UI_UPDATE);
-        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_INDICATOR_LEFT, indicateLeft.getValueString());
-        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_INDICATOR_RIGHT, indicateRight.getValueString());
-        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_LIGHTS_LOW, lightLow.getValueString());
-        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_LIGHTS_HIGH, lightHigh.getValueString());
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_INDICATOR_LEFT,
+                indicateLeft.getValueString());
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_INDICATOR_RIGHT,
+                indicateRight.getValueString());
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_LIGHTS_LOW,
+                lightLow.getValueString());
+        intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_LIGHTS_HIGH,
+                lightHigh.getValueString());
         intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_SPEED_LIMIT, currentLimitString);
         intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_SPEED_ACTUAL, actualSpeed);
 
         lbm.sendBroadcast(intent);
     }
 
+
     /*--------------------------------------
         HELPER METHODS
     --------------------------------------*/
-
-
     //-assigning listeners to watchedBooleans
     public void assignWatchedindicatorBools() {
         Log.d(TAG, "assignIndicatorLightBools: ");
@@ -2220,7 +2200,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    //-stops updates to gps/network location providers (testing moved/duplicated these so moved to own method)
+    //-stops updates to gps/network location providers
     public void stopUpdates() {
         Log.d(TAG, "stopUpdates: ");
         //*2 to stop both providers:
@@ -2241,7 +2221,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             //todo: research how to make this lock exclusive
             asyncLocked = true;
 
-            //check if previous location matches last query check location record (treat null as same)
+            //check previous location matches last query check location record (treat null as same)
             if (apiCheckDuplicateLocation == null) {
                 Log.d(TAG, "checkAsyncLock: duplicate location is null:");
                 if (finalLocation != null) {
@@ -2306,24 +2286,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    //-display toast to UI (remove repeated code from class)
-//    public void showToastOnUI(final String toastMessage) {
-//        Log.d(TAG, "showToastOnUI: displaying Toast...");
-//        handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                Toast.makeText(getApplicationContext(),
-//                        toastMessage,
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
-
     /*--------------------------------------
         TESTING METHODS
     --------------------------------------*/
-    //-testing of audio warning playback (triggered from activity button as currently no bike-speed to check against)
+    //-testing of audio warning playback (triggered from activity button)
     public void testAudioFromButton() {
         //initial testing of binding of service:
 //        showToastOnUI("binding of service succeeded:\n" +
@@ -2332,6 +2298,53 @@ public class PrimeForegroundService extends Service implements LocationListener,
         playAudio(TTS_LOLA_WARNING_NETWORK_LOST);
     }
 
+
+    /*--------------------------------------
+        BROADCAST RECEIVERS
+    --------------------------------------*/
+    //-receive instructions to trigger service methods from activity
+    private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive: method action broadcast from activity...");
+            //get number value of constant (to trigger switch method choice below)
+            int broadcastMsg = intent.getIntExtra(PrimeForegroundServiceHost.METHOD_TRIGGER,
+                    0);
+
+            switch (broadcastMsg) {
+                case METHODTRIGGER_TESTAUDIO:
+                    testAudioFromButton();
+                    break;
+                case METHODTRIGGER_TESTPRINT:
+                    Log.d(TAG, "onReceive: SWITCH TEST PRINT!");
+                    break;
+                default:
+                    Log.w(TAG, "onReceive: Warning: unexpected default methodTrigger");
+            }
+        }
+    };
+
+
+    /*--------------------------------------
+        (UNUSED) LISTENERS
+    --------------------------------------*/
+    //-required by superclass
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+    }
 
 
     /*--------------------------------------
@@ -2371,59 +2384,18 @@ public class PrimeForegroundService extends Service implements LocationListener,
 //    }
 
 
-    /*--------------------------------------
-        BROADCAST RECEIVERS
-    --------------------------------------*/
-    //-receive instructions to trigger service methods from activity
-    private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "onReceive: method action broadcast from activity...");
-            //get number value of constant (to trigger switch method choice below)
-            int broadcastMsg = intent.getIntExtra(PrimeForegroundServiceHost.METHOD_TRIGGER,
-                    0);
-
-            switch (broadcastMsg) {
-                case METHODTRIGGER_TESTAUDIO:
-                    testAudioFromButton();
-                    break;
-                case METHODTRIGGER_TESTPRINT:
-                    Log.d(TAG, "onReceive: SWITCH TEST PRINT!");
-                    break;
-                default:
-                    Log.w(TAG, "onReceive: Warning: unexpected default methodTrigger encountered");
-            }
-        }
-    };
-
-
-    //-listens for network connection changes
-    private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
-        @Override
-        public void onAvailable(Network network) {
-            super.onAvailable(network);
-            Log.d(TAG, "onAvailable: CONNECTION");
-            if (!connectivityManager.isActiveNetworkMetered()) {
-                //non-metered doesnt confirm -IS- wifi but for purposes, assume it does.
-                Log.d(TAG, "onAvailable: WIFI");
-                //testing: "spare" audio clip to differentiate between networks becoming available
-                playAudio(TTS_FULL_LOLA_PROMPT_VOICETEST);
-            } else {
-                Log.d(TAG, "onAvailable: MOBILE");
-                playAudio(TTS_FULL_LOLA_NOTIFY_CONNECTIONONLINE);
-            }
-//todo: get differing audio clips
-
-
-        }
-
-        @Override
-        public void onLost(Network network) {
-            super.onLost(network);
-            Log.d(TAG, "losing active connection");
-            playAudio(TTS_LOLA_WARNING_NETWORK_LOST);
-        }
-    };
+    //-display toast to UI (remove repeated code from class)
+//    public void showToastOnUI(final String toastMessage) {
+//        Log.d(TAG, "showToastOnUI: displaying Toast...");
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast.makeText(getApplicationContext(),
+//                        toastMessage,
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
 
 }
