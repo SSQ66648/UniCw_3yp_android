@@ -266,7 +266,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public static final String TTS_LOLA_NOTIFY_SPEEDLIMIT_CHANGED = "limitChanged";
     public static final String TTS_LOLA_NOTIFY_START_SERVICE = "startService";
     //prompts (background information or instructions to user) //todo: consider splitting info from prompts
-    public static final String TTS_LOLA_PROMPT_CHECK_BLUETOOTH = "checkBluetooth";
+    public static final String TTS_LOLA_PROMPT_BLUETOOTH_ERROR = "bluetoothConnectingError";
+    public static final String TTS_LOLA_PROMPT_CHECK_BLUETOOTH = "checkBluetooth"; //todo: remove this one?
     public static final String TTS_LOLA_PROMPT_DEV_VERSION = "developmentVersion";
     public static final String TTS_LOLA_PROMPT_DISCLAIMER = "disclaimer";
     public static final String TTS_LOLA_PROMPT_HELMET_TEST = "helmetTest";
@@ -364,6 +365,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     /*------------------
         Audio Array Variables
+        ('word-pool' version of voice audio-feedback: if have individual word/fragments,
+        can create new feedback sentences without adding more audio files by simply defining arrays)
     ------------------*/
     private final String[] tts_lola_NetworkConnectionLost = {
             "tts_mp3_lola_warning_warning.mp3",
@@ -1527,6 +1530,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
+                playAudio(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
                 //todo: insert code to handle exception
             }
             mmInStream = tmpIn;
@@ -1547,6 +1551,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     bluetoothInputHandler.obtainMessage(handlerState, bytes, -1,
                             readMessage).sendToTarget();
                 } catch (IOException e) {
+                    playAudio(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
                     break;
                 }
             }
@@ -1560,10 +1565,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 //write bytes over bluetooth outStream
                 mmOutStream.write(msgBuffer);
             } catch (IOException e) {
+                playAudio(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
                 //if you cannot write, close application
                 Toast.makeText(getApplicationContext(), "Connection Failure",
                         Toast.LENGTH_LONG).show();
-//                finish();
             }
         }
     }
@@ -1625,6 +1630,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 resourceFilenameArray[0] = "tts_lola_notify_wifionline_.mp3";
                 break;
             //prompts
+            case TTS_LOLA_PROMPT_BLUETOOTH_ERROR:
+                resourceFilenameArray[0] = "tts_lola_prompt_bluetootherror.mp3";
+                break;
             case TTS_LOLA_PROMPT_CHECK_BLUETOOTH:
                 //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_prompt_checkbluetoothconnected.mp3";
@@ -1798,6 +1806,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 bluetoothSocket_bike = createBluetoothSocket(device);
                 Log.d(TAG, "onResume: create bluetooth socket");
             } catch (IOException e) {
+                playAudio(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
                 Log.d(TAG, "onResume: Socket creation failed.");
                 Toast.makeText(getApplicationContext(), "Socket creation failed",
                         Toast.LENGTH_LONG).show();
@@ -1807,6 +1816,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 bluetoothSocket_bike.connect();
                 Log.d(TAG, "onResume: socket connect...");
             } catch (IOException e) {
+                playAudio(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
                 Log.d(TAG, "onResume: socket connection error.");
                 try {
                     bluetoothSocket_bike.close();
@@ -1821,15 +1831,13 @@ public class PrimeForegroundService extends Service implements LocationListener,
             mConnectedThread.start();
             //send character when resuming.beginning transmission to check device is connected
             mConnectedThread.write("x");
+
+            //todo: check this is where connection is established...?
+            playAudio(TTS_LOLA_NOTIFY_BLUETOOTH_ESTABLISHED);
         } catch (Exception e) {
+            playAudio(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
             Log.e(TAG, "onResume: error creating device.");
         }
-    }
-
-
-    //creates secure outgoing connection with BT device using UUID
-    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-        return device.createRfcommSocketToServiceRecord(BtModuleUUID);
     }
 
 
@@ -2285,6 +2293,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
         });
 
         //todo: ADD WATCHED NUMERIC FOR SPEED COMPARISON--------------------------------------------------------------------------------------------------------------
+    }
+
+
+    //creates secure outgoing connection with BT device using UUID
+    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
+        return device.createRfcommSocketToServiceRecord(BtModuleUUID);
     }
 
 
