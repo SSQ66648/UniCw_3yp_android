@@ -415,7 +415,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*------------------
         Bike Status Variables
     ------------------*/
-    private float currentSpeed;
+    private WatchedFloat currentSpeed;
     //indicators
     private WatchedBool indicatorR = new WatchedBool();
     private WatchedBool indicatorL = new WatchedBool();
@@ -1942,8 +1942,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
                                     incomingStatusValues[6]);
                             Log.v(TAG, "----------------------------------------");
 
-                            //get local copy (that can be monitored)
-                            //todo: !!!! parse this to number that can be monitored!!!!!!!----------------------------------------------------------------------
+                            //get local copy of speed (that can be monitored)
+                            //todo: test if needs valueOf instead?
+                            currentSpeed.set(Float.parseFloat(incomingStatusValues[1]));
+                            //string copy to display to UI
                             String currentSpeeds = incomingStatusValues[1] + "mph";
                             //bool value obtained from int (if received value == 1 : true otherwise false (ie 0))
                             indicatorL.setValue(incomingStatusValues[2].equals("1"));
@@ -2289,6 +2291,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
+    //-compares current moving speed against current location's speed limit
+    public void checkSpeedAgainstLimit() {
+        Log.d(TAG, "checkSpeedAgainstLimit: ");
+
+    }
+
     /*--------------------------------------
         HELPER METHODS
     --------------------------------------*/
@@ -2390,6 +2398,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         queuePlayback(TTS_LOLA_NOTIFY_LIMIT_CHANGE_70);
                         break;
                     default:
+                        Log.e(TAG, "onVariableChanged: Error: unrecognised speed limit");
                         //unrecognised/no speed value (may need to add other legal variations)
                         queuePlayback(TTS_LOLA_WARNING_NO_SPEED_DATA);
                         break;
