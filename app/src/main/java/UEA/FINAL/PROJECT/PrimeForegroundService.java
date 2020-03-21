@@ -1782,6 +1782,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 mediaPlayer_voice.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
                         afd.getLength());
                 mediaPlayer_voice.setOnCompletionListener(this);
+                mediaPlayer_voice.setVolume(0.9f, 0.9f);
                 mediaPlayer_voice.prepare();
                 mediaPlayer_voice.start();
             } catch (IllegalArgumentException e) {
@@ -2486,6 +2487,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public void stopPlayers() {
         if (mediaPlayer_voice != null) {
             Log.v(TAG, "stopPlayers: releasing resources for voice player");
+            mediaPlayer_voice.stop();
             mediaPlayer_voice.release();
             mediaPlayer_voice = null;
             return;
@@ -2493,6 +2495,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         if (mediaPlayer_sfx_indicator != null) {
             Log.v(TAG, "stopPlayers: releasing resources for sfx player");
+            mediaPlayer_sfx_indicator.stop();
             mediaPlayer_sfx_indicator.release();
             mediaPlayer_sfx_indicator = null;
             return;
