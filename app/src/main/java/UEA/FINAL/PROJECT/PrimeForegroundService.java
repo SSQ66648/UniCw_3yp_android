@@ -348,6 +348,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
     private WatchedFloat currentSpeed = new WatchedFloat();
     WatchedInteger currentSpeedLimit = new WatchedInteger();
     String currentRoadName;
+    //plays limit-exceeded warning every x seconds in warningLoop (re-defined as needed)
+    private Handler warningHandler;
+    private Runnable warningLoop;
+    //prevent contents of limit-exceeded check executing more than once
+    boolean speedingInProgress = false;
+
 
     /*------------------
         Testing/Log Variables
@@ -2407,16 +2413,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
         });
     }
 
-    //prevent infinite loop of start-stop audio playback from speeding feedback
-    boolean speedingInProgress = false;
-
 
     public void assignWatchedFloats() {
         Log.v(TAG, "assignWatchedFloats: ");
         currentSpeed.setFloatChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
-
                 //check if exceeding limit (ignore limit of zero: no data)
                 if (currentSpeed.get() > currentSpeedLimit.get() && currentSpeedLimit.get() > 0) {
                     //prevent re-triggering every update
@@ -2424,17 +2426,24 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         Log.w(TAG, "onVariableChanged: Warning: speed limit exceeded!");
                         speedingInProgress = true;
 
-                        //changed to non-queue version //todo: check this
-                        //as this is priority feedback: interrupt any playing media
+                        //repeat timer for playback warning (not looping: too much stimulus?)
+                        //todo: check if user testing supports this literature claim
+                        warningHandler = new Handler();
+                        Runnable warningLoop = new Runnable() {
+                            @Override
+                            public void run() {
+                                queuePlayback(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+                            }
+                        };
 
-                        queuePlayback(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
-
-                        //todo: add some sort of timer here: start on exceed, stop on below.
-                        //todo: -use to trigger audio again in x seconds if still speeding?
+                        //playback every 5 seconds
+                        warningHandler.postDelayed(warningLoop, 5000);
                     }
                 } else {
                     //allow speeding trigger to happen again
                     speedingInProgress = false;
+                    //stop loop (remove ALL pending callbacks and messages (via null key))
+                    warningHandler.removeCallbacksAndMessages(null);
                 }
             }
         });
