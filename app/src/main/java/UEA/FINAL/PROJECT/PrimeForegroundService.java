@@ -69,6 +69,7 @@
  *      v2.4    200320  Tidied Code. Added bulk of audio files, Const identifiers (also to switch).
  *      v2.4.1  200320  Added audio prompts throughout setup phase of service.
  *      v2.5    200320  Added (and re-added) speed limit exceeded warning playback: needs priorities
+ *      v2.5.1  200321  Extended section header labels to character line (code becoming complex).
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -220,9 +221,9 @@ import static UEA.FINAL.PROJECT.AppNotificationWrapper.CHANNEL_3YP;
 
 public class PrimeForegroundService extends Service implements LocationListener,
         AsyncCompleteListener, MediaPlayer.OnCompletionListener {
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         CONSTANTS
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     private static final String TAG = "PrimeForegroundService";
     //overpassAPI radius request value (const for easy changing during debug) todo: add UI change of value for testing
     public static final int API_RADIUS_VALUE = 20;
@@ -291,9 +292,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public static final String TTS_LOLA_WARNING_UNABLE_TO_CONTINUE = "criticalError";
 
 
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         MEMBER VARIABLES
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     /*------------------
         GPS Variables
     ------------------*/
@@ -421,9 +422,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     private int revCounter = 0;
 
 
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         LIFECYCLE
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     //-called ONCE when service is first created
     @Override
     public void onCreate() {
@@ -600,9 +601,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         LISTENERS
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     @Override
     public void onLocationChanged(Location location) {
         Log.v(TAG, "onLocationChanged: ");
@@ -925,9 +926,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         CLASSES (AsyncTask and STARTING METHODS)
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     //-preparation and triggers execution of http api query asyncTask
     public void startAsyncTaskHTTP() {
         Log.v(TAG, "startAsyncTaskHTTP: ");
@@ -1507,9 +1508,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         CONTAINER CLASSES/ THREADS
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     //-container for both road name and speed (other tags deemed useful later) back from AsyncPARSE
     private static class RoadTags {
         /*------------------
@@ -1601,9 +1602,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         METHODS
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     //-selects audio array to play (mostly implemented with FULL single files, however kept method
     // in this format in event there is time to debug the delay in 'word-pool' version
     public void playAudio(String playChoice) {
@@ -2295,9 +2296,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     }
 
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         HELPER METHODS
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     //-assigning listeners to watchedBooleans
     public void assignWatchedBooleans() {
         Log.v(TAG, "assignIndicatorLightBools: ");
@@ -2571,22 +2572,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    /*--------------------------------------
-        TESTING METHODS
-    --------------------------------------*/
-    //-testing of audio warning playback (triggered from activity button)
-    public void testAudioFromButton() {
-        //initial testing of binding of service:
-//        showToastOnUI("binding of service succeeded:\n" +
-//                "continue to test audio.");
-
-        queuePlayback(TTS_LOLA_WARNING_NETWORK_LOST);
-    }
-
-
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         BROADCAST RECEIVERS
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     //-receive instructions to trigger service methods from activity
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -2610,9 +2598,22 @@ public class PrimeForegroundService extends Service implements LocationListener,
     };
 
 
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
+        TESTING METHODS
+    ----------------------------------------------------------------------------------------------*/
+    //-testing of audio warning playback (triggered from activity button)
+    public void testAudioFromButton() {
+        //initial testing of binding of service:
+//        showToastOnUI("binding of service succeeded:\n" +
+//                "continue to test audio.");
+
+        queuePlayback(TTS_LOLA_WARNING_NETWORK_LOST);
+    }
+
+
+    /*----------------------------------------------------------------------------------------------
         (UNUSED) LISTENERS
-    --------------------------------------*/
+    ----------------------------------------------------------------------------------------------*/
     //-required by superclass
     @Override
     public IBinder onBind(Intent intent) {
@@ -2632,7 +2633,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    /*--------------------------------------
+    /*----------------------------------------------------------------------------------------------
         INCOMPLETE/OBSOLETE METHODS
     --------------------------------------*/
     //-request write to external memory permission for logging
