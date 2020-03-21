@@ -149,7 +149,8 @@
  *              todo:   find need for/remove othererrcount var
  *              todo:   combine error log and reset methods?
  *              //todo: clean up finished todo items
- *              //todo: change prioriies of logs as needed
+ *              //todo: change prioriies of log.d/v/i as needed
+ *              //todo: add warning to lost bt connection: need own broadcast listener in service or...?
  * ---------------------------------------------------------------------------*/
 
 package UEA.FINAL.PROJECT;
@@ -2419,6 +2420,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         currentSpeed.setFloatChangeListener(new VariableChangeListener() {
             @Override
             public void onVariableChanged(Object... newValue) {
+                Log.v(TAG, "onVariableChanged: ");
                 //check if exceeding limit (ignore limit of zero: no data)
                 if (currentSpeed.get() > currentSpeedLimit.get() && currentSpeedLimit.get() > 0) {
                     //prevent re-triggering every update
@@ -2428,22 +2430,26 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
                         //repeat timer for playback warning (not looping: too much stimulus?)
                         //todo: check if user testing supports this literature claim
-                        warningHandler = new Handler();
-                        Runnable warningLoop = new Runnable() {
+                        warningHandler = new Handler(Looper.getMainLooper());
+                        warningHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 queuePlayback(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+                                warningHandler.postDelayed(this, 3000);
                             }
-                        };
+                        }, 1000);
 
                         //playback every 5 seconds
-                        warningHandler.postDelayed(warningLoop, 5000);
+                        warningHandler.postDelayed(warningLoop, 1000);
                     }
                 } else {
-                    //allow speeding trigger to happen again
-                    speedingInProgress = false;
-                    //stop loop (remove ALL pending callbacks and messages (via null key))
-                    warningHandler.removeCallbacksAndMessages(null);
+                    if (speedingInProgress) {
+                        //bool toggle inside check to prevent unnecessary re-assignment
+                        speedingInProgress = false;
+                        //stop loop (remove ALL pending callbacks and messages (via null key))
+                        warningHandler.removeCallbacksAndMessages(null);
+                    }
+
                 }
             }
         });
