@@ -236,7 +236,7 @@ public class PrimeServceLogObject {
             //todo: add handling here or where used (currently on use)
             return false;
         } else {
-            Log.d(TAG, "checkIterationComplete: all variables accounted for:");
+            Log.v(TAG, "checkIterationComplete: all variables accounted for:");
             return true;
         }
     }

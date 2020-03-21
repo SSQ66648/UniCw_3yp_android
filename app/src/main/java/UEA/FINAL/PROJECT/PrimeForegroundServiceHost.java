@@ -85,6 +85,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     public static final String METHOD_TRIGGER = "methodMessage";
     //used to receive broadcasts from activity: value unimportant
     public static final String SERVICE_BROADCASTRECEIVER_UI_UPDATE = "updateUi";
+    public static final String SERVICE_BROADCASTRECEIVER_CONNECTION_ERROR = "btError";
     //view identifier constants for broadcast listener
     public static final String UI_UPDATE_INDICATOR_LEFT = "indLeft";
     public static final String UI_UPDATE_INDICATOR_RIGHT = "indRight";
@@ -312,4 +313,12 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     };
 
 
+    //-receive notification that service has experienced error setting up bluetooth connection
+    private BroadcastReceiver mServiceBroadcastReceiver_BT_error = (new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e(TAG, "onReceive: Error: bluetooth connection has failed: stop service");
+            stopService(foregroundIntent);
+        }
+    });
 }

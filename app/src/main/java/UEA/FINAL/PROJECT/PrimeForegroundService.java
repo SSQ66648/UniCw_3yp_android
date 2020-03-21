@@ -70,6 +70,7 @@
  *      v2.4.1  200320  Added audio prompts throughout setup phase of service.
  *      v2.5    200320  Added (and re-added) speed limit exceeded warning playback: needs priorities
  *      v2.5.1  200321  Extended section header labels to character line (code becoming complex).
+ *      v2.6    200321  Added method for interruption of lower-priority audio playback.
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -119,21 +120,18 @@
  *                              work, EVENTUALLY replaced with broadcast receiver and constants.
  *------------------------------------------------------------------------------
  * TO DO LIST:
- *              todo:   warning counter trigger (or by time)
  *              todo:   add warning if accuracy is above upper threshold radius
  *              todo:   need to check that old location more accurate than new, doesnt stack (ensure original timestamp)
  *              todo:   add checks for network/gps enabled etc
  *              todo:   add checks for permissions etc (additional to auto generated ones)
  *              todo:   add notifiaction to user / redirect on permission enable request etc
- *              todo:   add exceptions to else statements as part of error handling
  *              todo:   change http lock logic from equal location object to equal lat/lon values
  *              todo:   add start 1st update using distance travelled?
  *              todo:   add permission redirect to settings
- *              todo:
+ *              todo:   change all string const to filenames?
  *------------------------------------------------------------------------------
  * MAJOR ADDITIONS NEEDED:
  *              TODO:   retain/check time of last actual update used (override the accuracy selection of oldLocation)
- *              TODO:   if-exceed limit trigger logic
  *              TODO:   accuracy threshold warning
  *              TODO:   radius input option for testing (textinput view?)
  *              TODO:   sequential no-road-value warning (if no usable data for x seconds: treat as no location update warning)
@@ -145,8 +143,6 @@
  *              todo:   change all toast notification to method: pass string
  *              todo:   prevent multiple logging error to file (task chain knock-on)
  *              todo:   change all errors in async task to concat strings format
- *              todo:   default lbs if arg not provided?
- *              todo:   find need for/remove othererrcount var
  *              todo:   combine error log and reset methods?
  *              //todo: clean up finished todo items
  *              //todo: change prioriies of log.d/v/i as needed
@@ -1604,6 +1600,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 //if you cannot write, close application
                 Toast.makeText(getApplicationContext(), "Connection Failure",
                         Toast.LENGTH_LONG).show();
+                //todo: testing:
+                //prompt user to terminate service and retry from activity (excluding testing)
+                sendConnectionError();
             }
         }
     }
@@ -2346,6 +2345,16 @@ public class PrimeForegroundService extends Service implements LocationListener,
         intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_SPEED_LIMIT, currentLimitString);
         intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_SPEED_ACTUAL, actualSpeed);
 
+        lbm.sendBroadcast(intent);
+    }
+
+
+    //-send notification to activity that bluetooth connection has failed (stop self)
+    public void sendConnectionError() {
+        Log.d(TAG, "sendConnectionError: ");
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        Intent intent = new Intent(PrimeForegroundServiceHost.SERVICE_BROADCASTRECEIVER_CONNECTION_ERROR);
+        //no extra needed: only signal of error
         lbm.sendBroadcast(intent);
     }
 
