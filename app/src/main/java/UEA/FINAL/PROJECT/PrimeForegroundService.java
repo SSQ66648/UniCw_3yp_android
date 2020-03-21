@@ -1746,6 +1746,58 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
+    MediaPlayer interruptMediaPlayer;
+
+
+    //-pause and resume playback that needs to be interrupted
+    public void interruptPlayback(String interruptMessage) {
+        Log.d(TAG, "interruptPlayback: ");
+
+        //pause any playing sounds
+        if (mediaPlayer_voice != null && mediaPlayer_voice.isPlaying()) {
+            mediaPlayer_voice.pause();
+        }
+        if (mediaPlayer_sfx_indicator != null && mediaPlayer_sfx_indicator.isPlaying()) {
+            mediaPlayer_sfx_indicator.pause();
+        }
+
+        //play priority file (via new player)
+        try {
+            interruptMediaPlayer = new MediaPlayer();
+            AssetFileDescriptor afd = null;
+            afd = getAssets().openFd(interruptMessage);
+            interruptMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
+                    afd.getLength());
+            interruptMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    //release resources from priority player
+                    interruptMediaPlayer.stop();
+                    interruptMediaPlayer.reset();
+                    interruptMediaPlayer.release();
+
+                    if (mediaPlayer_voice != null && !mediaPlayer_voice.isPlaying()) {
+                        mediaPlayer_voice.start();
+                    }
+                    if (mediaPlayer_sfx_indicator != null && !mediaPlayer_sfx_indicator.isPlaying()) {
+                        mediaPlayer_sfx_indicator.start();
+                    }
+                    //todo: test if needs storage of seek position...?
+                }
+            });
+            interruptMediaPlayer.prepare();
+            interruptMediaPlayer.start();
+        } catch (IOException e) {
+            Log.e(TAG, "interruptPlayback: Error: error on priority player.");
+        }
+    }
+
+    //storage of playback duration on paused
+    private int seekToPosition = -1;
+    //storage of intterupted file reference
+    private String interruptedFile;
+
+
     //-play audio at index in array or cease
     public void play() {
         if (playIndex > resourceFilenameArray.length - 1) {
@@ -2361,7 +2413,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     Log.v(TAG, "onVariableChanged: voice mediaPlayer is now released");
                     //play next queued item if one exists
                     if (playQueue != null && playQueue.size() > 0) {
-                        //todo: test if this works or need to make a copy?
+                        //assign copy of playing file in case of interruption (to resume)
                         playAudio(playQueue.remove(playQueue.size() - 1));
                         //destroy queue object if empty
                         if (playQueue.size() == 0) {
@@ -2435,13 +2487,13 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         warningHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                queuePlayback(TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED);
+                                interruptPlayback("tts_lola_alert_speedlimitexceeded.mp3");
                                 warningHandler.postDelayed(this, 3000);
                             }
                         }, 1000);
 
-                        //playback every 5 seconds
-                        warningHandler.postDelayed(warningLoop, 1000);
+                        //begin playback every 3 seconds
+                        warningHandler.postDelayed(warningLoop, 0);
                     }
                 } else {
                     if (speedingInProgress) {
@@ -2488,6 +2540,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         if (mediaPlayer_voice != null) {
             Log.v(TAG, "stopPlayers: releasing resources for voice player");
             mediaPlayer_voice.stop();
+            mediaPlayer_voice.reset();
             mediaPlayer_voice.release();
             mediaPlayer_voice = null;
             return;
@@ -2496,9 +2549,17 @@ public class PrimeForegroundService extends Service implements LocationListener,
         if (mediaPlayer_sfx_indicator != null) {
             Log.v(TAG, "stopPlayers: releasing resources for sfx player");
             mediaPlayer_sfx_indicator.stop();
+            mediaPlayer_sfx_indicator.reset();
             mediaPlayer_sfx_indicator.release();
             mediaPlayer_sfx_indicator = null;
             return;
+        }
+
+        if (interruptMediaPlayer != null) {
+            interruptMediaPlayer.stop();
+            interruptMediaPlayer.reset();
+            interruptMediaPlayer.release();
+            interruptMediaPlayer = null;
         }
 
         Log.w(TAG, "stopPlayers: no player exists to stop");
