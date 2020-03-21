@@ -129,6 +129,7 @@
  *              todo:   add start 1st update using distance travelled?
  *              todo:   add permission redirect to settings
  *              todo:   change all string const to filenames?
+ *              //todo: add check in ofrm of runnabkle post delay by handler to check how long no road data available (is -1): alert audio on incremental counter?
  *------------------------------------------------------------------------------
  * MAJOR ADDITIONS NEEDED:
  *              TODO:   retain/check time of last actual update used (override the accuracy selection of oldLocation)
@@ -533,9 +534,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public void onDestroy() {
         Log.v(TAG, "onDestroy: ");
         queuePlayback(TTS_LOLA_NOTIFY_STOP_SERVICE);
-        while (mediaLock.getValue()) {
-            //await playback to finish
-        }
+//        while (mediaLock.getValue()) {
+//            //await playback to finish
+//        }
 
         Log.v(TAG, "onDestroy: cancelling any active tasks...");
         cancelAsyncTasks();

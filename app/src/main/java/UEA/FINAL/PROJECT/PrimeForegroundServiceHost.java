@@ -212,9 +212,14 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         //add address to foreground intent
         foregroundIntent.putExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS, bike_MAC);
 
-        //register receiver for activity requests to trigger service methods
+        //register receiver for service requests to trigger UI updates
         LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
                 new IntentFilter(PrimeForegroundServiceHost.SERVICE_BROADCASTRECEIVER_UI_UPDATE));
+
+        //register receiver for signalling bluetooth setup error
+        LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver_BT_error,
+                new IntentFilter(
+                        PrimeForegroundServiceHost.SERVICE_BROADCASTRECEIVER_CONNECTION_ERROR));
     }
 
 
@@ -225,6 +230,8 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
 
         Log.v(TAG, "onPause: unregistering broadcastReceiver");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this)
+                .unregisterReceiver(mServiceBroadcastReceiver_BT_error);
     }
 
     @Override
