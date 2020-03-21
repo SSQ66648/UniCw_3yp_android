@@ -100,7 +100,7 @@
         <!-- ****************************** INNER SCROLL & CONSTRAINT CONTAINER: ******************************-->
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScrollView"
+            android:id="@+id/nestedScrollView_bluetoothactions"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="8dp"
@@ -178,34 +178,41 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <!-- status info: no text: set when connecting to device ... get rid of this...?-->
-        <TextView
-            android:id="@+id/infotext_bluetoothactions_connecting"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_bluetoothactions_hiddensection"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="CONNECTING...."
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guidelineBottom" />
+            app:layout_constraintTop_toBottomOf="@id/nestedScrollView_bluetoothactions">
+            <!-- status info: no text: set when connecting to device ... get rid of this...?-->
+            <TextView
+                android:id="@+id/infotext_bluetoothactions_connecting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="CONNECTING...."
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/button_bluetoothactions_start_activity"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:drawableRight="@drawable/ic_small_noun_connect_2605299_cc"
-            android:text="Begin System"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toTopOf="@id/guidelineBottom" />
-
+            <Button
+                android:id="@+id/button_bluetoothactions_start_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/green"
+                android:drawableRight="@drawable/ic_small_noun_connect_2605299_cc"
+                android:text="Begin System    "
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

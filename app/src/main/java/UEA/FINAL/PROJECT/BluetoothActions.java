@@ -19,6 +19,12 @@
  *                              create activity intent method, also show/hiding start intent button
  *              v1.3    200317  Added enabled checking for buttons, moved some checks to onResume.
  *              v1.3.1  200317  Added default value for device address: workaround for development.
+ *              v1.3.2  200321  Added development workaround: deliberate assignment of bike icon to
+ *                              HC-05 module (as it has no class to detect).
+ *              v1.4    200321  Changed layout to include constraint container for (now green) start
+ *                              system button.
+ *              v1.4.1  200321  Added audio playback to test if helmet is connected or not
+ *                              (potentially followed by a confirmation of success dialog layout).
  *------------------------------------------------------------------------------
  * NOTES:       
  *      +   logcat records "errors" of no adapter attached, however attempting to solve this has
@@ -37,7 +43,6 @@
  *          prioritise functionality
  *------------------------------------------------------------------------------
  * TO DO LIST:
- *      //todo: complete passing of bluetooth management to Foreground service (or own service: communicate with prime service)
  *      //todo: add enable bt toast to button click if not enabled
  *      //todo: potentially build recycleres once and then update adapter when needed (item changed or similar)
  *      //todo: add green on connect
@@ -45,7 +50,6 @@
  *      //todo: add device type checking on connect as? - change from option to if these types of device, connect as, else if these he;lmet types connect as
  *      //todo: add set device type to switch prompt
  *      //todo: use same getcardlist logic to access specific card ... can this be used to change background color?
- *      //todo: button for proceed to activity or autromatic (automatic: how to handle on return?)
  *      //todo: select TYPE of connection using connect logic, then on final button to next activity: connect to 'both'?
  *      //todo: add 'collapse recycler' when button clicked 2nd time
  *      //todo: add countdown/bool listener for list button bt check fallthrough
@@ -53,8 +57,7 @@
  *      //todo: add toasts re status - bt enabled etc
  *      //todo: add check that paired device has address in it. and/or begin discovery for paired devices too: (how to show if found or not: need to change card: back to how to change background of card)
  *      //todo: pair discovered device connecting to
- *      //todo: add bike icon if module name
- *
+ *      //todo: tidy code
  *
  -----------------------------------------------------------------------------*/
 
@@ -75,6 +78,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -497,6 +502,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         });
     }
 
+
     //todo: ADD ENABLED CHECK HERE OR ....disable all card clicks if not enabled: show toast to enable?
     //-attempts to connect to device and sets bool flag which type is connected
     public void requestConnectDevice(final DeviceCard card, final String type) {
@@ -521,6 +527,30 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     helmetWatchedBool.setValue(true);
                     card.setConnectionStatus(true, DeviceCard.CONNECTION_HELMET);
                     Log.d(TAG, "requestConnectDevice: HELMET CONNECTED");
+
+                    //audio check for connection (used in case of having to pair and connect outside of this app):
+                    final MediaPlayer mediaplayer = new MediaPlayer();
+                    AssetFileDescriptor afd = null;
+                    try {
+                        Log.d(TAG, "requestConnectDevice: create media player for helmet test");
+                        afd = getAssets().openFd("tts_lola_prompt_helmetbluetoothtest.mp3");
+                        mediaplayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
+                                afd.getLength());
+                        mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                //release resources from priority player
+                                mediaplayer.stop();
+                                mediaplayer.reset();
+                                mediaplayer.release();
+                            }
+                        });
+                        mediaplayer.prepare();
+                        mediaplayer.start();
+                    } catch (IOException e) {
+                        Log.e(TAG, "requestConnectDevice: Error: media player error");
+                        e.printStackTrace();
+                    }
                 } else {
                     Log.w(TAG, "requestConnectDevice: Warning: Helmet device already connected: prompt for switch connect");
                     switchDevice(card, type);
@@ -703,6 +733,11 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             //testing:
             Log.d(TAG, "chooseIcon: device class:\n\t" +
                     deviceClassToString(btClass));
+
+            //development workaround: bluetooth module in prototype has no class: manually assign:
+            if (device.getName() != null && device.getName().equals("HC-05")) {
+                return R.drawable.ic_small_noun_motorcycle_2713773;
+            }
 
 
             if (deviceClass == BluetoothClass.Device.AUDIO_VIDEO_HEADPHONES) {

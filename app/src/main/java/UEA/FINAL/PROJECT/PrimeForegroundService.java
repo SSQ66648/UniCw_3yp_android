@@ -1595,12 +1595,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 //write bytes over bluetooth outStream
                 mmOutStream.write(msgBuffer);
             } catch (IOException e) {
-                //single instance of audio feedback re various connection stages failing
-                queuePlayback(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
+                //single instance of audio feedback re various connection stages failing (does not trigger in time: moved to activity
+//                queuePlayback(TTS_LOLA_PROMPT_BLUETOOTH_ERROR);
                 Log.e(TAG, "write: Error: failed to write to remote device");
                 //if you cannot write, close application
-                Toast.makeText(getApplicationContext(), "Connection Failure",
-                        Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Connection Failure",
+//                        Toast.LENGTH_LONG).show();
                 //todo: testing:
                 //prompt user to terminate service and retry from activity (excluding testing)
                 sendConnectionError();

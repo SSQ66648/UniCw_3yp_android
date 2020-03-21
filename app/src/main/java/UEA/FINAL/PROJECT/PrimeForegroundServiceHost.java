@@ -61,6 +61,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -73,6 +75,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import java.io.IOException;
 
 import static android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS;
 
@@ -329,6 +333,29 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
 
             //stop service
             stopService(foregroundIntent);
+
+            final MediaPlayer mediaplayer = new MediaPlayer();
+            AssetFileDescriptor afd = null;
+            try {
+                Log.d(TAG, "requestConnectDevice: create media player for helmet test");
+                afd = getAssets().openFd("tts_lola_prompt_bluetootherror_.mp3");
+                mediaplayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
+                        afd.getLength());
+                mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        //release resources from priority player
+                        mediaplayer.stop();
+                        mediaplayer.reset();
+                        mediaplayer.release();
+                    }
+                });
+                mediaplayer.prepare();
+                mediaplayer.start();
+            } catch (IOException e) {
+                Log.e(TAG, "requestConnectDevice: Error: media player error");
+                e.printStackTrace();
+            }
 
             //create dialog to prompt user to retry
             final Dialog dialog = new Dialog(PrimeForegroundServiceHost.this);
