@@ -352,6 +352,8 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
+
+            dialog.show();
         }
     });
 }
