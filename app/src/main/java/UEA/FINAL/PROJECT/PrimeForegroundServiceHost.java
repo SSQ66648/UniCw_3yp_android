@@ -56,6 +56,7 @@ package UEA.FINAL.PROJECT;
 --------------------------------------*/
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -318,7 +319,32 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e(TAG, "onReceive: Error: bluetooth connection has failed: stop service");
+
+            //stop service
             stopService(foregroundIntent);
+
+            //create dialog to prompt user to retry
+            final Dialog dialog = new Dialog(PrimeForegroundServiceHost.this);
+            dialog.setContentView(R.layout.dialog_popup_bluetooth_connection_error);
+            dialog.setTitle("Bike Connection Error");
+
+            Button dialogButton_retryService = dialog.findViewById(R.id.button_popup_retry_service);
+            dialogButton_retryService.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //attempt to restart service
+                    startGpsService();
+                    dialog.dismiss();
+                }
+            });
+
+            Button dialogButton_cancelService = dialog.findViewById(R.id.button_popup_cancel_service);
+            dialogButton_cancelService.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
         }
     });
 }
