@@ -2492,9 +2492,57 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     //reset index to start
                     demoDelayIndex[0] = 0;
                 }
-                //todo: get values
 
-                //todo: use location
+                //create empty location
+                Location demoLocation = new Location("demoProvider");
+                //assign timestamp
+//                demoLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+
+                //assign coordinates from array using index(array value)
+                demoLocation.setLatitude(demoLatArray[demoDelayIndex[0]]);
+                demoLocation.setLongitude(demoLonArray[demoDelayIndex[0]]);
+                Log.d(TAG, "run: created location from demo coordinates:\n" +
+                        "LAT: [" + demoLocation.getLatitude() + "]\n" +
+                        "LON: [" + demoLocation.getLongitude() + "]\n");
+//                        "Timestamp (since boot): [" + demoLocation.getElapsedRealtimeNanos() + "]");
+
+                //create timestamp
+                long locationRealTime = SystemClock.elapsedRealtime();
+                long locationRealTimeSeconds = locationRealTime / 1000;
+
+                //set demo location to service variables in place of onLocationUpdates
+                if (oldFinalLocation == null) {
+                    Log.v(TAG, "demoLocations: no prior location yet: using first update.");
+                    //assign updated location and associated time
+                    oldFinalLocation = demoLocation;
+                    oldFinalLocationRealTime = locationRealTime;
+                    oldFinalLocationRealTimeSeconds = oldFinalLocationRealTime / 1000;
+                    diffSeconds_location_oldLocation = 0;
+                } else {
+                    //assign demo values to new location variables
+                    finalLocation = demoLocation;
+                    finalLocationRealTime = locationRealTime;
+                    finalLocationRealTimeSeconds = locationRealTimeSeconds;
+
+                    //duplicate testing code (included to prevent current implementation from breaking)
+                    //testing: add time difference (seconds) to mean/median testing
+                    updateCount++;
+                    //second difference (debug: ensure cast from long is correct value
+                    int diff = (int) diffSeconds_location_oldLocation;
+
+                    //add seconds to total
+                    updateTotalTime = updateTotalTime + diff;
+                    //add value to list
+                    medianTime.add(diff);
+
+                    //update previous location
+                    oldFinalLocation = finalLocation;
+                    oldFinalLocationRealTime = finalLocationRealTime;
+                    oldFinalLocationRealTimeSeconds = finalLocationRealTimeSeconds;
+                }
+
+                //begin primary loop
+                checkAsyncLock();
 
                 //repeat
                 demoUpdateHandler.postDelayed(this, delayInMillis);
