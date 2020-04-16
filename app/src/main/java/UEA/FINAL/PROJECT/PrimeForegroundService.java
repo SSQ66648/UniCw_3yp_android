@@ -47,6 +47,7 @@
  *      +   The online source of the TTS audio clips changed format during development resulting in
  *          a slightly different sounding voice for later full sentence files (these files are
  *          marked by a trailing '_' before their file type (.mp3).
+ *      +
  *      +   Dates are recorded in YYMMDD notation.
  *--------------------------------------------------------------------------------------------------
  * OUTSTANDING ISSUES:
@@ -141,7 +142,11 @@
  *              TODO:   ADD PROPER HANDLING FOR NO MAXSPEED: COULD BE ROAD DOESNT HAVE ONE SPECIFIED IN API
  *              TODO:   if bluetooth connection error: show button to retry? (instead of stop-starting service)
  *              //todo: find way of prompting user to stop service? (some way of adding a clickable kill button to notification display?)
- *              //todo: demo mode
+ *              //todo: time delay warning between updates: INCLUDING DEMO MODE
+ *              //todo: visual display of demo mode (create own graphics if have to)
+ *              //todo: debug start service crash when no network available
+ *              //todo: check for all required is enabled (as bt currently checked in seperate activity etc) -combine
+ *              //todo: consider combining bluetooth actions activity into service host.
  *------------------------------------------------------------------------------
  * CODE HOUSEKEEPING TO DO LIST:
  *              todo:   change all toast notification to method: pass string
@@ -616,7 +621,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             meanTime = 0;
         } else {
             meanTime = updateTotalTime / updateCount;
-
         }
         //get median delay value
         Collections.sort(medianTime);
@@ -664,6 +668,18 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 Log.e(TAG, "onDestroy: Error: closing bluetooth sockets");
                 //handle?
             }
+        }
+
+        Log.d(TAG, "onDestroy: stopping runnable threads if existing");
+        if (warningHandler != null) {
+            Log.d(TAG, "onDestroy: warningHandler not nul, stopping...");
+            warningHandler.removeCallbacksAndMessages(null);
+            warningHandler = null;
+        }
+        if (demoUpdateHandler != null) {
+            Log.d(TAG, "onDestroy: demoUpdateHandler not null, stopping...");
+            demoUpdateHandler.removeCallbacksAndMessages(null);
+            demoUpdateHandler = null;
         }
 
         Log.v(TAG, "onDestroy: stopping self...");
