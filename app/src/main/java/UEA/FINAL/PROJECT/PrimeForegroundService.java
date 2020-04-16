@@ -140,6 +140,7 @@
  *              TODO:   ADD PROPER HANDLING FOR NO MAXSPEED: COULD BE ROAD DOESNT HAVE ONE SPECIFIED IN API
  *              TODO:   if bluetooth connection error: show button to retry? (instead of stop-starting service)
  *              //todo: find way of prompting user to stop service? (some way of adding a clickable kill button to notification display?)
+ *              //todo: demo mode
  *------------------------------------------------------------------------------
  * CODE HOUSEKEEPING TO DO LIST:
  *              todo:   change all toast notification to method: pass string
@@ -426,6 +427,71 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //revCounter is currently always zero: no use implemented as of yet)
     private int revCounter = 0;
 
+    /*------------------
+        Demo mode variables
+    ------------------*/
+    //latitude and longitude arrays
+    //(to be accessed via for-loop (i.e. i), 0 flags a deliberate loss of updates)
+    //todo: check better data structure for value pairs?
+    private double[] demoLatArray = {
+            52.62155553,
+            52.62115822,
+            52.62015516,
+            52.62131779,
+            52.62295911,
+            52.62308937,
+            52.62732912,
+            52.6288595,
+            52.62904836,
+            52.62946839,
+            52.63117777,
+            52.63362613,
+            52.63553394,
+            52.63701195,
+            52.63663431,
+            52.63543627,
+            52.63414053,
+            0,
+            52.62915255,
+            52.62826364,
+            52.62802594,
+            52.62714352,
+            52.62533629,
+            52.62309588,
+            52.62233711,
+            52.62182908,
+            52.62171185
+    };
+
+    private double[] demoLonArray = {
+            1.23219609,
+            1.23373836,
+            1.23584658,
+            1.23838395,
+            1.24074966,
+            1.2466827,
+            1.24812573,
+            1.24953657,
+            1.25379592,
+            1.25914961,
+            1.25933737,
+            1.25913888,
+            1.2591657,
+            1.25986844,
+            1.26349479,
+            1.26766831,
+            1.26666516,
+            0,
+            1.24887139,
+            1.24336749,
+            1.24089986,
+            1.23990744,
+            1.24030441,
+            1.24076575,
+            1.23981625,
+            1.23798162,
+            1.23466641
+    };
 
     /*----------------------------------------------------------------------------------------------
         LIFECYCLE
@@ -450,33 +516,23 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //assign listeners to watchedIntegers
         assignWatchedFloats();
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    Activity#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for Activity#requestPermissions for more details.
-            Log.e(TAG, "onCreate: Error: PERMISSIONS NOT GRANTED");
-            return;
-        }
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    Activity#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for Activity#requestPermissions for more details.
+//            Log.e(TAG, "onCreate: Error: PERMISSIONS NOT GRANTED");
+//            return;
+//        }
 
-        queuePlayback(TTS_LOLA_NOTIFY_BEGIN_LOCATION_UPDATES);
-        //begin location updates from both providers
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                5000,
-                0,
-                this,
-                Looper.getMainLooper());
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                5000,
-                0,
-                this,
-                Looper.getMainLooper());
+        ////todo: test moving begin updates from here to onstart (demo switch)
+
 
         //register receiver for activity reqests to trigger service methods
         LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
@@ -522,6 +578,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
 //                        Toast.LENGTH_SHORT).show();
 //            }
 //        });
+
+        selectServiceType(intent);
 
         //---BEGIN LOGGING---
         beginLoggingToFile();
@@ -2364,6 +2422,53 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //-compares current moving speed against current location's speed limit
     public void compareSpeedAndLimit() {
         Log.v(TAG, "checkSpeedAgainstLimit: ");
+
+    }
+
+
+    //uses passed intent extra string to begin either location updates or demo location method
+    public void selectServiceType(Intent intent) {
+        String type = intent.getStringExtra("serviceType");
+        Log.d(TAG, "selectServiceType: service type received: " + type);
+
+        queuePlayback(TTS_LOLA_NOTIFY_BEGIN_LOCATION_UPDATES);
+
+        if (type.equals("irl")) {
+            //started actual service: begin updates
+            //begin location updates from both providers
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    Activity#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+
+                //todo: add warning audio here and stop service as no network available? or already covered?
+                return;
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    5000,
+                    0,
+                    this,
+                    Looper.getMainLooper());
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    5000,
+                    0,
+                    this,
+                    Looper.getMainLooper());
+
+        } else if (type.equals("demo")) {
+            //started demo mode: begin locations from list
+            startDemoLocations();
+        }
+
+    }
+
+
+    //demo mode using predefined coordinates of chosen route for user testing/ submission demo
+    public void startDemoLocations() {
 
     }
 
