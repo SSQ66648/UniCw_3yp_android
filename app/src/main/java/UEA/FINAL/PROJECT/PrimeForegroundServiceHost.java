@@ -27,6 +27,8 @@
  *              v1.7    200319  Added broadcast listener for UI updates from service (efficient and
  *                              wont crash if no activity loaded to receive message ie screen off),
  *                              layout incl. textViews to set with values of received extras.
+ *              v1.8    200321  Added audio to broadcast listener as service being killed too
+ *                              quickly to notify user from there.
  *------------------------------------------------------------------------------
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
@@ -49,6 +51,7 @@
  *      //todo: hide/collapse bike status until something to view? (visible on connect?)
  *      //todo: add better notification to user re bt connecting
  *      //todo: add check for bt connection failure (if fail: notify user and maybe dont start service?) -add testing override of course.
+ *      //todo: debug no network on start crash?
  -----------------------------------------------------------------------------*/
 package UEA.FINAL.PROJECT;
 /*--------------------------------------
@@ -108,6 +111,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     private Button stopService;
     private Button testBatt;
     private Button testAudio;
+    private Button demoMode;
 
     private TextView textIndicateR;
     private TextView textIndicateL;
@@ -117,7 +121,11 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     private TextView textSpeedActual;
 
     //---VARIABLES---
+    //start IRL service
     Intent foregroundIntent;
+    //start demo version service
+    Intent demoIntnent;
+
     //local copy of bluetoothActions intent-passed device address
     String bike_MAC;
 
@@ -150,9 +158,19 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         startService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.v(TAG, "onClick: start service");
+                Log.v(TAG, "onClick: start service: IRL");
 //                Toast.makeText(getApplicationContext(), "Starting Service...", Toast.LENGTH_SHORT).show();
-                startGpsService();
+                startGpsService("irl");
+            }
+        });
+
+        //run demo mode version of primary service
+        demoMode = findViewById(R.id.button_demoservice_start);
+        demoMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: start service: DEMO");
+                startGpsService("demo");
             }
         });
 
@@ -185,6 +203,10 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
                 sendMsg();
             }
         });
+
+        //add flag to intents to signify which version to execute in service
+        foregroundIntent.putExtra("serviceType", "irl");
+        demoIntnent.putExtra("serviceType", "demo");
     }
 
 
@@ -291,17 +313,19 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     /*--------------------------------------
         HELPER METHODS
     --------------------------------------*/
-    //-starts the foreground service
-    public void startGpsService() {
+    //-starts the foreground service (using string extra as identifier for demo mode)
+    public void startGpsService(String servicePassed) {
         Log.v(TAG, "startGpsService: ");
+        foregroundIntent.putExtra("serviceType", servicePassed);
         startService(foregroundIntent);
     }
 
 
-    //-stops the foreground service
+    //-stops the foreground service (clear extra for next starting choice)
     public void stopGpsService() {
         Log.v(TAG, "stopGpsService: ");
         stopService(foregroundIntent);
+        foregroundIntent.removeExtra("serviceType");
     }
 
 
@@ -367,7 +391,9 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //attempt to restart service
-                    startGpsService();
+                    startGpsService(foregroundIntent.getStringExtra("serviceType"));
+                    Log.d(TAG, "onClick: retry service: type [" +
+                            foregroundIntent.getStringExtra("serviceType") + "]");
                     dialog.dismiss();
                 }
             });

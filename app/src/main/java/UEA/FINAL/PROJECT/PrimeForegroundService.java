@@ -71,6 +71,7 @@
  *      v2.5    200320  Added (and re-added) speed limit exceeded warning playback: needs priorities
  *      v2.5.1  200321  Extended section header labels to character line (code becoming complex).
  *      v2.6    200321  Added method for interruption of lower-priority audio playback.
+ *      v2.6.1  200321  Moved bluetooth connection error audio playback to activity.
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug

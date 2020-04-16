@@ -292,7 +292,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/button_test_battery_optimisation"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_gpsforegroundservice_start" />
+                    app:layout_constraintTop_toBottomOf="@+id/button_demoservice_start" />
 
                 <Button
                     android:id="@+id/button_test_battery_optimisation"
@@ -309,10 +309,20 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="start service"
-                    app:layout_constraintBottom_toTopOf="@+id/button_gpsforegroundservice_stop"
+                    app:layout_constraintBottom_toTopOf="@+id/button_demoservice_start"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                <Button
+                    android:id="@+id/button_demoservice_start"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="start demo service"
+                    app:layout_constraintBottom_toTopOf="@+id/button_gpsforegroundservice_stop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/button_gpsforegroundservice_start" />
 
                 <Button
                     android:id="@+id/button_test_audiofile_gpsforegroundservice"
