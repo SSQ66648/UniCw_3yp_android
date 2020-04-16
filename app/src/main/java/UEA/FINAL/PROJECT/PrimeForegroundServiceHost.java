@@ -29,6 +29,7 @@
  *                              layout incl. textViews to set with values of received extras.
  *              v1.8    200321  Added audio to broadcast listener as service being killed too
  *                              quickly to notify user from there.
+ *              v1.9    200416  added button to demo mode, changed startService to take flags
  *------------------------------------------------------------------------------
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
@@ -121,10 +122,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     private TextView textSpeedActual;
 
     //---VARIABLES---
-    //start IRL service
     Intent foregroundIntent;
-    //start demo version service
-    Intent demoIntnent;
 
     //local copy of bluetoothActions intent-passed device address
     String bike_MAC;
@@ -204,9 +202,6 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
             }
         });
 
-        //add flag to intents to signify which version to execute in service
-        foregroundIntent.putExtra("serviceType", "irl");
-        demoIntnent.putExtra("serviceType", "demo");
     }
 
 
@@ -215,6 +210,8 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         super.onStart();
         Log.v(TAG, "onStart: (re) creating service intent");
         foregroundIntent = new Intent(this, PrimeForegroundService.class);
+
+
     }
 
 

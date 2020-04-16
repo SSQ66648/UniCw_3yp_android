@@ -72,6 +72,7 @@
  *      v2.5.1  200321  Extended section header labels to character line (code becoming complex).
  *      v2.6    200321  Added method for interruption of lower-priority audio playback.
  *      v2.6.1  200321  Moved bluetooth connection error audio playback to activity.
+ *      v3.0    200416  Added demo mode to service (scripted replacement for location updates)
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -620,8 +621,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //get median delay value
         Collections.sort(medianTime);
 //todo: add index out of bound checking
-        int median = medianTime.get(medianTime.size() / 2);
-
+        int median = 0;
+        if (medianTime != null && medianTime.size() > 0) {
+            median = medianTime.get(medianTime.size() / 2);
+        } else {
+            Log.w(TAG, "onDestroy: Warning: unable to create median ");
+        }
         Log.v(TAG, "MEAN DELAY: " + meanTime + "\n" +
                 "MEDIAN DELAY:" + median + "\n" +
                 "number of updates: " + updateCount + "\n" +
@@ -899,8 +904,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 currentRoadName = ((RoadTags) localProduct).getRoadName();
                 //todo: test this works with watched int
                 currentSpeedLimit.set(((RoadTags) localProduct).getRoadSpeed());
-                Log.v(TAG, "onTaskComplete: service now has access to:\n" +
-                        "road: " + currentRoadName + " with limit: " + currentSpeedLimit);
+                Log.d(TAG, "onTaskComplete: service now has access to:\n" +
+                        "road: [" + currentRoadName + "]\n" +
+                        "limit: " + currentSpeedLimit.get());
 
                 //add parse completion time to log
                 logObject.setParseCompleteTime(SystemClock.elapsedRealtime());
@@ -1355,6 +1361,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         //testing:
                         Log.v(TAG, "doInBackground: NAME: " + roadNames.get(i));
                     } catch (JSONException e) {
+                        //todo: investigate why error showing when name IS returned?
                         Log.w(TAG, "AsyncPARSE: JSON exception occurred: no NAME for road");
                         roadNames.add("No name found");
                     }
@@ -1966,16 +1973,16 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 Log.v(TAG, "onResume: create bluetooth socket");
             } catch (IOException e) {
                 Log.v(TAG, "onResume: Socket creation failed.");
-                Toast.makeText(getApplicationContext(), "Socket creation failed",
-                        Toast.LENGTH_LONG).show();
+                //            Toast.makeText(getApplicationContext(), "Socket creation failed",
+                //                    Toast.LENGTH_LONG).show();
             }
             // Establish the Bluetooth socket connection.
             try {
                 bluetoothSocket_bike.connect();
                 Log.v(TAG, "onResume: socket connected.");
                 queuePlayback(TTS_LOLA_NOTIFY_BLUETOOTH_ESTABLISHED);
-                Toast.makeText(getApplicationContext(), "Connected to bike",
-                        Toast.LENGTH_SHORT).show();
+                //           Toast.makeText(getApplicationContext(), "Connected to bike",
+                //                  Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 //todo: specific audio for errors (maybe not applicable to users: dont care re specifics of bluetooth issue)?
                 Log.v(TAG, "onResume: socket connection error.");
@@ -2038,9 +2045,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             //assign and check result of splitString
                             for (int i = 0; i < receivedValues.length - 1; i++) {
                                 //debugging: trying to find cause of index out of bounds exception:
-                                // (length = 7; index = 7) shouldnt be possible: guessing something to do with debugger?
+                                // (length = 7; index = 8) shouldnt be possible: guessing something to do with debugger?
                                 if (i == incomingStatusValues.length || i == receivedValues.length) {
                                     Log.e(TAG, "handleMessage: Error: INDEX EQUAL TO LENGTH BUG: debugger is the cause?");
+                                    Log.d(TAG, "handleMessage: incomingStatusValues: " + incomingStatusValues.length);
+                                    Log.d(TAG, "handleMessage: receivedValues: " + receivedValues.length);
                                 } else {
                                     incomingStatusValues[i] = receivedValues[i];
                                 }
@@ -2488,6 +2497,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
         demoUpdateHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Log.d(TAG, "run: index = " + demoDelayIndex[0]);
+
                 if (demoDelayIndex[0] == demoLatArray.length) {
                     //reset index to start
                     demoDelayIndex[0] = 0;
@@ -2541,13 +2552,16 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     oldFinalLocationRealTimeSeconds = finalLocationRealTimeSeconds;
                 }
 
+                //increment index
+                demoDelayIndex[0]++;
+
                 //begin primary loop
                 checkAsyncLock();
 
                 //repeat
                 demoUpdateHandler.postDelayed(this, delayInMillis);
             }
-        }, delayInMillis);
+        }, 0);
     }
 
 
