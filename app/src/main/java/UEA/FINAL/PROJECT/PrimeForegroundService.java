@@ -229,6 +229,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public static final int API_RADIUS_VALUE = 20;
     //max seconds allowed to prioritise accuracy over newest location in locationChanged
     public static final int LOCATION_DELAY_THRESHOLD = 15;
+    //time (in seconds) to pause between demo location updates (for demonstration: not realtime)
+    public static final int DEMOMODE_LOCATION_UPDATE_DELAY = 20;
     //async task completion listener identification flags
     public static final String TASK_COMPLETION_FLAG_HTTP = "httpComplete";
     public static final String TASK_COMPLETION_FLAG_PARSE = "httpParse";
@@ -430,6 +432,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*------------------
         Demo mode variables
     ------------------*/
+    //handler for update intervals
+    private Handler demoUpdateHandler;
     //latitude and longitude arrays
     //(to be accessed via for-loop (i.e. i), 0 flags a deliberate loss of updates)
     //todo: check better data structure for value pairs?
@@ -2434,6 +2438,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         queuePlayback(TTS_LOLA_NOTIFY_BEGIN_LOCATION_UPDATES);
 
         if (type.equals("irl")) {
+            Log.d(TAG, "selectServiceType: beginning IRL location updates...");
             //started actual service: begin updates
             //begin location updates from both providers
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -2460,8 +2465,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     Looper.getMainLooper());
 
         } else if (type.equals("demo")) {
+            Log.d(TAG, "selectServiceType: beginning demo updates...");
             //started demo mode: begin locations from list
             startDemoLocations();
+        } else {
+            Log.e(TAG, "selectServiceType: Error: did not receive an expected intent extra");
+            //todo: handle? stop?
         }
 
     }
@@ -2469,8 +2478,30 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //demo mode using predefined coordinates of chosen route for user testing/ submission demo
     public void startDemoLocations() {
+        Log.d(TAG, "startDemoLocations: ");
+        demoUpdateHandler = new Handler();
+        final int delayInMillis = DEMOMODE_LOCATION_UPDATE_DELAY * 1000;
+        //final array for index (array is final -to use in Runnable, but contents can be edited)
+        final int[] demoDelayIndex = new int[]{0};
 
+        //begin update loop
+        demoUpdateHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (demoDelayIndex[0] == demoLatArray.length) {
+                    //reset index to start
+                    demoDelayIndex[0] = 0;
+                }
+                //todo: get values
+
+                //todo: use location
+
+                //repeat
+                demoUpdateHandler.postDelayed(this, delayInMillis);
+            }
+        }, delayInMillis);
     }
+
 
     /*----------------------------------------------------------------------------------------------
         HELPER METHODS
