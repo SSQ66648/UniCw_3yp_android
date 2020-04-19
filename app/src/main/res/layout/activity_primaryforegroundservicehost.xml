@@ -78,6 +78,7 @@
                     android:gravity="center"
                     android:text="placeholder:\nConnecting device items"
                     android:textAlignment="center"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -297,6 +298,17 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_label_demomap" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_primeservicehost_startstop_buttons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@id/container_primeservicehost_buttons"
+                app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
+                app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
+                app:layout_constraintTop_toBottomOf="@id/container_primeservicehost_demomap">
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
