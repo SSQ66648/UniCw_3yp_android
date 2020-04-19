@@ -47,29 +47,169 @@
     <!-- CONTAINER: BLUETOOTH -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_placholder_btactions"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/format_border_black"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/container_primeservicehost_bikestaus"
-        app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
-        app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
-        app:layout_constraintTop_toBottomOf="@id/appbar"
-        app:layout_goneMarginTop="0dp">
+        app:layout_constraintBottom_toTopOf="@id/container_primehost_buttonbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar">
 
-        <TextView
-            android:id="@+id/placeholdertext_primeforegroundhost"
+
+        <!-- ****************************** Guidelines ****************************** -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/format_border_black"
-            android:gravity="center"
-            android:text="placeholder:\nConnecting device items"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.20194647" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+
+        <!-- ****************************** UPPER VIEWS: ******************************-->
+
+
+        <TextView
+            android:id="@+id/prompttext_bluetoothactions_instructions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:text="Pair and connect to BOTH headset and bike Bluetooth "
             android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineTop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/toggle_bluetoothactions_enablebluetooth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textOff="enable bluetooth"
+            android:textOn="bluetooth enabled"
+            android:theme="@style/ToggleButton.YourTheme"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineTop2"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toTopOf="@id/guidelineTop" />
+
+
+        <!-- ****************************** INNER SCROLL & CONSTRAINT CONTAINER: ******************************-->
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView_bluetoothactions"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guidelineTop2">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- ****************************** INNER GUIDELINES ****************************** -->
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineInnerLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.2" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineInnerRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.8" />
+
+                <!-- ****************************** INNER VIEWS ****************************** -->
+
+                <Button
+                    android:id="@+id/button_bluetoothactions_discoverdevices"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:drawableLeft="@drawable/ic_small_noun_bluetooth_logo_signal_644140"
+                    android:text="discover devices"
+                    app:layout_constraintEnd_toEndOf="@id/guidelineInnerRight"
+                    app:layout_constraintStart_toStartOf="@id/guidelineInnerLeft"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_bluetoothactions_discovereddevices"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:color/darker_gray"
+                    android:scrollbars="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/button_bluetoothactions_discoverdevices" />
+
+                <Button
+                    android:id="@+id/button_bluetoothactions_paireddevices"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:drawableLeft="@drawable/ic_small_noun_bluetooth_device_734717"
+                    android:text="paired devices"
+                    app:layout_constraintEnd_toEndOf="@id/guidelineInnerRight"
+                    app:layout_constraintStart_toStartOf="@id/guidelineInnerLeft"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_bluetoothactions_discovereddevices" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_bluetoothactions_paireddevices"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:color/darker_gray"
+                    android:scrollbars="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/button_bluetoothactions_paireddevices" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -77,14 +217,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_primeservicehost_bikestaus"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@drawable/format_border_black"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/container_primeservicehost_demomap"
         app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
         app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
-        app:layout_constraintTop_toBottomOf="@id/container_placholder_btactions"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
         app:layout_goneMarginTop="4dp">
 
         <TextView
@@ -257,9 +397,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <!-- BELOW MIDDLE -->
-
-
     <!-- MAP -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_primeservicehost_demomap"
@@ -268,6 +405,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/format_border_black"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/container_primehost_buttonbar"
         app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
         app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
@@ -298,6 +436,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    <!-- BOTTOM BUTTON BAR -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_primehost_buttonbar"
         android:layout_width="match_parent"
@@ -307,54 +446,64 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+
+        <!-- CONNECT TO BLUETOOTH BUTTON -->
         <Button
-            android:id="@+id/button_primehost_connect_devices"
-            android:layout_width="0dp"
+            android:id="@+id/button_bluetoothactions_start_activity"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="placeholder"
+            android:backgroundTint="@color/green"
+            android:drawableRight="@drawable/ic_small_noun_connect_2605299_cc"
+            android:text="Begin System    "
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_bottombar_bluetooth_back"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteY="75dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+
+        <!--RETURN TO BLUETOOTH BUTTON -->
         <Button
             android:id="@+id/button_bottombar_bluetooth_back"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_arrow_back_black_24dp"
             android:drawableEnd="@drawable/ic_bluetooth_black_24dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_gpsforegroundservice_start"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/button_primehost_connect_devices"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteY="79dp" />
+            app:layout_constraintStart_toEndOf="@+id/button_bluetoothactions_start_activity"
+            app:layout_constraintTop_toTopOf="parent" />
 
+
+        <!-- IRL BUTTON -->
         <Button
             android:id="@+id/button_gpsforegroundservice_start"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="start service"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_demoservice_start"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button_bottombar_bluetooth_back"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteY="75dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+
+        <!-- DEMO BUTTON -->
         <Button
             android:id="@+id/button_demoservice_start"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="start demo"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_gpsforegroundservice_stop"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button_gpsforegroundservice_start"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteY="75dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <!-- STOP BUTTON -->
@@ -363,9 +512,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="stop service"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button_demoservice_start"
             app:layout_constraintTop_toTopOf="parent" />
