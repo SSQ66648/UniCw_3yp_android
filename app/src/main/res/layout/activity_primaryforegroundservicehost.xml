@@ -308,38 +308,53 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button_bottombar_bluetooth_back"
-            android:layout_width="wrap_content"
+            android:id="@+id/button_primehost_connect_devices"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
+            android:text="placeholder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_bottombar_bluetooth_back"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteY="75dp" />
+
+        <Button
+            android:id="@+id/button_bottombar_bluetooth_back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_arrow_back_black_24dp"
             android:drawableEnd="@drawable/ic_bluetooth_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button_gpsforegroundservice_start"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/button_gpsforegroundservice_start"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_primehost_connect_devices"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteY="79dp" />
 
         <Button
             android:id="@+id/button_gpsforegroundservice_start"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="start service"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button_demoservice_start"
-            app:layout_constraintStart_toEndOf="@id/button_bottombar_bluetooth_back"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/button_demoservice_start"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_bottombar_bluetooth_back"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteY="75dp" />
 
         <Button
             android:id="@+id/button_demoservice_start"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
             android:text="start demo"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button_gpsforegroundservice_stop"
-            app:layout_constraintStart_toEndOf="@id/button_gpsforegroundservice_start"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/button_gpsforegroundservice_stop"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_gpsforegroundservice_start"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteY="75dp" />
 
 
         <!-- STOP BUTTON -->
@@ -348,12 +363,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="stop service"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/button_demoservice_start"
-            app:layout_constraintTop_toTopOf="parent" />
 
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_demoservice_start"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
