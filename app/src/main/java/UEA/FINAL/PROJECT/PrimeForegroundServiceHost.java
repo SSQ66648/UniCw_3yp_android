@@ -182,25 +182,27 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
             }
         });
 
-        //check app battery optimisation
-        testBatt = findViewById(R.id.button_test_battery_optimisation);
-        testBatt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.v(TAG, "onClick: check batter optimization");
-                checkOptimization();
-            }
-        });
+        //todo: commented out buttons for testing: move functions to main menu
 
-        //test audio of service
-        testAudio = findViewById(R.id.button_test_audiofile_gpsforegroundservice);
-        testAudio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v(TAG, "onClick: test audio");
-                sendMsg();
-            }
-        });
+//        //check app battery optimisation
+//        testBatt = findViewById(R.id.button_test_battery_optimisation);
+//        testBatt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.v(TAG, "onClick: check batter optimization");
+//                checkOptimization();
+//            }
+//        });
+//
+//        //test audio of service
+//        testAudio = findViewById(R.id.button_test_audiofile_gpsforegroundservice);
+//        testAudio.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.v(TAG, "onClick: test audio");
+//                sendMsg();
+//            }
+//        });
 
     }
 

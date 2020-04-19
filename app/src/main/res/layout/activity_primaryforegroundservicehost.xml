@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.15085158" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_primeservicehost_right"
@@ -44,36 +44,28 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.85" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_primeservicehost_middle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
     <!-- CONTAINER: BLUETOOTH -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_placholder_btactions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/container_primeservicehost_bikestaus"
         app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
         app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
-        app:layout_constraintTop_toBottomOf="@id/appbar">
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_goneMarginTop="0dp">
 
         <TextView
             android:id="@+id/placeholdertext_primeforegroundhost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:background="@drawable/format_border_black"
             android:gravity="center"
             android:text="placeholder:\nConnecting device items"
             android:textAlignment="center"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,25 +76,28 @@
     <!-- CONTAINER: BIKE STATUS -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_primeservicehost_bikestaus"
-        android:layout_width="288dp"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/format_border_black"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/container_primeservicehost_demomap"
         app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
         app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
         app:layout_constraintTop_toBottomOf="@id/container_placholder_btactions"
-        tools:layout_editor_absoluteX="62dp">
+        app:layout_goneMarginTop="4dp">
 
         <TextView
             android:id="@+id/text_label_primeservicehost_bikestatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
             android:text="@string/bike_status"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/text_sublabel_indicate_left"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -268,13 +263,16 @@
     <!-- MAP -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_primeservicehost_demomap"
-        android:layout_width="288dp"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/format_border_black"
-        app:layout_constraintBottom_toTopOf="@+id/container_primeservicehost_buttons"
+        app:layout_constraintBottom_toTopOf="@+id/container_primehost_buttonbar"
         app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
         app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
         app:layout_constraintTop_toBottomOf="@+id/container_primeservicehost_bikestaus"
+        app:layout_goneMarginTop="0dp"
         tools:layout_editor_absoluteX="62dp">
 
         <TextView
@@ -290,7 +288,7 @@
         <ImageView
             android:id="@+id/image_demomap"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:src="@drawable/map_00_placeholder_test"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -299,39 +297,50 @@
             app:layout_constraintTop_toBottomOf="@id/text_label_demomap" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_primeservicehost_buttons"
-        android:layout_width="288dp"
+        android:id="@+id/container_primehost_buttonbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/format_border_black"
+        android:background="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
-        app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
-        app:layout_constraintTop_toBottomOf="@+id/container_primeservicehost_demomap"
-        tools:layout_editor_absoluteX="62dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <Button
+            android:id="@+id/button_bottombar_bluetooth_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:drawableStart="@drawable/ic_arrow_back_black_24dp"
+            android:drawableEnd="@drawable/ic_bluetooth_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_gpsforegroundservice_start"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- IRL BUTTON -->
         <Button
             android:id="@+id/button_gpsforegroundservice_start"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="start service"
-            app:layout_constraintBottom_toTopOf="@+id/button_demoservice_start"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_demoservice_start"
+            app:layout_constraintStart_toEndOf="@id/button_bottombar_bluetooth_back"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- DEMO BUTTON -->
         <Button
             android:id="@+id/button_demoservice_start"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="start demo service"
-            app:layout_constraintBottom_toTopOf="@+id/button_gpsforegroundservice_stop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_gpsforegroundservice_start" />
+            android:layout_marginRight="4dp"
+            android:text="start demo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_gpsforegroundservice_stop"
+            app:layout_constraintStart_toEndOf="@id/button_gpsforegroundservice_start"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <!-- STOP BUTTON -->
         <Button
@@ -342,8 +351,8 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_demoservice_start" />
+            app:layout_constraintStart_toEndOf="@id/button_demoservice_start"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
