@@ -414,7 +414,7 @@
         tools:layout_editor_absoluteX="62dp">
 
         <TextView
-            android:id="@+id/text_label_demomap"
+            android:id="@+id/text_label_demomap_or_roadname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DEMO LOCATION MAP"
@@ -432,7 +432,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_label_demomap" />
+            app:layout_constraintTop_toBottomOf="@id/text_label_demomap_or_roadname" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -74,6 +74,7 @@
  *      v2.6    200321  Added method for interruption of lower-priority audio playback.
  *      v2.6.1  200321  Moved bluetooth connection error audio playback to activity.
  *      v3.0    200416  Added demo mode to service (scripted replacement for location updates)
+ *      v3.0.1  200419  additional extras attached to UI update if demomode is enabled (added bool)
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -147,6 +148,7 @@
  *              //todo: debug start service crash when no network available
  *              //todo: check for all required is enabled (as bt currently checked in seperate activity etc) -combine
  *              //todo: consider combining bluetooth actions activity into service host.
+ *              //todo: ADD BEEN TOO LONG SINCE LAST LOCATION WARNING CHECK
  *------------------------------------------------------------------------------
  * CODE HOUSEKEEPING TO DO LIST:
  *              todo:   change all toast notification to method: pass string
@@ -438,70 +440,32 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*------------------
         Demo mode variables
     ------------------*/
+    private boolean demoModeEnabled = false;
     //handler for update intervals
     private Handler demoUpdateHandler;
     //latitude and longitude arrays
     //(to be accessed via for-loop (i.e. i), 0 flags a deliberate loss of updates)
     //todo: check better data structure for value pairs?
     private double[] demoLatArray = {
-            52.62155553,
-            52.62115822,
-            52.62015516,
-            52.62131779,
-            52.62295911,
-            52.62308937,
-            52.62732912,
-            52.6288595,
-            52.62904836,
-            52.62946839,
-            52.63117777,
-            52.63362613,
-            52.63553394,
-            52.63701195,
-            52.63663431,
-            52.63543627,
-            52.63414053,
+            52.62155553, 52.62115822, 52.62015516, 52.62131779, 52.62295911, 52.62308937,
+            52.62732912, 52.6288595, 52.62904836, 52.62946839, 52.63117777, 52.63362613,
+            52.63553394, 52.63701195, 52.63663431, 52.63543627, 52.63414053,
             0,
-            52.62915255,
-            52.62826364,
-            52.62802594,
-            52.62714352,
-            52.62533629,
-            52.62309588,
-            52.62233711,
-            52.62182908,
-            52.62171185
+            52.62915255, 52.62826364, 52.62802594, 52.62714352, 52.62533629, 52.62309588,
+            52.62233711, 52.62182908, 52.62171185
     };
 
     private double[] demoLonArray = {
-            1.23219609,
-            1.23373836,
-            1.23584658,
-            1.23838395,
-            1.24074966,
-            1.2466827,
-            1.24812573,
-            1.24953657,
-            1.25379592,
-            1.25914961,
-            1.25933737,
-            1.25913888,
-            1.2591657,
-            1.25986844,
-            1.26349479,
-            1.26766831,
-            1.26666516,
+            1.23219609, 1.23373836, 1.23584658, 1.23838395, 1.24074966, 1.2466827, 1.24812573,
+            1.24953657, 1.25379592, 1.25914961, 1.25933737, 1.25913888, 1.2591657, 1.25986844,
+            1.26349479, 1.26766831, 1.26666516,
             0,
-            1.24887139,
-            1.24336749,
-            1.24089986,
-            1.23990744,
-            1.24030441,
-            1.24076575,
-            1.23981625,
-            1.23798162,
-            1.23466641
+            1.24887139, 1.24336749, 1.24089986, 1.23990744, 1.24030441, 1.24076575, 1.23981625,
+            1.23798162, 1.23466641
     };
+
+    //final array for index (array is final -to use in Runnable, but contents can be edited)
+    final int[] demoDelayIndex = new int[]{0};
 
     /*----------------------------------------------------------------------------------------------
         LIFECYCLE
@@ -2434,6 +2398,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
         intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_SPEED_LIMIT, currentLimitString);
         intent.putExtra(PrimeForegroundServiceHost.UI_UPDATE_SPEED_ACTUAL, actualSpeed);
 
+        //additional extra included if demo mode is enabled
+        //todo: not as many updates required (once per location update) : move to own broadcast?
+        if (demoModeEnabled) {
+            //pass map array index (same as demo location index)
+            intent.putExtra("mapIndex", demoDelayIndex);
+            intent.putExtra("roadName", currentRoadName);
+        }
+
         lbm.sendBroadcast(intent);
     }
 
@@ -2445,13 +2417,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
         Intent intent = new Intent(PrimeForegroundServiceHost.SERVICE_BROADCASTRECEIVER_CONNECTION_ERROR);
         //no extra needed: only signal of error
         lbm.sendBroadcast(intent);
-    }
-
-
-    //-compares current moving speed against current location's speed limit
-    public void compareSpeedAndLimit() {
-        Log.v(TAG, "checkSpeedAgainstLimit: ");
-
     }
 
 
@@ -2491,6 +2456,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         } else if (type.equals("demo")) {
             Log.d(TAG, "selectServiceType: beginning demo updates...");
+            demoModeEnabled = true;
             //started demo mode: begin locations from list
             startDemoLocations();
         } else {
@@ -2506,8 +2472,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         Log.d(TAG, "startDemoLocations: ");
         demoUpdateHandler = new Handler();
         final int delayInMillis = DEMOMODE_LOCATION_UPDATE_DELAY * 1000;
-        //final array for index (array is final -to use in Runnable, but contents can be edited)
-        final int[] demoDelayIndex = new int[]{0};
+
 
         //begin update loop
         demoUpdateHandler.postDelayed(new Runnable() {

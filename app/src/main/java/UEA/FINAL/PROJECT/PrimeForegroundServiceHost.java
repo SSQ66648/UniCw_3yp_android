@@ -30,6 +30,12 @@
  *              v1.8    200321  Added audio to broadcast listener as service being killed too
  *                              quickly to notify user from there.
  *              v1.9    200416  added button to demo mode, changed startService to take flags
+ *              v2.0    200419  changed layout significantly to include bottom 'button bar' and
+ *                              various sections set to "gone" - to be used in event bluetooth
+ *                              activity can be integrated into this one with time available
+ *              v2.1    200419  commented out test buttons (to be moved to main menu later)
+ *              v3.0    200419  added array of image resources to be displayed when demo mode
+ *                              updates location
  *------------------------------------------------------------------------------
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
@@ -44,7 +50,8 @@
  *                  //explanation
  *
  *------------------------------------------------------------------------------
- * TO DO LIST:  
+ * TO DO LIST:
+ * //todo: restore buttons to main menu
  *      //todo: add status display for bt devices
  *      //todo: checking for bt connections?
  *      //todo: consider enum for method choices (const)?
@@ -73,6 +80,7 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,11 +129,21 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     private TextView textSpeedLimit;
     private TextView textSpeedActual;
 
+    private TextView mapRoadName;
+    private ImageView mapImage;
+
     //---VARIABLES---
     Intent foregroundIntent;
-
     //local copy of bluetoothActions intent-passed device address
     String bike_MAC;
+    //map image resources for demo mode
+    int[] mapResources = {R.drawable.map_01, R.drawable.map_02, R.drawable.map_03,
+            R.drawable.map_04, R.drawable.map_05, R.drawable.map_06, R.drawable.map_07,
+            R.drawable.map_08, R.drawable.map_09, R.drawable.map_10, R.drawable.map_11,
+            R.drawable.map_12, R.drawable.map_13, R.drawable.map_14, R.drawable.map_15,
+            R.drawable.map_16, R.drawable.map_17, R.drawable.map_18, R.drawable.map_19,
+            R.drawable.map_20, R.drawable.map_21, R.drawable.map_22, R.drawable.map_23,
+            R.drawable.map_24, R.drawable.map_25, R.drawable.map_26};
 
 
     /*--------------------------------------
@@ -144,12 +162,17 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //---VIEWS---
+        //status textViews
         textIndicateL = findViewById(R.id.textupdate_indicate_left);
         textIndicateR = findViewById(R.id.textupdate_indicate_right);
         textLightL = findViewById(R.id.textupdate_lights_low);
         textLightH = findViewById(R.id.textupdate_lights_high);
         textSpeedLimit = findViewById(R.id.textupdate_speed_limit);
         textSpeedActual = findViewById(R.id.textupdate_speed_actual);
+
+        //map views
+        mapRoadName = findViewById(R.id.text_label_demomap_or_roadname);
+        mapImage = findViewById(R.id.image_demomap);
 
         //---BUTTONS---
         startService = findViewById(R.id.button_gpsforegroundservice_start);
@@ -337,13 +360,27 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Log.v(TAG, "onReceive:view update broadcast from service...");
 
-            //update views from passed extras
-            textIndicateL.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_LEFT));
-            textIndicateR.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_RIGHT));
-            textLightL.setText(intent.getStringExtra(UI_UPDATE_LIGHTS_LOW));
-            textLightH.setText(intent.getStringExtra(UI_UPDATE_LIGHTS_HIGH));
-            textSpeedLimit.setText(intent.getStringExtra(UI_UPDATE_SPEED_LIMIT));
-            textSpeedActual.setText(intent.getStringExtra(UI_UPDATE_SPEED_ACTUAL));
+            //nullcheck
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                //update views from passed extras
+                textIndicateL.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_LEFT));
+                textIndicateR.setText(intent.getStringExtra(UI_UPDATE_INDICATOR_RIGHT));
+                textLightL.setText(intent.getStringExtra(UI_UPDATE_LIGHTS_LOW));
+                textLightH.setText(intent.getStringExtra(UI_UPDATE_LIGHTS_HIGH));
+                textSpeedLimit.setText(intent.getStringExtra(UI_UPDATE_SPEED_LIMIT));
+                textSpeedActual.setText(intent.getStringExtra(UI_UPDATE_SPEED_ACTUAL));
+
+                //if extras are attached: demo mode is active: update map on UI
+                if (extras.containsKey("mapIndex")) {
+                    //todo: set map image from resource array
+                    mapImage.setImageResource(mapResources[extras.getInt("mapIndex")]);
+                }
+                if (extras.containsKey("roadName")) {
+                    //todo: set road name text
+                    mapRoadName.setText(extras.getString("roadName"));
+                }
+            }
         }
     };
 
