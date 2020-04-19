@@ -9,6 +9,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".PrimeForegroundServiceHost">
 
+
     <!-- APPBAR -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -27,370 +28,325 @@
             app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- SCOLL CONTAINER (and "single child" container -->
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+    <!-- GUIDELINES -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_primeservicehost_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_primeservicehost_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_primeservicehost_middle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <!-- CONTAINER: BLUETOOTH -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_placholder_btactions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/container_primeservicehost_bikestaus"
+        app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
+        app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
         app:layout_constraintTop_toBottomOf="@id/appbar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/placeholdertext_primeforegroundhost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/format_border_black"
+            android:gravity="center"
+            android:text="placeholder:\nConnecting device items"
+            android:textAlignment="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <!-- GUIDELINES -->
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_primeservicehost_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.15" />
+    <!-- CONTAINER: BIKE STATUS -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_primeservicehost_bikestaus"
+        android:layout_width="288dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/format_border_black"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/container_primeservicehost_demomap"
+        app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
+        app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
+        app:layout_constraintTop_toBottomOf="@id/container_placholder_btactions"
+        tools:layout_editor_absoluteX="62dp">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_primeservicehost_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.85" />
+        <TextView
+            android:id="@+id/text_label_primeservicehost_bikestatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bike_status"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- CONTAINER: BLUETOOTH -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_placholder_btactions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/container_primeservicehost_bikestaus"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed">
+        <!-- INDICATORS: LEFT -->
+        <TextView
+            android:id="@+id/text_sublabel_indicate_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Indicator: LEFT"
+            app:layout_constraintBottom_toTopOf="@+id/textupdate_indicate_left"
+            app:layout_constraintEnd_toStartOf="@+id/text_sublabel_indicate_right"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_label_primeservicehost_bikestatus"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-                <TextView
-                    android:id="@+id/placeholdertext_primeforegroundhost"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/format_border_black"
-                    android:gravity="center"
-                    android:text="placeholder:\nConnecting device items"
-                    android:textAlignment="center"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textupdate_indicate_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:text="L"
+            app:layout_constraintBottom_toTopOf="@+id/text_sublabel_lights_low"
+            app:layout_constraintEnd_toEndOf="@+id/text_sublabel_indicate_left"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/text_sublabel_indicate_left"
+            app:layout_constraintTop_toBottomOf="@+id/text_sublabel_indicate_left" />
 
-            <!-- CONTAINER: BIKE STATUS -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_primeservicehost_bikestaus"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/format_border_black"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/container_primeservicehost_demomap"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_primeservicehost_right"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/guideline_primeservicehost_left"
-                app:layout_constraintTop_toBottomOf="@+id/container_placholder_btactions">
+        <!-- INDICATORS: RIGHT -->
+        <TextView
+            android:id="@+id/text_sublabel_indicate_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Indicator: RIGHT"
+            app:layout_constraintBottom_toBottomOf="@+id/text_sublabel_indicate_left"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/text_sublabel_indicate_left"
+            app:layout_constraintTop_toTopOf="@+id/text_sublabel_indicate_left" />
 
-                <TextView
-                    android:id="@+id/text_label_primeservicehost_bikestatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bike_status"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textupdate_indicate_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="R"
+            app:layout_constraintEnd_toEndOf="@+id/text_sublabel_indicate_right"
+            app:layout_constraintStart_toStartOf="@+id/text_sublabel_indicate_right"
+            app:layout_constraintTop_toBottomOf="@+id/text_sublabel_indicate_right" />
 
-                <!-- INDICATORS: LEFT -->
-                <TextView
-                    android:id="@+id/text_sublabel_indicate_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Indicator: LEFT"
-                    app:layout_constraintBottom_toTopOf="@+id/textupdate_indicate_left"
-                    app:layout_constraintEnd_toStartOf="@+id/text_sublabel_indicate_right"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_label_primeservicehost_bikestatus"
-                    app:layout_constraintVertical_chainStyle="packed" />
+        <!-- HEADLIGHTS: LOW -->
+        <TextView
+            android:id="@+id/text_sublabel_lights_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Headlights: LOW"
+            app:layout_constraintBottom_toTopOf="@+id/textupdate_lights_low"
+            app:layout_constraintEnd_toStartOf="@+id/text_sublabel_lights_high"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textupdate_indicate_left" />
 
-                <TextView
-                    android:id="@+id/textupdate_indicate_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="L"
-                    app:layout_constraintBottom_toTopOf="@+id/text_sublabel_lights_low"
-                    app:layout_constraintEnd_toEndOf="@+id/text_sublabel_indicate_left"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="@+id/text_sublabel_indicate_left"
-                    app:layout_constraintTop_toBottomOf="@+id/text_sublabel_indicate_left" />
+        <TextView
+            android:id="@+id/textupdate_lights_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:text="LO"
+            app:layout_constraintBottom_toTopOf="@+id/text_sublabel_speed_limit"
+            app:layout_constraintEnd_toEndOf="@+id/text_sublabel_lights_low"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/text_sublabel_lights_low"
+            app:layout_constraintTop_toBottomOf="@+id/text_sublabel_lights_low" />
 
-                <!-- INDICATORS: RIGHT -->
-                <TextView
-                    android:id="@+id/text_sublabel_indicate_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Indicator: RIGHT"
-                    app:layout_constraintBottom_toBottomOf="@+id/text_sublabel_indicate_left"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/text_sublabel_indicate_left"
-                    app:layout_constraintTop_toTopOf="@+id/text_sublabel_indicate_left" />
+        <!-- HEADLIGHTS: HIGH -->
+        <TextView
+            android:id="@+id/text_sublabel_lights_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Headlights: HIGH"
+            app:layout_constraintBottom_toBottomOf="@+id/text_sublabel_lights_low"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/text_sublabel_lights_low"
+            app:layout_constraintTop_toTopOf="@+id/text_sublabel_lights_low" />
 
-                <TextView
-                    android:id="@+id/textupdate_indicate_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="R"
-                    app:layout_constraintEnd_toEndOf="@+id/text_sublabel_indicate_right"
-                    app:layout_constraintStart_toStartOf="@+id/text_sublabel_indicate_right"
-                    app:layout_constraintTop_toBottomOf="@+id/text_sublabel_indicate_right" />
+        <TextView
+            android:id="@+id/textupdate_lights_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="HI"
+            app:layout_constraintEnd_toEndOf="@+id/text_sublabel_lights_high"
+            app:layout_constraintStart_toStartOf="@+id/text_sublabel_lights_high"
+            app:layout_constraintTop_toBottomOf="@+id/text_sublabel_lights_high" />
 
-                <!-- HEADLIGHTS: LOW -->
-                <TextView
-                    android:id="@+id/text_sublabel_lights_low"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Headlights: LOW"
-                    app:layout_constraintBottom_toTopOf="@+id/textupdate_lights_low"
-                    app:layout_constraintEnd_toStartOf="@+id/text_sublabel_lights_high"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textupdate_indicate_left" />
+        <!-- SPEED: LIMIT -->
+        <TextView
+            android:id="@+id/text_sublabel_speed_limit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Speedlimit:"
+            app:layout_constraintBottom_toTopOf="@+id/textupdate_speed_limit"
+            app:layout_constraintEnd_toStartOf="@+id/text_sublabel_speed_actual"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textupdate_lights_low" />
 
-                <TextView
-                    android:id="@+id/textupdate_lights_low"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="LO"
-                    app:layout_constraintBottom_toTopOf="@+id/text_sublabel_speed_limit"
-                    app:layout_constraintEnd_toEndOf="@+id/text_sublabel_lights_low"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="@+id/text_sublabel_lights_low"
-                    app:layout_constraintTop_toBottomOf="@+id/text_sublabel_lights_low" />
+        <TextView
+            android:id="@+id/textupdate_speed_limit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:text="LIM"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/text_sublabel_speed_limit"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/text_sublabel_speed_limit"
+            app:layout_constraintTop_toBottomOf="@+id/text_sublabel_speed_limit" />
 
-                <!-- HEADLIGHTS: HIGH -->
-                <TextView
-                    android:id="@+id/text_sublabel_lights_high"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Headlights: HIGH"
-                    app:layout_constraintBottom_toBottomOf="@+id/text_sublabel_lights_low"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/text_sublabel_lights_low"
-                    app:layout_constraintTop_toTopOf="@+id/text_sublabel_lights_low" />
+        <!-- SPEED: ACTUAL -->
+        <TextView
+            android:id="@+id/text_sublabel_speed_actual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Actual speed"
+            app:layout_constraintBottom_toBottomOf="@+id/text_sublabel_speed_limit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/text_sublabel_speed_limit"
+            app:layout_constraintTop_toTopOf="@+id/text_sublabel_speed_limit" />
 
-                <TextView
-                    android:id="@+id/textupdate_lights_high"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="HI"
-                    app:layout_constraintEnd_toEndOf="@+id/text_sublabel_lights_high"
-                    app:layout_constraintStart_toStartOf="@+id/text_sublabel_lights_high"
-                    app:layout_constraintTop_toBottomOf="@+id/text_sublabel_lights_high" />
-
-                <!-- SPEED: LIMIT -->
-                <TextView
-                    android:id="@+id/text_sublabel_speed_limit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Speedlimit:"
-                    app:layout_constraintBottom_toTopOf="@+id/textupdate_speed_limit"
-                    app:layout_constraintEnd_toStartOf="@+id/text_sublabel_speed_actual"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textupdate_lights_low" />
-
-                <TextView
-                    android:id="@+id/textupdate_speed_limit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="LIM"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/text_sublabel_speed_limit"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="@+id/text_sublabel_speed_limit"
-                    app:layout_constraintTop_toBottomOf="@+id/text_sublabel_speed_limit" />
-
-                <!-- SPEED: ACTUAL -->
-                <TextView
-                    android:id="@+id/text_sublabel_speed_actual"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Actual speed"
-                    app:layout_constraintBottom_toBottomOf="@+id/text_sublabel_speed_limit"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/text_sublabel_speed_limit"
-                    app:layout_constraintTop_toTopOf="@+id/text_sublabel_speed_limit" />
-
-                <TextView
-                    android:id="@+id/textupdate_speed_actual"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="SPD"
-                    app:layout_constraintEnd_toEndOf="@+id/text_sublabel_speed_actual"
-                    app:layout_constraintStart_toStartOf="@+id/text_sublabel_speed_actual"
-                    app:layout_constraintTop_toBottomOf="@+id/text_sublabel_speed_actual" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textupdate_speed_actual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="SPD"
+            app:layout_constraintEnd_toEndOf="@+id/text_sublabel_speed_actual"
+            app:layout_constraintStart_toStartOf="@+id/text_sublabel_speed_actual"
+            app:layout_constraintTop_toBottomOf="@+id/text_sublabel_speed_actual" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_primeservicehost_demomap"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/format_border_black"
-                app:layout_constraintBottom_toTopOf="@id/container_primeservicehost_buttons"
-                app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
-                app:layout_constraintTop_toBottomOf="@id/container_primeservicehost_bikestaus">
-
-                <TextView
-                    android:id="@+id/text_label_demomap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DEMO LOCATION MAP"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/image_demomap"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/map_00_placeholder_test"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_label_demomap" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_primeservicehost_startstop_buttons"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@id/container_primeservicehost_buttons"
-                app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
-                app:layout_constraintTop_toBottomOf="@id/container_primeservicehost_demomap">
+    <!-- BELOW MIDDLE -->
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- MAP -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_primeservicehost_demomap"
+        android:layout_width="288dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/format_border_black"
+        app:layout_constraintBottom_toTopOf="@+id/container_primeservicehost_buttons"
+        app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
+        app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
+        app:layout_constraintTop_toBottomOf="@+id/container_primeservicehost_bikestaus"
+        tools:layout_editor_absoluteX="62dp">
+
+        <TextView
+            android:id="@+id/text_label_demomap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DEMO LOCATION MAP"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_demomap"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/map_00_placeholder_test"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_label_demomap" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_primeservicehost_buttons"
+        android:layout_width="288dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/format_border_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_primeservicehost_right"
+        app:layout_constraintStart_toStartOf="@id/guideline_primeservicehost_left"
+        app:layout_constraintTop_toBottomOf="@+id/container_primeservicehost_demomap"
+        tools:layout_editor_absoluteX="62dp">
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_primeservicehost_buttons"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/format_border_black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_primeservicehost_right"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/guideline_primeservicehost_left"
-                app:layout_constraintTop_toBottomOf="@+id/container_primeservicehost_demomap">
+        <!-- IRL BUTTON -->
+        <Button
+            android:id="@+id/button_gpsforegroundservice_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="start service"
+            app:layout_constraintBottom_toTopOf="@+id/button_demoservice_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Testing Buttons:"
-                    app:layout_constraintBottom_toTopOf="@+id/button_gpsforegroundservice_start"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_chainStyle="packed" />
+        <!-- DEMO BUTTON -->
+        <Button
+            android:id="@+id/button_demoservice_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="start demo service"
+            app:layout_constraintBottom_toTopOf="@+id/button_gpsforegroundservice_stop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_gpsforegroundservice_start" />
 
-                <Button
-                    android:id="@+id/button_gpsforegroundservice_stop"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="stop service"
-                    app:layout_constraintBottom_toTopOf="@+id/button_test_battery_optimisation"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_demoservice_start" />
+        <!-- STOP BUTTON -->
+        <Button
+            android:id="@+id/button_gpsforegroundservice_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="stop service"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_demoservice_start" />
 
-                <Button
-                    android:id="@+id/button_test_battery_optimisation"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="test battery optimisation for app"
-                    app:layout_constraintBottom_toTopOf="@+id/button_test_audiofile_gpsforegroundservice"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_gpsforegroundservice_stop" />
 
-                <Button
-                    android:id="@+id/button_gpsforegroundservice_start"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="start service"
-                    app:layout_constraintBottom_toTopOf="@+id/button_demoservice_start"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <Button
-                    android:id="@+id/button_demoservice_start"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="start demo service"
-                    app:layout_constraintBottom_toTopOf="@+id/button_gpsforegroundservice_stop"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_gpsforegroundservice_start" />
-
-                <Button
-                    android:id="@+id/button_test_audiofile_gpsforegroundservice"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="test audio\n(trigger speed warning)"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_test_battery_optimisation" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
