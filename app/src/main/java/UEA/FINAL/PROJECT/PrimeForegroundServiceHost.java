@@ -360,7 +360,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Log.v(TAG, "onReceive:view update broadcast from service...");
 
-            //nullcheck
+            //todo: test this additional additional nullcheck
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 //update views from passed extras

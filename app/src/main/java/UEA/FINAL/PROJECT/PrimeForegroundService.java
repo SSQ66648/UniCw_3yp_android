@@ -75,8 +75,11 @@
  *      v2.6.1  200321  Moved bluetooth connection error audio playback to activity.
  *      v3.0    200416  Added demo mode to service (scripted replacement for location updates)
  *      v3.0.1  200419  additional extras attached to UI update if demomode is enabled (added bool)
+ *      v3.1    200420  changed demo delay to 5 seconds for testing (change to 10 for user testing
+ *                      as 20 is far too long), fixed the bug from previous changes where demo
+ *                      locations index would no longer increment.
  *--------------------------------------------------------------------------------------------------
- * PREVIOUS HISTORY:
+ * PREVIOUS VERSION HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
  *                              mean/median as doesnt work, still getting time travelling locations:
  *                              to test with only one provider running when mean median working)
@@ -238,7 +241,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //max seconds allowed to prioritise accuracy over newest location in locationChanged
     public static final int LOCATION_DELAY_THRESHOLD = 15;
     //time (in seconds) to pause between demo location updates (for demonstration: not realtime)
-    public static final int DEMOMODE_LOCATION_UPDATE_DELAY = 20;
+    public static final int DEMOMODE_LOCATION_UPDATE_DELAY = 5;
     //async task completion listener identification flags
     public static final String TASK_COMPLETION_FLAG_HTTP = "httpComplete";
     public static final String TASK_COMPLETION_FLAG_PARSE = "httpParse";
@@ -2402,7 +2405,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //todo: not as many updates required (once per location update) : move to own broadcast?
         if (demoModeEnabled) {
             //pass map array index (same as demo location index)
-            intent.putExtra("mapIndex", demoDelayIndex);
+            intent.putExtra("mapIndex", demoDelayIndex[0]);
             intent.putExtra("roadName", currentRoadName);
         }
 
