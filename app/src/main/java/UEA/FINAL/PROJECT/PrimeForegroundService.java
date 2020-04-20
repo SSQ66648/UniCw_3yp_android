@@ -77,7 +77,8 @@
  *      v3.0.1  200419  additional extras attached to UI update if demomode is enabled (added bool)
  *      v3.1    200420  changed demo delay to 5 seconds for testing (change to 10 for user testing
  *                      as 20 is far too long), fixed the bug from previous changes where demo
- *                      locations index would no longer increment.
+ *                      locations index would no longer increment: required some restructuring of
+ *                      demoMode methods and addition of control booleans.
  *--------------------------------------------------------------------------------------------------
  * PREVIOUS VERSION HISTORY:
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
@@ -460,7 +461,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             52.62155553, 52.62115822, 52.62015516, 52.62131779, 52.62295911, 52.62308937,
             52.62732912, 52.6288595, 52.62904836, 52.62946839, 52.63117777, 52.63362613,
             52.63553394, 52.63701195, 52.63663431, 52.63543627, 52.63414053,
-            0,
+
             52.62915255, 52.62826364, 52.62802594, 52.62714352, 52.62533629, 52.62309588,
             52.62233711, 52.62182908, 52.62171185
     };
@@ -469,7 +470,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             1.23219609, 1.23373836, 1.23584658, 1.23838395, 1.24074966, 1.2466827, 1.24812573,
             1.24953657, 1.25379592, 1.25914961, 1.25933737, 1.25913888, 1.2591657, 1.25986844,
             1.26349479, 1.26766831, 1.26666516,
-            0,
+
             1.24887139, 1.24336749, 1.24089986, 1.23990744, 1.24030441, 1.24076575, 1.23981625,
             1.23798162, 1.23466641
     };
@@ -2539,6 +2540,21 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 if (demoDelayIndex[0] == demoLatArray.length) {
                     //reset index to start
                     demoDelayIndex[0] = 0;
+                }
+
+                //cause (intentional) delay in updates
+                if (demoDelayIndex[0] == 17) {
+                    Log.d(TAG, "run: intentional update delay occurring...");
+                    ////todo: check
+                    Log.d(TAG, "run: update number: [" + demoDelayIndex[0] + "]");
+                    //sleep for 20 seconds
+                    try {
+                        Log.d(TAG, "run: sleeping...");
+                        Thread.sleep(20000);
+                    } catch (InterruptedException e) {
+                        Log.e(TAG, "run: Error attempting to sleep thread");
+                        e.printStackTrace();
+                    }
                 }
 
 

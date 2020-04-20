@@ -36,6 +36,8 @@
  *              v2.1    200419  commented out test buttons (to be moved to main menu later)
  *              v3.0    200419  added array of image resources to be displayed when demo mode
  *                              updates location
+ *              v3.1    200420  Naive version of button visibility swapping (not yet added listener
+ *                              or other checks for running service)
  *------------------------------------------------------------------------------
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
@@ -53,6 +55,7 @@
  * TO DO LIST:
  * //todo: restore buttons to main menu
  *      //todo: add status display for bt devices
+ *      //todo: ADD CHECKING FOR RUNNING SERVICE TO CONTROL START/STOP  BUTTON VISIBILITY STATUS
  *      //todo: checking for bt connections?
  *      //todo: consider enum for method choices (const)?
  *      //todo: COMBINE BTACTIONS ACTIVITY??
@@ -182,6 +185,11 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
                 Log.v(TAG, "onClick: start service: IRL");
 //                Toast.makeText(getApplicationContext(), "Starting Service...", Toast.LENGTH_SHORT).show();
                 startGpsService("irl");
+
+                //naive button visibility swap
+                stopService.setVisibility(View.VISIBLE);
+                startService.setVisibility(View.GONE);
+                demoMode.setVisibility(View.GONE);
             }
         });
 
@@ -192,6 +200,11 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: start service: DEMO");
                 startGpsService("demo");
+
+                //naive button visibility swap
+                stopService.setVisibility(View.VISIBLE);
+                startService.setVisibility(View.GONE);
+                demoMode.setVisibility(View.GONE);
             }
         });
 
@@ -202,6 +215,11 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
                 Log.v(TAG, "onClick: stop service");
                 stopGpsService();
 //                Toast.makeText(getApplicationContext(), "Stopping Service...", Toast.LENGTH_SHORT).show();
+
+                //naive button visibility swap
+                stopService.setVisibility(View.GONE);
+                startService.setVisibility(View.VISIBLE);
+                demoMode.setVisibility(View.VISIBLE);
             }
         });
 
