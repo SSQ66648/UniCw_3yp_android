@@ -452,6 +452,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //prevent infinite wait loop in thread if service stops unexpectedly
     private boolean demoErrorLoopEscape = false;
     private boolean demoChangeLocation = false;
+    private boolean demoUpdateReady = false;
     //latitude and longitude arrays
     //(to be accessed via for-loop (i.e. i), 0 flags a deliberate loss of updates)
     //todo: check better data structure for value pairs?
@@ -474,7 +475,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     };
 
     //final array for index (array is final -to use in Runnable, but contents can be edited)
-    final int[] demoDelayIndex = new int[]{-1};
+    final int[] demoDelayIndex = new int[]{0};
 
     /*----------------------------------------------------------------------------------------------
         LIFECYCLE
@@ -2113,13 +2114,20 @@ public class PrimeForegroundService extends Service implements LocationListener,
         //pass method name that called this method to identify origin of error
         //(local copy in case asyncTask goes out of scope)
         String localMethodName = methodName;
-
+        Log.w(TAG, "errorReset: caused by: [" + methodName + "]");
         //log error cause to file
         logErrorToFile(localMethodName, LOGFILE_LINEBREAK_STAR);
         //cancel any async tasks if running:
         cancelAsyncTasks();
         //release lock for awaiting next iteration
         asyncLocked = false;
+        Log.d(TAG, "errorReset: async tasks cancelled and unlocked");
+
+        //permit demoMode to repeat at last demoLocation
+        if (demoModeEnabled) {
+            Log.d(TAG, "errorReset: demoMode enabled: reattempting update from index...");
+            demoChangeLocation = true;
+        }
     }
 
 
@@ -2306,7 +2314,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //control demoMode location updates
         if (demoModeEnabled) {
+            //allow location update to increment
             demoChangeLocation = true;
+            //allow ui update to happen
+            demoUpdateReady = true;
+
+            //todo: test this here...?
+            //increment index for next loop
+//            demoDelayIndex[0]++;
         }
     }
 
@@ -2421,10 +2436,15 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
         //additional extra included if demo mode is enabled
         //todo: not as many updates required (once per location update) : move to own broadcast?
-        if (demoModeEnabled) {
+        if (demoModeEnabled && demoUpdateReady) {
+            Log.d(TAG, "sendUiUpdate: demoUpdate is ready: including map and roadname extras");
             //pass map array index (same as demo location index)
             intent.putExtra("mapIndex", demoDelayIndex[0]);
             intent.putExtra("roadName", currentRoadName);
+            //await next ui update
+            demoUpdateReady = false;
+            demoDelayIndex[0]++;
+
         }
 
         lbm.sendBroadcast(intent);
@@ -2514,14 +2534,14 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 //location is changing: prevent additional
                 demoChangeLocation = false;
 
-                //increment index for next loop
-                demoDelayIndex[0]++;
 
                 //reset index if array length complete
                 if (demoDelayIndex[0] == demoLatArray.length) {
                     //reset index to start
                     demoDelayIndex[0] = 0;
                 }
+
+
                 // TODO: 20/04/2020 change if and increment to equals modulo?
                 Log.d(TAG, "run: index = " + demoDelayIndex[0]);
 
