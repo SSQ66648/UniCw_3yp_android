@@ -229,6 +229,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import static UEA.FINAL.PROJECT.AppNotificationWrapper.CHANNEL_3YP;
+import static java.lang.Thread.interrupted;
 
 public class PrimeForegroundService extends Service implements LocationListener,
         AsyncCompleteListener, MediaPlayer.OnCompletionListener {
@@ -446,6 +447,11 @@ public class PrimeForegroundService extends Service implements LocationListener,
     private boolean demoModeEnabled = false;
     //handler for update intervals
     private Handler demoUpdateHandler;
+    // private CountDownLatch demoApiResponseLatch;
+    private boolean demoModeApiInProgress;
+    //prevent infinite wait loop in thread if service stops unexpectedly
+    private boolean demoErrorLoopEscape = false;
+    private boolean demoChangeLocation = false;
     //latitude and longitude arrays
     //(to be accessed via for-loop (i.e. i), 0 flags a deliberate loss of updates)
     //todo: check better data structure for value pairs?
@@ -468,7 +474,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     };
 
     //final array for index (array is final -to use in Runnable, but contents can be edited)
-    final int[] demoDelayIndex = new int[]{0};
+    final int[] demoDelayIndex = new int[]{-1};
 
     /*----------------------------------------------------------------------------------------------
         LIFECYCLE
@@ -637,7 +643,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             }
         }
 
-        Log.d(TAG, "onDestroy: stopping runnable threads if existing");
+        Log.d(TAG, "onDestroy: stopping any runnable threads...");
         if (warningHandler != null) {
             Log.d(TAG, "onDestroy: warningHandler not nul, stopping...");
             warningHandler.removeCallbacksAndMessages(null);
@@ -648,6 +654,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
             demoUpdateHandler.removeCallbacksAndMessages(null);
             demoUpdateHandler = null;
         }
+
 
         Log.v(TAG, "onDestroy: stopping self...");
         stopSelf();
@@ -2283,13 +2290,24 @@ public class PrimeForegroundService extends Service implements LocationListener,
         currentRoadName = product.getRoadName();
 
         //testing:
-        Log.v(TAG, "updateCurrentSpeedInfo: Road name: " + currentRoadName);
-        Log.v(TAG, "updateCurrentSpeedInfo: Road speed: " + currentSpeedLimit);
+        Log.d(TAG, "updateCurrentSpeedInfo: Road name: " + currentRoadName);
+        Log.d(TAG, "updateCurrentSpeedInfo: Road speed: " + currentSpeedLimit);
+
+        //release demo update latch
+//        if (demoModeEnabled && demoApiResponseLatch != null) {
+//            demoApiResponseLatch.countDown();
+//            Log.d(TAG, "updateCurrentSpeedInfo: demo location update latch released");
+//        }
 
         //complete logging this iteration
         logObject.setLimitUpdateTime(SystemClock.elapsedRealtime());
         //use log object to fill out one pass of primary loop logging to file
         logIteration();
+
+        //control demoMode location updates
+        if (demoModeEnabled) {
+            demoChangeLocation = true;
+        }
     }
 
 
@@ -2415,6 +2433,8 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-send notification to activity that bluetooth connection has failed (stop self)
     public void sendConnectionError() {
+        //todo: test
+        //  demoErrorLoopEscape = true;
         Log.d(TAG, "sendConnectionError: ");
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         Intent intent = new Intent(PrimeForegroundServiceHost.SERVICE_BROADCASTRECEIVER_CONNECTION_ERROR);
@@ -2473,20 +2493,37 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //demo mode using predefined coordinates of chosen route for user testing/ submission demo
     public void startDemoLocations() {
         Log.d(TAG, "startDemoLocations: ");
+        demoChangeLocation = true;
         demoUpdateHandler = new Handler();
-        final int delayInMillis = DEMOMODE_LOCATION_UPDATE_DELAY * 1000;
-
-
         //begin update loop
-        demoUpdateHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "run: index = " + demoDelayIndex[0]);
+        demoUpdateHandler.postDelayed(demoLocationUpdateThread, 0);
+    }
 
+
+    //todo: move this to correct sections
+    private int delayInMillis = DEMOMODE_LOCATION_UPDATE_DELAY * 1000;
+
+    Runnable demoLocationUpdateThread = new Runnable() {
+        @Override
+        public void run() {
+            //        demoApiResponseLatch = new CountDownLatch(1);
+            Log.d(TAG, "run: attempt demoLocation change...");
+
+
+            if (demoChangeLocation) {
+                //location is changing: prevent additional
+                demoChangeLocation = false;
+
+                //increment index for next loop
+                demoDelayIndex[0]++;
+
+                //reset index if array length complete
                 if (demoDelayIndex[0] == demoLatArray.length) {
                     //reset index to start
                     demoDelayIndex[0] = 0;
                 }
+                // TODO: 20/04/2020 change if and increment to equals modulo?
+                Log.d(TAG, "run: index = " + demoDelayIndex[0]);
 
                 //create empty location
                 Location demoLocation = new Location("demoProvider");
@@ -2507,10 +2544,15 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
                 //set demo location to service variables in place of onLocationUpdates
                 if (oldFinalLocation == null) {
-                    Log.v(TAG, "demoLocations: no prior location yet: using first update.");
+                    Log.v(TAG, "demoLocations: no prior location yet: assigning first update to BOTH old and new locations....");
+                    //todo: debug this.....
+
                     //assign updated location and associated time
+                    finalLocation = demoLocation;
                     oldFinalLocation = demoLocation;
+                    finalLocationRealTime = locationRealTime;
                     oldFinalLocationRealTime = locationRealTime;
+                    finalLocationRealTimeSeconds = finalLocationRealTime / 1000;
                     oldFinalLocationRealTimeSeconds = oldFinalLocationRealTime / 1000;
                     diffSeconds_location_oldLocation = 0;
                 } else {
@@ -2534,19 +2576,47 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     oldFinalLocation = finalLocation;
                     oldFinalLocationRealTime = finalLocationRealTime;
                     oldFinalLocationRealTimeSeconds = finalLocationRealTimeSeconds;
-                }
 
-                //increment index
-                demoDelayIndex[0]++;
+
+                }
 
                 //begin primary loop
                 checkAsyncLock();
 
-                //repeat
-                demoUpdateHandler.postDelayed(this, delayInMillis);
+//                //todo: workaround for out of sync map location updates :test.
+//                try {
+//                    demoApiResponseLatch.await();
+//                } catch (Exception e) {
+//                    Log.e(TAG, "run: Error: awaiting demomode API countdown latch");
+//                    e.getMessage();
+//                    e.printStackTrace();
+//                }
+//todo: test while loop of sleep to pause until response has been received (cause of location array updating before api call is finished)
+//            while (asyncLocked) {
+//
+//                try {
+//                    Log.d(TAG, "run: asyncLocked - sleep 1 second...");
+//                    Thread.sleep(1000);
+//                    if (!asyncLocked) {
+//                        break;
+//
+//                    }
+//                } catch (InterruptedException e) {
+//                    Log.w(TAG, "run: Warning: thread interrupted");
+//                    //asyncLocked = false;
+//                }
+//
+//            }
+
+
             }
-        }, 0);
-    }
+
+
+            //repeat
+            demoUpdateHandler.postDelayed(this, delayInMillis);
+
+        }
+    };
 
 
     /*----------------------------------------------------------------------------------------------

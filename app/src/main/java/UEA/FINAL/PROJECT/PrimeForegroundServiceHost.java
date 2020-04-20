@@ -354,7 +354,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
     /*--------------------------------------
         BROADCAST RECEIVERS
     --------------------------------------*/
-    //-receive instructions to trigger service methods from activity
+    //-update UI bike status info
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -397,7 +397,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
             final MediaPlayer mediaplayer = new MediaPlayer();
             AssetFileDescriptor afd = null;
             try {
-                Log.d(TAG, "requestConnectDevice: create media player for helmet test");
+                Log.d(TAG, "onReceive: bluetooth connection error siganl received.");
                 afd = getAssets().openFd("tts_lola_prompt_bluetootherror_.mp3");
                 mediaplayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
                         afd.getLength());
