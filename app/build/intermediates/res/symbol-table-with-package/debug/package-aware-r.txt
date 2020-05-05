@@ -2272,6 +2272,7 @@ layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
 layout wallet_test_layout
 mipmap ic_launcher
+mipmap ic_launcher_generator_bike_1
 mipmap ic_launcher_round
 string abc_action_bar_home_description
 string abc_action_bar_up_description

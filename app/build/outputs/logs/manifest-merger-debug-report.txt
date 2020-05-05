@@ -475,9 +475,9 @@ MERGED from [com.google.android.gms:play-services-wearable-license:12.0.1] C:\Us
 	tools:ignore
 		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:30:9-48
 	android:roundIcon
-		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:27:9-54
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:27:9-65
 	android:icon
-		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:25:9-43
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:25:9-60
 	android:allowBackup
 		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:24:9-35
 	android:theme
