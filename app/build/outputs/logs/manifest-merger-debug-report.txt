@@ -1,0 +1,1126 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:1-69:12
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:1-69:12
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:1-69:12
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:1-69:12
+MERGED from [com.google.android.material:material:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c5011d8db7e86bd79ba16c345de4bb25\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1c5ac4122e2ef34fc969d5cda4f346f\AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:2:1-14:12
+MERGED from [com.google.android.gms:play-services-cast:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\16970abeedfc3a3a0acdc5d702db1b82\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.mediarouter:mediarouter:1.0.0-alpha5] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0c29916b5b4621d8147b9ec3be0e51d7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\645bb55332b0916bb8e548890f347229\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\28783e2f4c3b48be75512c4b70faac4c\AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\120887bfaae0609ceca59dc2a94e6596\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\852f89f0fae4092e7657902f6c187845\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-ads:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\3c500992831dbb2a0120073237f7db6b\AndroidManifest.xml:17:1-25:12
+MERGED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:17:1-36:12
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:17:1-47:12
+MERGED from [com.google.android.gms:play-services-tagmanager:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ce9c84b3436b7f3cd84ed62deb0cc620\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8f751dc86fa9260d2f8993f88ad85f19\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:17:1-31:12
+MERGED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:17:1-37:12
+MERGED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:17:1-39:12
+MERGED from [com.google.android.gms:play-services-auth-api-phone:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fe94e7efa29720bea3092d6e3886f38d\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.gms:play-services-auth-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\99179f5306ec67ac02363578e5b90c90\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.firebase:firebase-config:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee4ebef5608767e8e25451f03394e650\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-awareness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\65c863367a7085986423586a5fa6e86f\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-games:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e1b9019c2c76209bce16e121ac24cbd1\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-drive:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\92dfe0fda7bb858a5409616a25c77419\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-fido:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\3033b25ec503c365bb2806f77b6fd3e5\AndroidManifest.xml:2:1-10:12
+MERGED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:17:1-32:12
+MERGED from [com.google.firebase:firebase-dynamic-links:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\80c67f11eb4cdc82485447fede0b94fa\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-fitness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\793dde219a0e785e11857fe262a6e705\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-gcm:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2dbf7cff036c93dd2c296790d81c17cc\AndroidManifest.xml:17:1-28:12
+MERGED from [com.google.firebase:firebase-appindexing:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9481d339fcab122bdd573915f1e96e4a\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-wallet:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\a81813056ace35b36dc33ad4ae1720b9\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.gms:play-services-identity:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49c3bb42bc56bdaaacc4d2574d76192a\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f13490a5f9724d490b48f2d9d33140\AndroidManifest.xml:17:1-28:12
+MERGED from [com.google.android.gms:play-services-instantapps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6c0856183a118ce8f2713609a86e050b\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.gms:play-services-location:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0a5e36c94adb2cdacbdd0509df47d8aa\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-places:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2c21ef7ab11697a95f2389e1a5ec2d83\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:17:1-32:12
+MERGED from [com.google.android.gms:play-services-nearby:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2cfdb8edf02c8df589dcb0b735ad4d61\AndroidManifest.xml:2:1-11:12
+MERGED from [com.google.android.gms:play-services-panorama:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\bd2f78b1219a533bfbeca70f88dab7e2\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-plus:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\1132e986927d71df1215e4b437bac8c5\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-safetynet:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\037a312ffc5d14c81b5a79e97d3229c9\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-vision:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9bf03808674bea83811ed94f3241a6da\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-vision-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\31cf71a7d62f7d0723cc4db573f54434\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-wearable:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f6c0b60df004a8e29b1283d22b72d6cb\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\215ce8a0e36b6cc4af5056a8b4426523\AndroidManifest.xml:17:1-29:12
+MERGED from [com.google.firebase:firebase-crash:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b57c2ddec074b57eaa28ac7488bfa40c\AndroidManifest.xml:17:1-27:12
+MERGED from [com.google.firebase:firebase-database:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6b3cef6eeb0fdb1041ab006ee009a0b1\AndroidManifest.xml:2:1-8:12
+MERGED from [com.google.firebase:firebase-database-connection:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\93d1cf2be0ce3a7d8eaf8509c6232370\AndroidManifest.xml:2:1-8:12
+MERGED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:17:1-37:12
+MERGED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:17:1-47:12
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:17:1-54:12
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:17:1-40:12
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:17:1-59:12
+MERGED from [com.google.firebase:firebase-storage:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2819b027662022f4df0d6bd68453a66e\AndroidManifest.xml:2:1-8:12
+MERGED from [com.google.firebase:firebase-storage-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\81fd4a337f520f8c742801a38e2d109f\AndroidManifest.xml:2:1-8:12
+MERGED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:2:1-15:12
+MERGED from [com.google.android.gms:play-services-gass:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7189a06efbf7acd90842996e394e9680\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-tasks:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\582841271f9c2cf4af41f3f6a5730736\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-basement:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4987b97d723ad78d3c4b5922461c8391\AndroidManifest.xml:17:1-28:12
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\94834371acf7b4c6947e3195db2fe9c2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4c1eac69e4f00b9f23637a8744c0cbb1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.appcompat:appcompat-resources:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\eb1f81ccc66bd8f8bc7d93c2e0cae385\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\52b2a4e2b5722430b158daad431f1a60\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2baf0db69f26c07c1571b8f8a2d224f\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.palette:palette:1.0.0-rc01] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7f0220726dc08e510fe65f7009c95585\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\34d9446ce3d2c27e828a30aa8c5b62c6\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\76b0a05a8cd8d3376be806d7495c9aa7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\92c669ef03b9473a41c2f3c920e7b4d8\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8d3cca09967e99db25fdda2538585e25\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f597cccdd4d10e673755100c003b60\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\53c605c745124fd06bc12bdf900bad1d\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2168eb6b8db29a1c2d80573418abaf8\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f48c1b885da25905bdbc7451273f181d\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f8786bdd7b4157e1361e52af1eb8bf2a\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d60fd600d62ba9f70c9413a6f185055d\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\de1dd77181746e2a689077f52afc25c1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\166f14e518c5014577d75b07ff2298ed\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media2:media2:1.0.0-alpha02] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b5d53777e66b7b313d72ba7c3d5104c2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media:media:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cfb08633f41fd7a4e4795a838ae3aab9\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\655de8e81aa8ae31e89af35a32bc8b2b\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fd5526affb56ee316d4fac4299960d72\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\82a59211aea27585355c1ea64a2b44c4\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8382bf07a7ee151353004d7dcbcf7396\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b5ef849d9b5136b1f3a0938c180732ad\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ec478b9082dd1c6e96147cdc564a55da\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e36a782ab392c061f0a1efbaee08b197\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\1bdd73c476a83d70e835df94e22d731d\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0682556b174cfdda7754ff2c881f5773\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4715fc85d8d9f230e30f01398b2c4e8c\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\29505f475125b94e161c05dc26a61bc3\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\921fbfe292478bcf070921bb9c0f86a3\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0cfcf30592d3c54cdc829e49fac2b34d\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.gms:play-services-ads-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\536e61fe777a9dc41d06c1bcd1115c94\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-ads-lite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7759102fd0c9ba2a9be2a669bbb3d3a4\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0abd30e2023c5822a82c0dbf45d74574\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f2bcb1d87d6a26bbcd67d8f60c681a9a\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-appinvite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\070f4d84b186d8c655ecafa9f3054286\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-auth-api-phone-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f8e6996904bf2f56345d4aaf582fbeb6\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-auth-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2122ead48cc6ea645f7a3c459ec7b44\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4bb2b9905b9c1d9cbfeb1deba868923b\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-cast-framework-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e8c923e9f46fe2fdbfd4ca2197e6cdca\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-cast-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\db30197d0ea819fb8da1a4ecbc17e230\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-basement-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fe1080d07531d776d13300fef719278e\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-config-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\041dec9437addb2f5ea88db0f8013235\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-awareness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\38ffdf3fbb9bc3d07647cdf6ad72d0de\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-crash-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8c0d3243d758a0c84dae3338a5297ab1\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-drive-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49f0f4b4b3fef874a45d7b3ac2deae98\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-fido-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c4c1e813029a613058301e4e8f933a62\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-auth-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\77fa2d209e9072bd6543ed093e0e46be\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-database-connection-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\78f408bba926466d1320db6b765fa66f\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-database-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c6ded02fae4176b29973fbd78ee65b18\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-dynamic-links-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6c7c659f272fbfa1b11e8de2400d44f8\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d41ef6dd339425fbf11c19c03d73f44a\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-messaging-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\923c56974a4b70db7bd7b9f63acfc872\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-storage-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\10c12d9929c205432a90b083ab688dec\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-storage-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b4b613ed640af7755727a1bb4693eb82\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\a0cb52556d61c9eaf956f0bf14237a37\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-fitness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7f508d1f6c7db19ed5a669a7123eb115\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-games-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8e68c58749485aea82c1493f9a782c9b\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-gass-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7addefcb0150df1f628a865d6f2ce629\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-gcm-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ccabdeb306292dfcff4fd3767096b01c\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-appindexing-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f545a4d7e81003997c7b56440532f211\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-identity-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20a5ca4aaf99b3518cd1bf7d38032476\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5f1d3fbe145a2c9ec335f2eb296b013a\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-instantapps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\406ab7943cba0a406bacf36bd6ff9bdd\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-location-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5611abe8252e3d1b912ca9c565826333\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-maps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0d8dd2c6aed14fd530619256bc90bfa2\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fc80eb1d07dd34abc9384ff9e178ffb2\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\574f50d89078213785d7c5fd3bedc7cf\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-nearby-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0f4a07375ca0cbe175421fbe52cbf983\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-panorama-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\60065dfe5d89b1102016a23779b9bbbd\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-places-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ede5d4ed726f7cbe2a38208ac0c26580\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-plus-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\160a76f609924657723772c0be025e4a\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-safetynet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee9d89343b200faf8d2d815b3cb978f6\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-tagmanager-api-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0daac58742cf5c8e02bfdd177fa2d231\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-tagmanager-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6fbc68e96aa2aa35ea37fc0e0f420717\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\dba412e65094d45b9a0c9585ed034165\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-tasks-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1b33ae1b7492cc695c3b217d06250da\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-vision-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2691beda91b58e7e478db6196c8af9e0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-vision-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f9dca77ef22cd799c56a86f34f0189f5\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-wallet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\827314be4e8c0bbcf5cb47de50b2b683\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-wearable-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ea1fbd8394dcf4d36628f97a6a6fb387\AndroidManifest.xml:17:1-24:12
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:1-69:12
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:1-69:12
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:1-69:12
+	package
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:4:5-32
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:1-69:12
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:3:5-51
+	android:versionCode
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:1-69:12
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.BLUETOOTH
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:6:5-68
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:6:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:7:5-74
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:7:22-71
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:8:5-81
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:8:22-78
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:9:5-79
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:9:22-76
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:10:5-67
+MERGED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:23:5-67
+MERGED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:23:5-67
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:23:5-67
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:23:5-67
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:23:5-67
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:23:5-67
+MERGED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:22:5-67
+MERGED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:22:5-67
+MERGED from [com.google.android.gms:play-services-gcm:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2dbf7cff036c93dd2c296790d81c17cc\AndroidManifest.xml:24:5-67
+MERGED from [com.google.android.gms:play-services-gcm:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2dbf7cff036c93dd2c296790d81c17cc\AndroidManifest.xml:24:5-67
+MERGED from [com.google.android.gms:play-services-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f13490a5f9724d490b48f2d9d33140\AndroidManifest.xml:24:5-67
+MERGED from [com.google.android.gms:play-services-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f13490a5f9724d490b48f2d9d33140\AndroidManifest.xml:24:5-67
+MERGED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:24:5-67
+MERGED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:24:5-67
+MERGED from [com.google.firebase:firebase-crash:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b57c2ddec074b57eaa28ac7488bfa40c\AndroidManifest.xml:22:5-67
+MERGED from [com.google.firebase:firebase-crash:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b57c2ddec074b57eaa28ac7488bfa40c\AndroidManifest.xml:22:5-67
+MERGED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:23:5-67
+MERGED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:23:5-67
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:10:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:11:5-79
+MERGED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:24:5-79
+MERGED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:24:5-79
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:24:5-79
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:24:5-79
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:24:5-79
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:24:5-79
+MERGED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:23:5-79
+MERGED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:23:5-79
+MERGED from [com.google.android.gms:play-services-nearby:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2cfdb8edf02c8df589dcb0b735ad4d61\AndroidManifest.xml:7:5-79
+MERGED from [com.google.android.gms:play-services-nearby:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2cfdb8edf02c8df589dcb0b735ad4d61\AndroidManifest.xml:7:5-79
+MERGED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:24:5-79
+MERGED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:24:5-79
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:24:5-79
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:24:5-79
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:24:5-79
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:24:5-79
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:22:5-79
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:22:5-79
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:11:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:12:5-76
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:12:22-73
+uses-permission#android.permission.WAKE_LOCK
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:13:5-68
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:27:5-68
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:27:5-68
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:27:5-68
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:27:5-68
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:25:5-68
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:25:5-68
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:25:5-68
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:25:5-68
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:24:5-68
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:24:5-68
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:13:22-65
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:14:5-77
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:14:22-74
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:15:5-81
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:15:22-78
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:16:5-78
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:16:22-75
+uses-permission#android.permission.ACCESS_NOTIFICATION_POLICY
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:17:5-85
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:17:22-82
+uses-feature#android.hardware.location.gps
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:19:5-66
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:19:19-63
+uses-feature#android.hardware.location.network
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:20:5-70
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:20:19-67
+application
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:22:5-67:19
+MERGED from [com.google.android.material:material:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c5011d8db7e86bd79ba16c345de4bb25\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c5011d8db7e86bd79ba16c345de4bb25\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1c5ac4122e2ef34fc969d5cda4f346f\AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1c5ac4122e2ef34fc969d5cda4f346f\AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:7:5-12:19
+MERGED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:7:5-12:19
+MERGED from [com.google.android.gms:play-services-cast:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\16970abeedfc3a3a0acdc5d702db1b82\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-cast:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\16970abeedfc3a3a0acdc5d702db1b82\AndroidManifest.xml:22:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\28783e2f4c3b48be75512c4b70faac4c\AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\28783e2f4c3b48be75512c4b70faac4c\AndroidManifest.xml:9:5-20
+MERGED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:26:5-34:19
+MERGED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:26:5-34:19
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:29:5-45:19
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:29:5-45:19
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8f751dc86fa9260d2f8993f88ad85f19\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8f751dc86fa9260d2f8993f88ad85f19\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:29:5-20
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:29:5-20
+MERGED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:24:5-35:19
+MERGED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:24:5-35:19
+MERGED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:22:5-37:19
+MERGED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:22:5-37:19
+MERGED from [com.google.firebase:firebase-config:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee4ebef5608767e8e25451f03394e650\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-config:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee4ebef5608767e8e25451f03394e650\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-awareness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\65c863367a7085986423586a5fa6e86f\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-awareness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\65c863367a7085986423586a5fa6e86f\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-games:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e1b9019c2c76209bce16e121ac24cbd1\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-games:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e1b9019c2c76209bce16e121ac24cbd1\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-drive:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\92dfe0fda7bb858a5409616a25c77419\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-drive:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\92dfe0fda7bb858a5409616a25c77419\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-fido:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\3033b25ec503c365bb2806f77b6fd3e5\AndroidManifest.xml:7:5-8:19
+MERGED from [com.google.android.gms:play-services-fido:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\3033b25ec503c365bb2806f77b6fd3e5\AndroidManifest.xml:7:5-8:19
+MERGED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:22:5-30:19
+MERGED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:22:5-30:19
+MERGED from [com.google.firebase:firebase-dynamic-links:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\80c67f11eb4cdc82485447fede0b94fa\AndroidManifest.xml:7:5-20
+MERGED from [com.google.firebase:firebase-dynamic-links:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\80c67f11eb4cdc82485447fede0b94fa\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-fitness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\793dde219a0e785e11857fe262a6e705\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-fitness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\793dde219a0e785e11857fe262a6e705\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-gcm:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2dbf7cff036c93dd2c296790d81c17cc\AndroidManifest.xml:26:5-20
+MERGED from [com.google.android.gms:play-services-gcm:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2dbf7cff036c93dd2c296790d81c17cc\AndroidManifest.xml:26:5-20
+MERGED from [com.google.firebase:firebase-appindexing:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9481d339fcab122bdd573915f1e96e4a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-appindexing:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9481d339fcab122bdd573915f1e96e4a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-identity:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49c3bb42bc56bdaaacc4d2574d76192a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-identity:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49c3bb42bc56bdaaacc4d2574d76192a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f13490a5f9724d490b48f2d9d33140\AndroidManifest.xml:26:5-20
+MERGED from [com.google.android.gms:play-services-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f13490a5f9724d490b48f2d9d33140\AndroidManifest.xml:26:5-20
+MERGED from [com.google.android.gms:play-services-location:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0a5e36c94adb2cdacbdd0509df47d8aa\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-location:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0a5e36c94adb2cdacbdd0509df47d8aa\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-places:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2c21ef7ab11697a95f2389e1a5ec2d83\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-places:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2c21ef7ab11697a95f2389e1a5ec2d83\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:30:5-20
+MERGED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:30:5-20
+MERGED from [com.google.android.gms:play-services-nearby:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2cfdb8edf02c8df589dcb0b735ad4d61\AndroidManifest.xml:9:5-20
+MERGED from [com.google.android.gms:play-services-nearby:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2cfdb8edf02c8df589dcb0b735ad4d61\AndroidManifest.xml:9:5-20
+MERGED from [com.google.android.gms:play-services-panorama:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\bd2f78b1219a533bfbeca70f88dab7e2\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-panorama:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\bd2f78b1219a533bfbeca70f88dab7e2\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-plus:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\1132e986927d71df1215e4b437bac8c5\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-plus:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\1132e986927d71df1215e4b437bac8c5\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-safetynet:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\037a312ffc5d14c81b5a79e97d3229c9\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-safetynet:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\037a312ffc5d14c81b5a79e97d3229c9\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-vision:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9bf03808674bea83811ed94f3241a6da\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-vision:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9bf03808674bea83811ed94f3241a6da\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-vision-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\31cf71a7d62f7d0723cc4db573f54434\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-vision-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\31cf71a7d62f7d0723cc4db573f54434\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-wearable:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f6c0b60df004a8e29b1283d22b72d6cb\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-wearable:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f6c0b60df004a8e29b1283d22b72d6cb\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\215ce8a0e36b6cc4af5056a8b4426523\AndroidManifest.xml:22:5-27:19
+MERGED from [com.google.android.gms:play-services-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\215ce8a0e36b6cc4af5056a8b4426523\AndroidManifest.xml:22:5-27:19
+MERGED from [com.google.firebase:firebase-crash:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b57c2ddec074b57eaa28ac7488bfa40c\AndroidManifest.xml:24:5-25:19
+MERGED from [com.google.firebase:firebase-crash:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b57c2ddec074b57eaa28ac7488bfa40c\AndroidManifest.xml:24:5-25:19
+MERGED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:22:5-35:19
+MERGED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:22:5-35:19
+MERGED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:26:5-45:19
+MERGED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:26:5-45:19
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:27:5-52:19
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:27:5-52:19
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:27:5-38:19
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:27:5-38:19
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:34:5-57:19
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:34:5-57:19
+MERGED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:7:5-13:19
+MERGED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:7:5-13:19
+MERGED from [com.google.android.gms:play-services-gass:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7189a06efbf7acd90842996e394e9680\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-gass:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7189a06efbf7acd90842996e394e9680\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-tasks:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\582841271f9c2cf4af41f3f6a5730736\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-tasks:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\582841271f9c2cf4af41f3f6a5730736\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-basement:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4987b97d723ad78d3c4b5922461c8391\AndroidManifest.xml:22:5-26:19
+MERGED from [com.google.android.gms:play-services-basement:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4987b97d723ad78d3c4b5922461c8391\AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.core:core:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\655de8e81aa8ae31e89af35a32bc8b2b\AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\655de8e81aa8ae31e89af35a32bc8b2b\AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\82a59211aea27585355c1ea64a2b44c4\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\82a59211aea27585355c1ea64a2b44c4\AndroidManifest.xml:24:5-25:19
+MERGED from [com.google.android.gms:play-services-ads-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\536e61fe777a9dc41d06c1bcd1115c94\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-ads-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\536e61fe777a9dc41d06c1bcd1115c94\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-ads-lite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7759102fd0c9ba2a9be2a669bbb3d3a4\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-ads-lite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7759102fd0c9ba2a9be2a669bbb3d3a4\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0abd30e2023c5822a82c0dbf45d74574\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0abd30e2023c5822a82c0dbf45d74574\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f2bcb1d87d6a26bbcd67d8f60c681a9a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f2bcb1d87d6a26bbcd67d8f60c681a9a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-appinvite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\070f4d84b186d8c655ecafa9f3054286\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-appinvite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\070f4d84b186d8c655ecafa9f3054286\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-auth-api-phone-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f8e6996904bf2f56345d4aaf582fbeb6\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-auth-api-phone-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f8e6996904bf2f56345d4aaf582fbeb6\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-auth-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2122ead48cc6ea645f7a3c459ec7b44\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-auth-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2122ead48cc6ea645f7a3c459ec7b44\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4bb2b9905b9c1d9cbfeb1deba868923b\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4bb2b9905b9c1d9cbfeb1deba868923b\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-cast-framework-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e8c923e9f46fe2fdbfd4ca2197e6cdca\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-cast-framework-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e8c923e9f46fe2fdbfd4ca2197e6cdca\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-cast-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\db30197d0ea819fb8da1a4ecbc17e230\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-cast-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\db30197d0ea819fb8da1a4ecbc17e230\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-basement-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fe1080d07531d776d13300fef719278e\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-basement-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fe1080d07531d776d13300fef719278e\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-config-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\041dec9437addb2f5ea88db0f8013235\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-config-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\041dec9437addb2f5ea88db0f8013235\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-awareness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\38ffdf3fbb9bc3d07647cdf6ad72d0de\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-awareness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\38ffdf3fbb9bc3d07647cdf6ad72d0de\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-crash-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8c0d3243d758a0c84dae3338a5297ab1\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-crash-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8c0d3243d758a0c84dae3338a5297ab1\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-drive-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49f0f4b4b3fef874a45d7b3ac2deae98\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-drive-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49f0f4b4b3fef874a45d7b3ac2deae98\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-fido-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c4c1e813029a613058301e4e8f933a62\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-fido-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c4c1e813029a613058301e4e8f933a62\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-auth-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\77fa2d209e9072bd6543ed093e0e46be\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-auth-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\77fa2d209e9072bd6543ed093e0e46be\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-database-connection-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\78f408bba926466d1320db6b765fa66f\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-database-connection-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\78f408bba926466d1320db6b765fa66f\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-database-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c6ded02fae4176b29973fbd78ee65b18\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-database-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c6ded02fae4176b29973fbd78ee65b18\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-dynamic-links-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6c7c659f272fbfa1b11e8de2400d44f8\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-dynamic-links-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6c7c659f272fbfa1b11e8de2400d44f8\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d41ef6dd339425fbf11c19c03d73f44a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d41ef6dd339425fbf11c19c03d73f44a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-messaging-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\923c56974a4b70db7bd7b9f63acfc872\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-messaging-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\923c56974a4b70db7bd7b9f63acfc872\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-storage-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\10c12d9929c205432a90b083ab688dec\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-storage-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\10c12d9929c205432a90b083ab688dec\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-storage-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b4b613ed640af7755727a1bb4693eb82\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-storage-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b4b613ed640af7755727a1bb4693eb82\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\a0cb52556d61c9eaf956f0bf14237a37\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\a0cb52556d61c9eaf956f0bf14237a37\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-fitness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7f508d1f6c7db19ed5a669a7123eb115\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-fitness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7f508d1f6c7db19ed5a669a7123eb115\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-games-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8e68c58749485aea82c1493f9a782c9b\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-games-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8e68c58749485aea82c1493f9a782c9b\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-gass-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7addefcb0150df1f628a865d6f2ce629\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-gass-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7addefcb0150df1f628a865d6f2ce629\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-gcm-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ccabdeb306292dfcff4fd3767096b01c\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-gcm-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ccabdeb306292dfcff4fd3767096b01c\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-appindexing-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f545a4d7e81003997c7b56440532f211\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-appindexing-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f545a4d7e81003997c7b56440532f211\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-identity-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20a5ca4aaf99b3518cd1bf7d38032476\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-identity-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20a5ca4aaf99b3518cd1bf7d38032476\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5f1d3fbe145a2c9ec335f2eb296b013a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5f1d3fbe145a2c9ec335f2eb296b013a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-instantapps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\406ab7943cba0a406bacf36bd6ff9bdd\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-instantapps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\406ab7943cba0a406bacf36bd6ff9bdd\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-location-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5611abe8252e3d1b912ca9c565826333\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-location-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5611abe8252e3d1b912ca9c565826333\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-maps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0d8dd2c6aed14fd530619256bc90bfa2\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-maps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0d8dd2c6aed14fd530619256bc90bfa2\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fc80eb1d07dd34abc9384ff9e178ffb2\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fc80eb1d07dd34abc9384ff9e178ffb2\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\574f50d89078213785d7c5fd3bedc7cf\AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\574f50d89078213785d7c5fd3bedc7cf\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-nearby-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0f4a07375ca0cbe175421fbe52cbf983\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-nearby-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0f4a07375ca0cbe175421fbe52cbf983\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-panorama-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\60065dfe5d89b1102016a23779b9bbbd\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-panorama-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\60065dfe5d89b1102016a23779b9bbbd\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-places-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ede5d4ed726f7cbe2a38208ac0c26580\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-places-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ede5d4ed726f7cbe2a38208ac0c26580\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-plus-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\160a76f609924657723772c0be025e4a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-plus-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\160a76f609924657723772c0be025e4a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-safetynet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee9d89343b200faf8d2d815b3cb978f6\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-safetynet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee9d89343b200faf8d2d815b3cb978f6\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-tagmanager-api-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0daac58742cf5c8e02bfdd177fa2d231\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-tagmanager-api-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0daac58742cf5c8e02bfdd177fa2d231\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-tagmanager-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6fbc68e96aa2aa35ea37fc0e0f420717\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-tagmanager-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6fbc68e96aa2aa35ea37fc0e0f420717\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\dba412e65094d45b9a0c9585ed034165\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\dba412e65094d45b9a0c9585ed034165\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-tasks-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1b33ae1b7492cc695c3b217d06250da\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-tasks-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1b33ae1b7492cc695c3b217d06250da\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-vision-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2691beda91b58e7e478db6196c8af9e0\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-vision-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2691beda91b58e7e478db6196c8af9e0\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-vision-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f9dca77ef22cd799c56a86f34f0189f5\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-vision-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f9dca77ef22cd799c56a86f34f0189f5\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-wallet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\827314be4e8c0bbcf5cb47de50b2b683\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-wallet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\827314be4e8c0bbcf5cb47de50b2b683\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-wearable-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ea1fbd8394dcf4d36628f97a6a6fb387\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-wearable-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ea1fbd8394dcf4d36628f97a6a6fb387\AndroidManifest.xml:22:5-20
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\655de8e81aa8ae31e89af35a32bc8b2b\AndroidManifest.xml:24:18-86
+	android:supportsRtl
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:28:9-35
+	android:label
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:26:9-41
+	tools:ignore
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:30:9-48
+	android:roundIcon
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:27:9-54
+	android:icon
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:25:9-43
+	android:allowBackup
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:24:9-35
+	android:theme
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:29:9-52
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:23:9-47
+activity#UEA.FINAL.PROJECT.MainActivity
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:33:9-38:20
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:33:19-47
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:34:13-37:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:35:17-69
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:35:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:36:17-77
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:36:27-74
+activity#UEA.FINAL.PROJECT.SyncDevices_REMOVE
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:40:9-48:20
+	android:parentActivityName
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:43:13-55
+	android:label
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:42:13-41
+	android:theme
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:44:13-68
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:41:13-47
+meta-data#android.support.PARENT_ACTIVITY
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:45:13-47:49
+	android:value
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:47:17-46
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:46:17-63
+activity#UEA.FINAL.PROJECT.PrimeForegroundServiceHost
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:50:9-54:71
+	android:parentActivityName
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:53:13-55
+	android:label
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:52:13-57
+	android:theme
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:54:13-68
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:51:13-55
+activity#UEA.FINAL.PROJECT.BluetoothActions
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:56:9-60:71
+	android:parentActivityName
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:59:13-55
+	android:label
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:58:13-45
+	android:theme
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:60:13-68
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:57:13-45
+service#UEA.FINAL.PROJECT.PrimeForegroundService
+ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:62:9-64:38
+	android:enabled
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:64:13-35
+	android:name
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml:63:13-51
+uses-sdk
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+MERGED from [com.google.android.material:material:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c5011d8db7e86bd79ba16c345de4bb25\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c5011d8db7e86bd79ba16c345de4bb25\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1c5ac4122e2ef34fc969d5cda4f346f\AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1c5ac4122e2ef34fc969d5cda4f346f\AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-cast:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\16970abeedfc3a3a0acdc5d702db1b82\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-cast:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\16970abeedfc3a3a0acdc5d702db1b82\AndroidManifest.xml:20:5-44
+MERGED from [androidx.mediarouter:mediarouter:1.0.0-alpha5] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0c29916b5b4621d8147b9ec3be0e51d7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.mediarouter:mediarouter:1.0.0-alpha5] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0c29916b5b4621d8147b9ec3be0e51d7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\645bb55332b0916bb8e548890f347229\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\645bb55332b0916bb8e548890f347229\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\28783e2f4c3b48be75512c4b70faac4c\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\28783e2f4c3b48be75512c4b70faac4c\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\120887bfaae0609ceca59dc2a94e6596\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\120887bfaae0609ceca59dc2a94e6596\AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\852f89f0fae4092e7657902f6c187845\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\852f89f0fae4092e7657902f6c187845\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.gms:play-services-ads:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\3c500992831dbb2a0120073237f7db6b\AndroidManifest.xml:21:5-23:52
+MERGED from [com.google.android.gms:play-services-ads:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\3c500992831dbb2a0120073237f7db6b\AndroidManifest.xml:21:5-23:52
+MERGED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ce9c84b3436b7f3cd84ed62deb0cc620\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ce9c84b3436b7f3cd84ed62deb0cc620\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8f751dc86fa9260d2f8993f88ad85f19\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8f751dc86fa9260d2f8993f88ad85f19\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\173c1c6a69a2896a1ccb1d2f892ec05d\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-auth-api-phone:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fe94e7efa29720bea3092d6e3886f38d\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-auth-api-phone:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fe94e7efa29720bea3092d6e3886f38d\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-auth-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\99179f5306ec67ac02363578e5b90c90\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-auth-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\99179f5306ec67ac02363578e5b90c90\AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-config:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee4ebef5608767e8e25451f03394e650\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-config:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee4ebef5608767e8e25451f03394e650\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-awareness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\65c863367a7085986423586a5fa6e86f\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-awareness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\65c863367a7085986423586a5fa6e86f\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-games:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e1b9019c2c76209bce16e121ac24cbd1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-games:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e1b9019c2c76209bce16e121ac24cbd1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-drive:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\92dfe0fda7bb858a5409616a25c77419\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-drive:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\92dfe0fda7bb858a5409616a25c77419\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-fido:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\3033b25ec503c365bb2806f77b6fd3e5\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-fido:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\3033b25ec503c365bb2806f77b6fd3e5\AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-dynamic-links:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\80c67f11eb4cdc82485447fede0b94fa\AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-dynamic-links:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\80c67f11eb4cdc82485447fede0b94fa\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-fitness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\793dde219a0e785e11857fe262a6e705\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-fitness:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\793dde219a0e785e11857fe262a6e705\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-gcm:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2dbf7cff036c93dd2c296790d81c17cc\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-gcm:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2dbf7cff036c93dd2c296790d81c17cc\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-appindexing:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9481d339fcab122bdd573915f1e96e4a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-appindexing:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9481d339fcab122bdd573915f1e96e4a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wallet:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\a81813056ace35b36dc33ad4ae1720b9\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wallet:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\a81813056ace35b36dc33ad4ae1720b9\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-identity:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49c3bb42bc56bdaaacc4d2574d76192a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-identity:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49c3bb42bc56bdaaacc4d2574d76192a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f13490a5f9724d490b48f2d9d33140\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f13490a5f9724d490b48f2d9d33140\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-instantapps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6c0856183a118ce8f2713609a86e050b\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-instantapps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6c0856183a118ce8f2713609a86e050b\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-location:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0a5e36c94adb2cdacbdd0509df47d8aa\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-location:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0a5e36c94adb2cdacbdd0509df47d8aa\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-places:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2c21ef7ab11697a95f2389e1a5ec2d83\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-places:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2c21ef7ab11697a95f2389e1a5ec2d83\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-nearby:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2cfdb8edf02c8df589dcb0b735ad4d61\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-nearby:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2cfdb8edf02c8df589dcb0b735ad4d61\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-panorama:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\bd2f78b1219a533bfbeca70f88dab7e2\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-panorama:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\bd2f78b1219a533bfbeca70f88dab7e2\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-plus:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\1132e986927d71df1215e4b437bac8c5\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-plus:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\1132e986927d71df1215e4b437bac8c5\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-safetynet:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\037a312ffc5d14c81b5a79e97d3229c9\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-safetynet:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\037a312ffc5d14c81b5a79e97d3229c9\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-vision:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9bf03808674bea83811ed94f3241a6da\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-vision:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\9bf03808674bea83811ed94f3241a6da\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-vision-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\31cf71a7d62f7d0723cc4db573f54434\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-vision-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\31cf71a7d62f7d0723cc4db573f54434\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-wearable:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f6c0b60df004a8e29b1283d22b72d6cb\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wearable:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f6c0b60df004a8e29b1283d22b72d6cb\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\215ce8a0e36b6cc4af5056a8b4426523\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\215ce8a0e36b6cc4af5056a8b4426523\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-crash:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b57c2ddec074b57eaa28ac7488bfa40c\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-crash:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b57c2ddec074b57eaa28ac7488bfa40c\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-database:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6b3cef6eeb0fdb1041ab006ee009a0b1\AndroidManifest.xml:6:5-44
+MERGED from [com.google.firebase:firebase-database:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6b3cef6eeb0fdb1041ab006ee009a0b1\AndroidManifest.xml:6:5-44
+MERGED from [com.google.firebase:firebase-database-connection:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\93d1cf2be0ce3a7d8eaf8509c6232370\AndroidManifest.xml:6:5-44
+MERGED from [com.google.firebase:firebase-database-connection:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\93d1cf2be0ce3a7d8eaf8509c6232370\AndroidManifest.xml:6:5-44
+MERGED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-storage:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2819b027662022f4df0d6bd68453a66e\AndroidManifest.xml:6:5-44
+MERGED from [com.google.firebase:firebase-storage:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2819b027662022f4df0d6bd68453a66e\AndroidManifest.xml:6:5-44
+MERGED from [com.google.firebase:firebase-storage-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\81fd4a337f520f8c742801a38e2d109f\AndroidManifest.xml:6:5-44
+MERGED from [com.google.firebase:firebase-storage-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\81fd4a337f520f8c742801a38e2d109f\AndroidManifest.xml:6:5-44
+MERGED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-gass:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7189a06efbf7acd90842996e394e9680\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-gass:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7189a06efbf7acd90842996e394e9680\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-tasks:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\582841271f9c2cf4af41f3f6a5730736\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-tasks:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\582841271f9c2cf4af41f3f6a5730736\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-basement:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4987b97d723ad78d3c4b5922461c8391\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-basement:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4987b97d723ad78d3c4b5922461c8391\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\94834371acf7b4c6947e3195db2fe9c2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\94834371acf7b4c6947e3195db2fe9c2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4c1eac69e4f00b9f23637a8744c0cbb1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4c1eac69e4f00b9f23637a8744c0cbb1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\eb1f81ccc66bd8f8bc7d93c2e0cae385\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\eb1f81ccc66bd8f8bc7d93c2e0cae385\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\52b2a4e2b5722430b158daad431f1a60\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\52b2a4e2b5722430b158daad431f1a60\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2baf0db69f26c07c1571b8f8a2d224f\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2baf0db69f26c07c1571b8f8a2d224f\AndroidManifest.xml:20:5-44
+MERGED from [androidx.palette:palette:1.0.0-rc01] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7f0220726dc08e510fe65f7009c95585\AndroidManifest.xml:20:5-44
+MERGED from [androidx.palette:palette:1.0.0-rc01] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7f0220726dc08e510fe65f7009c95585\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\34d9446ce3d2c27e828a30aa8c5b62c6\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\34d9446ce3d2c27e828a30aa8c5b62c6\AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\76b0a05a8cd8d3376be806d7495c9aa7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\76b0a05a8cd8d3376be806d7495c9aa7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\92c669ef03b9473a41c2f3c920e7b4d8\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\92c669ef03b9473a41c2f3c920e7b4d8\AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8d3cca09967e99db25fdda2538585e25\AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8d3cca09967e99db25fdda2538585e25\AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f597cccdd4d10e673755100c003b60\AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f597cccdd4d10e673755100c003b60\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\53c605c745124fd06bc12bdf900bad1d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\53c605c745124fd06bc12bdf900bad1d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2168eb6b8db29a1c2d80573418abaf8\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2168eb6b8db29a1c2d80573418abaf8\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f48c1b885da25905bdbc7451273f181d\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f48c1b885da25905bdbc7451273f181d\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f8786bdd7b4157e1361e52af1eb8bf2a\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f8786bdd7b4157e1361e52af1eb8bf2a\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d60fd600d62ba9f70c9413a6f185055d\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d60fd600d62ba9f70c9413a6f185055d\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\de1dd77181746e2a689077f52afc25c1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\de1dd77181746e2a689077f52afc25c1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\166f14e518c5014577d75b07ff2298ed\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\166f14e518c5014577d75b07ff2298ed\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media2:media2:1.0.0-alpha02] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b5d53777e66b7b313d72ba7c3d5104c2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media2:media2:1.0.0-alpha02] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b5d53777e66b7b313d72ba7c3d5104c2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cfb08633f41fd7a4e4795a838ae3aab9\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cfb08633f41fd7a4e4795a838ae3aab9\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\655de8e81aa8ae31e89af35a32bc8b2b\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\655de8e81aa8ae31e89af35a32bc8b2b\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fd5526affb56ee316d4fac4299960d72\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fd5526affb56ee316d4fac4299960d72\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\82a59211aea27585355c1ea64a2b44c4\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\82a59211aea27585355c1ea64a2b44c4\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8382bf07a7ee151353004d7dcbcf7396\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8382bf07a7ee151353004d7dcbcf7396\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b5ef849d9b5136b1f3a0938c180732ad\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b5ef849d9b5136b1f3a0938c180732ad\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ec478b9082dd1c6e96147cdc564a55da\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ec478b9082dd1c6e96147cdc564a55da\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e36a782ab392c061f0a1efbaee08b197\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e36a782ab392c061f0a1efbaee08b197\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\1bdd73c476a83d70e835df94e22d731d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\1bdd73c476a83d70e835df94e22d731d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0682556b174cfdda7754ff2c881f5773\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0682556b174cfdda7754ff2c881f5773\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4715fc85d8d9f230e30f01398b2c4e8c\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4715fc85d8d9f230e30f01398b2c4e8c\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\29505f475125b94e161c05dc26a61bc3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\29505f475125b94e161c05dc26a61bc3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\921fbfe292478bcf070921bb9c0f86a3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\921fbfe292478bcf070921bb9c0f86a3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0cfcf30592d3c54cdc829e49fac2b34d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0cfcf30592d3c54cdc829e49fac2b34d\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-ads-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\536e61fe777a9dc41d06c1bcd1115c94\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-ads-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\536e61fe777a9dc41d06c1bcd1115c94\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-ads-lite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7759102fd0c9ba2a9be2a669bbb3d3a4\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-ads-lite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7759102fd0c9ba2a9be2a669bbb3d3a4\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0abd30e2023c5822a82c0dbf45d74574\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0abd30e2023c5822a82c0dbf45d74574\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f2bcb1d87d6a26bbcd67d8f60c681a9a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f2bcb1d87d6a26bbcd67d8f60c681a9a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-appinvite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\070f4d84b186d8c655ecafa9f3054286\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-appinvite-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\070f4d84b186d8c655ecafa9f3054286\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-auth-api-phone-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f8e6996904bf2f56345d4aaf582fbeb6\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-auth-api-phone-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f8e6996904bf2f56345d4aaf582fbeb6\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-auth-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2122ead48cc6ea645f7a3c459ec7b44\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-auth-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2122ead48cc6ea645f7a3c459ec7b44\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4bb2b9905b9c1d9cbfeb1deba868923b\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-base-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4bb2b9905b9c1d9cbfeb1deba868923b\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-cast-framework-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e8c923e9f46fe2fdbfd4ca2197e6cdca\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-cast-framework-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\e8c923e9f46fe2fdbfd4ca2197e6cdca\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-cast-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\db30197d0ea819fb8da1a4ecbc17e230\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-cast-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\db30197d0ea819fb8da1a4ecbc17e230\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-basement-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fe1080d07531d776d13300fef719278e\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-basement-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fe1080d07531d776d13300fef719278e\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-config-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\041dec9437addb2f5ea88db0f8013235\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-config-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\041dec9437addb2f5ea88db0f8013235\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-awareness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\38ffdf3fbb9bc3d07647cdf6ad72d0de\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-awareness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\38ffdf3fbb9bc3d07647cdf6ad72d0de\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-crash-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8c0d3243d758a0c84dae3338a5297ab1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-crash-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8c0d3243d758a0c84dae3338a5297ab1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-drive-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49f0f4b4b3fef874a45d7b3ac2deae98\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-drive-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\49f0f4b4b3fef874a45d7b3ac2deae98\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-fido-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c4c1e813029a613058301e4e8f933a62\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-fido-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c4c1e813029a613058301e4e8f933a62\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-auth-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\77fa2d209e9072bd6543ed093e0e46be\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-auth-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\77fa2d209e9072bd6543ed093e0e46be\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-database-connection-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\78f408bba926466d1320db6b765fa66f\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-database-connection-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\78f408bba926466d1320db6b765fa66f\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-database-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c6ded02fae4176b29973fbd78ee65b18\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-database-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c6ded02fae4176b29973fbd78ee65b18\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-dynamic-links-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6c7c659f272fbfa1b11e8de2400d44f8\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-dynamic-links-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6c7c659f272fbfa1b11e8de2400d44f8\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d41ef6dd339425fbf11c19c03d73f44a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d41ef6dd339425fbf11c19c03d73f44a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-messaging-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\923c56974a4b70db7bd7b9f63acfc872\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-messaging-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\923c56974a4b70db7bd7b9f63acfc872\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-storage-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\10c12d9929c205432a90b083ab688dec\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-storage-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\10c12d9929c205432a90b083ab688dec\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-storage-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b4b613ed640af7755727a1bb4693eb82\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-storage-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b4b613ed640af7755727a1bb4693eb82\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\a0cb52556d61c9eaf956f0bf14237a37\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\a0cb52556d61c9eaf956f0bf14237a37\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-fitness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7f508d1f6c7db19ed5a669a7123eb115\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-fitness-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7f508d1f6c7db19ed5a669a7123eb115\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-games-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8e68c58749485aea82c1493f9a782c9b\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-games-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\8e68c58749485aea82c1493f9a782c9b\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-gass-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7addefcb0150df1f628a865d6f2ce629\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-gass-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\7addefcb0150df1f628a865d6f2ce629\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-gcm-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ccabdeb306292dfcff4fd3767096b01c\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-gcm-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ccabdeb306292dfcff4fd3767096b01c\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-appindexing-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f545a4d7e81003997c7b56440532f211\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-appindexing-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f545a4d7e81003997c7b56440532f211\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-identity-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20a5ca4aaf99b3518cd1bf7d38032476\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-identity-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20a5ca4aaf99b3518cd1bf7d38032476\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5f1d3fbe145a2c9ec335f2eb296b013a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-iid-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5f1d3fbe145a2c9ec335f2eb296b013a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-instantapps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\406ab7943cba0a406bacf36bd6ff9bdd\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-instantapps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\406ab7943cba0a406bacf36bd6ff9bdd\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-location-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5611abe8252e3d1b912ca9c565826333\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-location-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\5611abe8252e3d1b912ca9c565826333\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-maps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0d8dd2c6aed14fd530619256bc90bfa2\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-maps-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0d8dd2c6aed14fd530619256bc90bfa2\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fc80eb1d07dd34abc9384ff9e178ffb2\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\fc80eb1d07dd34abc9384ff9e178ffb2\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\574f50d89078213785d7c5fd3bedc7cf\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\574f50d89078213785d7c5fd3bedc7cf\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-nearby-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0f4a07375ca0cbe175421fbe52cbf983\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-nearby-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0f4a07375ca0cbe175421fbe52cbf983\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-panorama-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\60065dfe5d89b1102016a23779b9bbbd\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-panorama-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\60065dfe5d89b1102016a23779b9bbbd\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-places-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ede5d4ed726f7cbe2a38208ac0c26580\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-places-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ede5d4ed726f7cbe2a38208ac0c26580\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-plus-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\160a76f609924657723772c0be025e4a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-plus-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\160a76f609924657723772c0be025e4a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-safetynet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee9d89343b200faf8d2d815b3cb978f6\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-safetynet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ee9d89343b200faf8d2d815b3cb978f6\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-api-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0daac58742cf5c8e02bfdd177fa2d231\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-api-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\0daac58742cf5c8e02bfdd177fa2d231\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6fbc68e96aa2aa35ea37fc0e0f420717\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\6fbc68e96aa2aa35ea37fc0e0f420717\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\dba412e65094d45b9a0c9585ed034165\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\dba412e65094d45b9a0c9585ed034165\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tasks-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1b33ae1b7492cc695c3b217d06250da\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tasks-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d1b33ae1b7492cc695c3b217d06250da\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-vision-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2691beda91b58e7e478db6196c8af9e0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-vision-common-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2691beda91b58e7e478db6196c8af9e0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-vision-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f9dca77ef22cd799c56a86f34f0189f5\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-vision-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\f9dca77ef22cd799c56a86f34f0189f5\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wallet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\827314be4e8c0bbcf5cb47de50b2b683\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wallet-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\827314be4e8c0bbcf5cb47de50b2b683\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wearable-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ea1fbd8394dcf4d36628f97a6a6fb387\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wearable-license:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\ea1fbd8394dcf4d36628f97a6a6fb387\AndroidManifest.xml:20:5-44
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+	tools:overrideLibrary
+		ADDED from [com.google.android.gms:play-services-ads:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\3c500992831dbb2a0120073237f7db6b\AndroidManifest.xml:23:9-49
+	android:targetSdkVersion
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\HydraPortable\AndroidStudioProjects\3yp\app\src\main\AndroidManifest.xml
+receiver#com.google.android.gms.cast.framework.media.MediaIntentReceiver
+ADDED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:8:9-100
+	android:name
+		ADDED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:8:19-97
+service#com.google.android.gms.cast.framework.media.MediaNotificationService
+ADDED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:10:9-104
+	android:name
+		ADDED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:10:18-101
+service#com.google.android.gms.cast.framework.ReconnectionService
+ADDED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:11:9-93
+	android:name
+		ADDED from [com.google.android.gms:play-services-cast-framework:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\570e54270c2a6bec162e7617a7e539cc\AndroidManifest.xml:11:18-90
+activity#com.google.android.gms.ads.AdActivity
+ADDED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:29:9-33:64
+	android:exported
+		ADDED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:32:13-37
+	android:configChanges
+		ADDED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:31:13-122
+	android:theme
+		ADDED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:33:13-61
+	android:name
+		ADDED from [com.google.android.gms:play-services-ads-lite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\40301765d97877a209b6d0f407ee136f\AndroidManifest.xml:30:13-65
+receiver#com.google.android.gms.analytics.AnalyticsReceiver
+ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:30:9-34:20
+	android:enabled
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:32:13-35
+	android:exported
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:33:13-37
+	android:name
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:31:13-78
+service#com.google.android.gms.analytics.AnalyticsService
+ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:36:9-39:40
+	android:enabled
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:38:13-35
+	android:exported
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:39:13-37
+	android:name
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:37:13-77
+service#com.google.android.gms.analytics.AnalyticsJobService
+ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:40:9-44:72
+	android:enabled
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:42:13-35
+	android:exported
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:43:13-37
+	android:permission
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:44:13-69
+	android:name
+		ADDED from [com.google.android.gms:play-services-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d0de263bae283a2719eb5982ebef8e24\AndroidManifest.xml:41:13-80
+activity#com.google.android.gms.appinvite.PreviewActivity
+ADDED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:25:9-34:20
+	android:exported
+		ADDED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:27:13-36
+	android:theme
+		ADDED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:28:13-59
+	android:name
+		ADDED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:26:13-76
+intent-filter#action:name:com.google.android.gms.appinvite.ACTION_PREVIEW+category:name:android.intent.category.DEFAULT
+ADDED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:29:13-33:29
+action#com.google.android.gms.appinvite.ACTION_PREVIEW
+ADDED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:30:17-90
+	android:name
+		ADDED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:30:25-87
+category#android.intent.category.DEFAULT
+ADDED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:32:17-76
+	android:name
+		ADDED from [com.google.android.gms:play-services-appinvite:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4d4f326bf5852c97a84e997054d0d393\AndroidManifest.xml:32:27-73
+activity#com.google.android.gms.auth.api.signin.internal.SignInHubActivity
+ADDED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:23:9-27:75
+	android:excludeFromRecents
+		ADDED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:25:13-46
+	android:exported
+		ADDED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:26:13-37
+	android:theme
+		ADDED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:27:13-72
+	android:name
+		ADDED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:24:13-93
+service#com.google.android.gms.auth.api.signin.RevocationBoundService
+ADDED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:33:9-36:110
+	android:exported
+		ADDED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:35:13-36
+	android:permission
+		ADDED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:36:13-107
+	android:name
+		ADDED from [com.google.android.gms:play-services-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\d6a3dd3567224241e6da5cd6b121c8d4\AndroidManifest.xml:34:13-89
+activity#com.google.firebase.auth.internal.FederatedSignInActivity
+ADDED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:23:9-29:75
+	android:excludeFromRecents
+		ADDED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:25:13-46
+	android:launchMode
+		ADDED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:27:13-48
+	android:exported
+		ADDED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:26:13-36
+	android:permission
+		ADDED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:28:13-102
+	android:theme
+		ADDED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:29:13-72
+	android:name
+		ADDED from [com.google.firebase:firebase-auth:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\88270a638ac5cebfbfda5ef52dbd9587\AndroidManifest.xml:24:13-85
+uses-permission#com.google.android.c2dm.permission.RECEIVE
+ADDED from [com.google.android.gms:play-services-gcm:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2dbf7cff036c93dd2c296790d81c17cc\AndroidManifest.xml:23:5-82
+MERGED from [com.google.android.gms:play-services-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f13490a5f9724d490b48f2d9d33140\AndroidManifest.xml:23:5-82
+MERGED from [com.google.android.gms:play-services-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c2f13490a5f9724d490b48f2d9d33140\AndroidManifest.xml:23:5-82
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:26:5-82
+MERGED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:26:5-82
+	android:name
+		ADDED from [com.google.android.gms:play-services-gcm:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\2dbf7cff036c93dd2c296790d81c17cc\AndroidManifest.xml:23:22-79
+uses-feature#0x00020000
+ADDED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:26:5-28:35
+	android:glEsVersion
+		ADDED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:27:9-41
+	android:required
+		ADDED from [com.google.android.gms:play-services-maps:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\b2bd141e7e57bfaa29aa212aefa509f4\AndroidManifest.xml:28:9-32
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\215ce8a0e36b6cc4af5056a8b4426523\AndroidManifest.xml:23:9-26:75
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\215ce8a0e36b6cc4af5056a8b4426523\AndroidManifest.xml:25:13-37
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\215ce8a0e36b6cc4af5056a8b4426523\AndroidManifest.xml:26:13-72
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\215ce8a0e36b6cc4af5056a8b4426523\AndroidManifest.xml:24:13-79
+service#com.google.firebase.messaging.FirebaseMessagingService
+ADDED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:28:9-34:19
+	android:exported
+		ADDED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:30:13-36
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:29:13-82
+intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
+ADDED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:31:13-33:29
+	android:priority
+		ADDED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:31:28-51
+action#com.google.firebase.MESSAGING_EVENT
+ADDED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:32:17-78
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\cae695bae1cafe8cac431dbc0ec7259e\AndroidManifest.xml:32:25-75
+service#com.google.android.gms.tagmanager.TagManagerService
+ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:27:9-30:40
+	android:enabled
+		ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:29:13-35
+	android:exported
+		ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:30:13-37
+	android:name
+		ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:28:13-79
+activity#com.google.android.gms.tagmanager.TagManagerPreviewActivity
+ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:32:9-44:20
+	android:noHistory
+		ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:35:13-37
+	android:exported
+		ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:34:13-36
+	android:name
+		ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:33:13-87
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:scheme:tagmanager.c.${applicationId}
+ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:36:13-43:29
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:scheme:tagmanager.c.UEA.FINAL.PROJECT
+ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:36:13-43:29
+data
+ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:37:17-72
+	android:scheme
+		ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:37:23-69
+action#android.intent.action.VIEW
+ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:39:17-69
+	android:name
+		ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:39:25-66
+category#android.intent.category.BROWSABLE
+ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:42:17-78
+	android:name
+		ADDED from [com.google.android.gms:play-services-tagmanager-api:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c255f5d901537034432488151f452def\AndroidManifest.xml:42:27-75
+receiver#com.google.android.gms.measurement.AppMeasurementReceiver
+ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:28:9-32:20
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:28:9-32:20
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:28:9-32:20
+	android:enabled
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:30:13-35
+	android:exported
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:31:13-37
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:29:13-85
+receiver#com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver
+ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:33:9-41:20
+	android:enabled
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:35:13-35
+	android:exported
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:36:13-36
+	android:permission
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:37:13-69
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:34:13-100
+intent-filter#action:name:com.android.vending.INSTALL_REFERRER
+ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:38:13-40:29
+action#com.android.vending.INSTALL_REFERRER
+ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:39:17-79
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:39:25-76
+service#com.google.android.gms.measurement.AppMeasurementService
+ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:43:9-46:40
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:34:9-37:40
+MERGED from [com.google.firebase:firebase-analytics-impl:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\551bcb9ead9d29041d9bf7451a4843dd\AndroidManifest.xml:34:9-37:40
+	android:enabled
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:45:13-35
+	android:exported
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:46:13-37
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:44:13-84
+service#com.google.android.gms.measurement.AppMeasurementJobService
+ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:47:9-51:72
+	android:enabled
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:49:13-35
+	android:exported
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:50:13-37
+	android:permission
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:51:13-69
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\20f23eb7cb3cc0b9443e00cd078ac94a\AndroidManifest.xml:48:13-87
+permission#${applicationId}.permission.C2D_MESSAGE
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:28:5-30:47
+	android:protectionLevel
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:30:9-44
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:29:9-63
+permission#UEA.FINAL.PROJECT.permission.C2D_MESSAGE
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:28:5-30:47
+	android:protectionLevel
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:30:9-44
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:29:9-63
+uses-permission#${applicationId}.permission.C2D_MESSAGE
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:32:5-79
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:32:22-76
+uses-permission#UEA.FINAL.PROJECT.permission.C2D_MESSAGE
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:32:5-79
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:32:22-76
+receiver#com.google.firebase.iid.FirebaseInstanceIdReceiver
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:35:9-44:20
+	android:exported
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:37:13-36
+	android:permission
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:38:13-73
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:36:13-78
+intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE+category:name:${applicationId}
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:39:13-43:29
+intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE+category:name:UEA.FINAL.PROJECT
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:39:13-43:29
+action#com.google.android.c2dm.intent.RECEIVE
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:40:17-81
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:40:25-78
+category#${applicationId}
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:42:17-61
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:42:27-58
+category#UEA.FINAL.PROJECT
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:42:17-61
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:42:27-58
+service#com.google.firebase.iid.FirebaseInstanceIdService
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:50:9-56:19
+	android:exported
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:52:13-36
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:51:13-77
+intent-filter#action:name:com.google.firebase.INSTANCE_ID_EVENT
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:53:13-55:29
+	android:priority
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:53:28-51
+action#com.google.firebase.INSTANCE_ID_EVENT
+ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:54:17-80
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\c66765c4cd2092489b39f2918a8d0dbb\AndroidManifest.xml:54:25-77
+provider#com.google.firebase.provider.FirebaseInitProvider
+ADDED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:8:9-12:39
+	android:authorities
+		ADDED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:10:13-72
+	android:exported
+		ADDED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:11:13-37
+	android:initOrder
+		ADDED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:12:13-36
+	android:name
+		ADDED from [com.google.firebase:firebase-common:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\312c7195273e4fec798f03f6d5ed4b7a\AndroidManifest.xml:9:13-77
+meta-data#com.google.android.gms.version
+ADDED from [com.google.android.gms:play-services-basement:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4987b97d723ad78d3c4b5922461c8391\AndroidManifest.xml:23:9-25:69
+	android:value
+		ADDED from [com.google.android.gms:play-services-basement:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4987b97d723ad78d3c4b5922461c8391\AndroidManifest.xml:25:13-66
+	android:name
+		ADDED from [com.google.android.gms:play-services-basement:12.0.1] C:\Users\HydraPortable\.gradle\caches\transforms-2\files-2.1\4987b97d723ad78d3c4b5922461c8391\AndroidManifest.xml:24:13-58
