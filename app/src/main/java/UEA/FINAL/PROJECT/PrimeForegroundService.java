@@ -51,7 +51,8 @@
  *      +   Dates are recorded in YYMMDD notation.
  *--------------------------------------------------------------------------------------------------
  * OUTSTANDING ISSUES:
- *      +   todo: Limit update to value lower than current speed results in warning being placed in middle of update notification queue: still need to add a way of prioritising playback (perhaps own playeer, pause notification player, restart (seeking)?
+ *      +   todo: Limit update to value lower than current speed results in warning being placed in
+ *           middle of update notification queue: still need to add a way of prioritising playback
  *--------------------------------------------------------------------------------------------------
  * HISTORY:
  *      v1.0    200314  Copied to own project from testing project to reduce build time and

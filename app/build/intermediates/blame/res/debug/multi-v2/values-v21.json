@@ -23,25 +23,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\HydraPortable\\.gradle\\caches\\transforms-2\\files-2.1\\4d4f326bf5852c97a84e997054d0d393\\res\\values-v21\\values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "172",
-                        "endLines": "5",
-                        "endColumns": "8",
-                        "endOffsets": "297"
-                    },
-                    "to": {
-                        "startLines": "312",
-                        "startColumns": "4",
-                        "startOffsets": "22145",
-                        "endLines": "313",
-                        "endColumns": "8",
-                        "endOffsets": "22270"
-                    }
-                },
-                {
                     "source": "C:\\Users\\HydraPortable\\.gradle\\caches\\transforms-2\\files-2.1\\655de8e81aa8ae31e89af35a32bc8b2b\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
@@ -58,6 +39,25 @@
                         "endLines": "2,3,4,5,264,265,272,276,316,321",
                         "endColumns": "103,63,66,63,115,125,125,127,12,12",
                         "endOffsets": "154,218,285,349,19381,19507,19964,20260,22442,22780"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\HydraPortable\\.gradle\\caches\\transforms-2\\files-2.1\\14b2d5000229cab0c85772e67e9abf06\\res\\values-v21\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "172",
+                        "endLines": "5",
+                        "endColumns": "8",
+                        "endOffsets": "297"
+                    },
+                    "to": {
+                        "startLines": "312",
+                        "startColumns": "4",
+                        "startOffsets": "22145",
+                        "endLines": "313",
+                        "endColumns": "8",
+                        "endOffsets": "22270"
                     }
                 },
                 {

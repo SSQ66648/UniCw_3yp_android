@@ -4,6 +4,23 @@
             "outputFile": "C:\\Users\\HydraPortable\\AndroidStudioProjects\\3yp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-land\\values-land.xml",
             "map": [
                 {
+                    "source": "C:\\Users\\HydraPortable\\.gradle\\caches\\transforms-2\\files-2.1\\e06ceda18962c95e59eeaa8ea4d0ca3e\\res\\values-land\\values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9",
+                        "startColumns": "0,0,0,0,0,0",
+                        "startOffsets": "183,264,344,414,483,578",
+                        "endColumns": "80,79,69,68,94,90",
+                        "endOffsets": "263,343,413,482,577,668"
+                    },
+                    "to": {
+                        "startLines": "5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "264,349,433,507,580,679",
+                        "endColumns": "84,83,73,72,98,94",
+                        "endOffsets": "344,428,502,575,674,769"
+                    }
+                },
+                {
                     "source": "C:\\Users\\HydraPortable\\.gradle\\caches\\transforms-2\\files-2.1\\c5011d8db7e86bd79ba16c345de4bb25\\res\\values-land\\values-land.xml",
                     "from": {
                         "startLines": "2",
@@ -20,23 +37,6 @@
                         "endLines": "17",
                         "endColumns": "10",
                         "endOffsets": "1169"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\HydraPortable\\.gradle\\caches\\transforms-2\\files-2.1\\570e54270c2a6bec162e7617a7e539cc\\res\\values-land\\values.xml",
-                    "from": {
-                        "startLines": "4,5,6,7,8,9",
-                        "startColumns": "0,0,0,0,0,0",
-                        "startOffsets": "183,264,344,414,483,578",
-                        "endColumns": "80,79,69,68,94,90",
-                        "endOffsets": "263,343,413,482,577,668"
-                    },
-                    "to": {
-                        "startLines": "5,6,7,8,9,10",
-                        "startColumns": "4,4,4,4,4,4",
-                        "startOffsets": "264,349,433,507,580,679",
-                        "endColumns": "84,83,73,72,98,94",
-                        "endOffsets": "344,428,502,575,674,769"
                     }
                 },
                 {
