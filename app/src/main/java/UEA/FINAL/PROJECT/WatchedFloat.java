@@ -1,27 +1,15 @@
 /*------------------------------------------------------------------------------
  * PROJECT:     3YP Motorcycle Feedback System Mobile Device App
- *
  * FILE:        WatchedFloat.Java
- *
- * LAYOUT(S):   activity_.xml
- *
  * DESCRIPTION: Object wrapper to allow use of listener to detect change in value of float primitive
- *
+ *              Required for Android to observe change of a primitive variable
  * AUTHOR:      SSQ16SHU / 100166648
- *
+ *------------------------------------------------------------------------------
  * HISTORY:     v1.0    200320  Initial implementation.
- *------------------------------------------------------------------------------
- * NOTES:       
- *      +   
- *------------------------------------------------------------------------------
- * TO DO LIST:  
  -----------------------------------------------------------------------------*/
 
 package UEA.FINAL.PROJECT;
 
-/*--------------------------------------
-    IMPORT LIST
---------------------------------------*/
 public class WatchedFloat {
     /*--------------------------------------
         CONSTANTS

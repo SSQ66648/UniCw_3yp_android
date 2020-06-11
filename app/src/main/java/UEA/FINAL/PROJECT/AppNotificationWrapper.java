@@ -1,28 +1,17 @@
 /*--------------------------------------------------------------------------------------------------
  * PROJECT:     3YP Motorcycle Feedback System App (UEA.FINAL.PROJECT)
- *
- * FILE:        PrimeForegroundService.Java
- *
+ * FILE:        AppNotificationWrapper.java
  * AUTHOR:      SSQ16SHU / 100166648
- *
- * DESCRIPTION: 8th version of main function of project app: started from host activity, runs
- *              continuously in background to receive location updates from GPS and network
- *              providers, use coordinates to create and send HTTP queries to OverpassAPI, receive
- *              and parse JSON response to find speed limit of road at current location.
- *              Also handles bluetooth input of bike "status" including speed, warning the user via
- *              bluetooth connection to headset if current speed exceeds the limit at location.
+ * DESCRIPTION: First item to load on app boot: used to create notification channels for service
+ *              hosting notification
  *--------------------------------------------------------------------------------------------------
  * NOTES:
+ *      +   Technically not needed in this implementation as it is only required for Android Oreo
+ *          (API 26) and upward, but retained for future forward comparability
  *      +   Dates are recorded in YYMMDD notation.
- *--------------------------------------------------------------------------------------------------
- * OUTSTANDING ISSUES:
- *      +
  *--------------------------------------------------------------------------------------------------
  * HISTORY:
  *      v1.0    200314  Initial implementation.
- *--------------------------------------------------------------------------------------------------
- * TO DO:
- *      +
  *------------------------------------------------------------------------------------------------*/
 
 package UEA.FINAL.PROJECT;
@@ -48,7 +37,6 @@ public class AppNotificationWrapper extends Application {
     /*--------------------------------------
         LIFECYCLE
     --------------------------------------*/
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -76,7 +64,6 @@ public class AppNotificationWrapper extends Application {
         } else {
             Log.w(TAG, "createNotificationChannels: Warning: SDK below target: ");
         }
-
 
     }
 }

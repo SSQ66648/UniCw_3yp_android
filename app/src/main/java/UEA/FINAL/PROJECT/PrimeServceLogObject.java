@@ -1,41 +1,22 @@
-/*------------------------------------------------------------------------------
- *
+/*--------------------------------------------------------------------------------------------------
  * TITLE:       3YP Motorcycle Feedback System Mobile Device App
- *
  * FILE:        PrimeServceLogObject.Java
- *
- * LAYOUT(S):   n/a
- *
  * DESCRIPTION: class to contain (& de-clutter) the timestamps required for debugging/log file in
- *              GpsForegroundService.
- *
+ *              GpsForegroundService (later: PrimeForegroundService).
  * AUTHOR:      SSQ16SHU / 100166648
- *
+ *--------------------------------------------------------------------------------------------------
  * HISTORY:     v1.0    200302  Initial implementation.
  *              v1.1    200302  added lat/lon/name/speed/index of array to variables & get/set.
- *              v1.2    200302  added lat/lon/accuracy/radiusTotal/provider to log object to ease log to file method
- *              v1.3    200309  added check for null variables method, changed primitives to object for null check.
+ *              v1.2    200302  added lat/lon/accuracy/radiusTotal/provider to log object to ease
+ *                              log to file method
+ *              v1.3    200309  added check for null variables method, changed primitives to object
+ *                              for null check.
  *              v1.4    200314  copied from test project.
- *
+ *--------------------------------------------------------------------------------------------------
  * NOTES:       
  *          +   separate method to calculate total time may not be needed: if use subtraction in
  *              accessor, method is made obsolete.
- *
- *              date notation: YYMMDD
- *              comment format:
- *                  //---GROUP---
- *                  //-purpose of method etc-
- *                  //explanation
- *
- *------------------------------------------------------------------------------
- * TO DO LIST:  
- *              todo:
- *              todo:   tidy code
- *
- * TO DO TODAY:
- *              TODO:
- *
- -----------------------------------------------------------------------------*/
+ -------------------------------------------------------------------------------------------------*/
 package UEA.FINAL.PROJECT;
 
 import android.util.Log;
@@ -73,7 +54,6 @@ public class PrimeServceLogObject {
     private Integer radiusTotal;
     private String provider;
 
-    //TODO: still to add to service logging procedure
     private int roadArrayIndex;
 
     //debugging log items (
@@ -231,7 +211,10 @@ public class PrimeServceLogObject {
 
     //-check that all relevant variables are populated (prevent null crashing on logging)
     public boolean checkIterationComplete() {
-        if (latitude == null | longitude == null | accuracy == null | provider == null | radiusTotal == null | roadName == null | maxSpeed == null | locationFixTime == null | locationUseTime == null | querySentTime == null | queryResponseTime == null | parseCompleteTime == null | limitUpdateTime == null) {
+        if (latitude == null | longitude == null | accuracy == null | provider == null
+                | radiusTotal == null | roadName == null | maxSpeed == null
+                | locationFixTime == null | locationUseTime == null | querySentTime == null
+                | queryResponseTime == null | parseCompleteTime == null | limitUpdateTime == null) {
             Log.e(TAG, "checkIterationComplete: Error: required loggging variable is NULL:");
             //todo: add handling here or where used (currently on use)
             return false;

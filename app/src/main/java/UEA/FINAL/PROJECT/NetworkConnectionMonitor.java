@@ -1,20 +1,11 @@
 /*------------------------------------------------------------------------------
  * PROJECT:     3YP Motorcycle Feedback System Mobile Device App
- *
  * FILE:        NetworkConnectionMonitor.Java
- *
- * LAYOUT(S):   activity_.xml
- *
- * DESCRIPTION: MIGHT BE OBSOLETE AND DEPRECIATED AKA USELESS
- *
+ * DESCRIPTION: External object used to monitor the current network availability
  * AUTHOR:      SSQ16SHU / 100166648
- *
  * HISTORY:     v1.0    200319  Initial implementation.
  *------------------------------------------------------------------------------
- * NOTES:       
- *      +   
- *------------------------------------------------------------------------------
- * TO DO LIST:  
+ * TO DO LIST:
  *      todo:
  -----------------------------------------------------------------------------*/
 
@@ -24,13 +15,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/*--------------------------------------
-    IMPORT LIST
---------------------------------------*/
 public class NetworkConnectionMonitor {
-    /*--------------------------------------
-        CONSTANTS
-    --------------------------------------*/
+
     private static final String TAG = NetworkConnectionMonitor.class.getSimpleName();
 
 

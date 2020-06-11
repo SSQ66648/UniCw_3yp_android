@@ -1,17 +1,16 @@
-/*------------------------------------------------------------------------------
+/*--------------------------------------------------------------------------------------------------
  * PROJECT:     3YP Motorcycle Feedback System Mobile Device App
- *
  * FILE:        BluetoothActions.Java
- *
- * LAYOUT(S):   activity_.xml
- *
+ * LAYOUT(S):   activity_bluetooth_actions.xml
  * DESCRIPTION: Handles toggling of device Bluetooth statuses as well as discovery, pairing and
  *              connecting to nearby Bluetooth devices. active connection is passed to service to
  *              maintain connection while device is locked.
  *              (based on combination of test classes: "SerialWingood" and "BluetoothActions")
- *
+ *              Actual "connection" work has been moved to foreground service due to needing to host
+ *              the Bluetooth socket there. Currently forwards the MAC address (if available) to
+ *              following activity.
  * AUTHOR:      SSQ16SHU / 100166648
- *
+ *--------------------------------------------------------------------------------------------------
  * HISTORY:     v1.0    200315  Initial implementation (from previous test classes).
  *              v1.1    200315  Added click events to cards, additional dialogs.
  *              v1.2    200316  Added card click connect/disconnect logic, solved switch device
@@ -25,14 +24,14 @@
  *                              system button.
  *              v1.4.1  200321  Added audio playback to test if helmet is connected or not
  *                              (potentially followed by a confirmation of success dialog layout).
- *------------------------------------------------------------------------------
- * NOTES:       
+ *--------------------------------------------------------------------------------------------------
+ * NOTES:
  *      +   logcat records "errors" of no adapter attached, however attempting to solve this has
- *          resulted in much wasted time: as this does not affect the intended behaviour, this has
- *          been indefinitely postponed.
+ *          resulted in much wasted time: as this does not affect the intended behaviour,
+ *          indefinitely postponed.
  *      +   initial pairing code idea has been abandoned as multiple sources claim best to let
  *          android handle it (attempting to connect to unpaired device prompts pairing by system).
- *------------------------------------------------------------------------------
+ *--------------------------------------------------------------------------------------------------
  * FUTURE IMPROVEMENTS:
  *      +   current buttons being subject to expanding recyclerview is not ideal:
  *              either move buttons above and focus switch to selected,
@@ -41,10 +40,12 @@
  *      +   setting card clicked to color/change text is proving very difficult to work out:
  *          unfortunately postponed indefinitely as it alone has taken too many hours of work:
  *          prioritise functionality
- *------------------------------------------------------------------------------
+ *      +   has been absorbed into the service host activity layout, however this has been postponed
+ *          until the improved UI from user testing is complete
+ *--------------------------------------------------------------------------------------------------
  * TO DO LIST:
  *      //todo: add enable bt toast to button click if not enabled
- *      //todo: potentially build recycleres once and then update adapter when needed (item changed or similar)
+ *      //todo: potentially build recycleres once and then update adapter when needed
  *      //todo: add green on connect
  *      //todo: address orientation of yes/no mental model
  *      //todo: add device type checking on connect as? - change from option to if these types of device, connect as, else if these he;lmet types connect as
@@ -55,11 +56,15 @@
  *      //todo: add countdown/bool listener for list button bt check fallthrough
  *      //todo: reword helmet assumption toast
  *      //todo: add toasts re status - bt enabled etc
- *      //todo: add check that paired device has address in it. and/or begin discovery for paired devices too: (how to show if found or not: need to change card: back to how to change background of card)
+ *      //todo: add check that paired device has address in it. and/or begin discovery for paired devices too:
+ *          (how to show if found or not: need to change card: back to how to change background of card)
  *      //todo: pair discovered device connecting to
- *      //todo: tidy code
- *
- -----------------------------------------------------------------------------*/
+ *--------------------------------------------------------------------------------------------------
+ * OPEN ISSUES:
+ *      +   Despite eatensive searching, a way to obtain the view ID of the clicked cardView to set
+ *          it's background to green upon user selection has not been possible. this is postponed
+ *          for functionality focus
+ -------------------------------------------------------------------------------------------------*/
 
 package UEA.FINAL.PROJECT;
 /*--------------------------------------
@@ -106,11 +111,7 @@ import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 public class BluetoothActions extends AppCompatActivity implements View.OnClickListener {
-    /*--------------------------------------
-        CONSTANTS
-    --------------------------------------*/
     private static final String TAG = BluetoothActions.class.getSimpleName();
-
 
     /*--------------------------------------
         MEMBER VARIABLES
@@ -166,8 +167,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         getSupportActionBar().setTitle(getLocalBluetoothName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //todo: move above toolbar?
-
         //---VIEWS----
         toggle_enableBT = findViewById(R.id.toggle_bluetoothactions_enablebluetooth);
         toggle_enableBT.setOnClickListener(this);
@@ -177,15 +176,9 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
         button_pairedDevices.setOnClickListener(this);
         button_moveActivity = findViewById(R.id.button_bluetoothactions_start_activity);
         button_moveActivity.setOnClickListener(this);
-
-
         text_connectingInfo = findViewById(R.id.infotext_bluetoothactions_connecting);
-
         recyc_discoveredDevices = findViewById(R.id.recycler_bluetoothactions_discovereddevices);
         recyc_pairedDevices = findViewById(R.id.recycler_bluetoothactions_paireddevices);
-
-
-        //---EXECUTE---
     }
 
 
@@ -222,9 +215,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
             }
         });
 
-
-        //(re) check if bluetooth enabled
-        //todo: once selecting cards is possible: move this there as a 'check' before moving to next activity- leave bt to toggle button here
         //cannot use here as will enter loop if not granted.
 //        checkBluetoothState();
     }
@@ -291,7 +281,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     public void registerReceiverStatusChange() {
         Log.d(TAG, "registerReceiverStatusChange: ");
         IntentFilter intentFilter = new IntentFilter();
-        //device status changes (//todo: check the removal of action found here does not affect usage)
 //        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
@@ -508,20 +497,16 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     public void requestConnectDevice(final DeviceCard card, final String type) {
         Log.d(TAG, "requestConnectDevice: passed card: " + card.toString());
 
-        //check both not already connected? (should not be possible?)
-        //todo: 'duplicate' both connected check here as well? - may be viable if user goes back to activity
-
+        //check both not already connected? (should not be possible)
         switch (type) {
             case DeviceCard.CONNECTION_HELMET:
                 //helmet connection requested:
                 if (!helmetWatchedBool.getValue()) {
                     Log.d(TAG, "requestConnectDevice: helmet not connected: proceed.");
-//todo: connect code
-//TODO: LOOK INTO THIS IF HAVE TIME: CURRENTLY HAVE TO ASSUME PAIRED AND CONNECTD BY SELF - use for testing??
                     //demo measures:
 //                    Toast.makeText(getApplicationContext(), "THIS PROGRAM HAS TO ASSUME YOUR HEADSET IS ALREADY CONNECTED", Toast.LENGTH_SHORT).show();
 
-                    //set color (ABANDONED DUE TO IMPOSSIBILITY OF TASK)
+                    //set color (ABANDONED)
 //            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
                     //record type and specific card connected
                     helmetWatchedBool.setValue(true);
@@ -560,14 +545,12 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                 //bike connection requested
                 if (!bikeWatchedBool.getValue()) {
                     Log.d(TAG, "requestConnectDevice: bike not connected: proceed.");
-//todo: connect code
-                    //set color (ABANDONED DUE TO IMPOSSIBILITY OF TASK)
+                    //set color (ABANDONED)
 //            view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
                     bikeWatchedBool.setValue(true);
                     card.setConnectionStatus(true, DeviceCard.CONNECTION_BIKE);
                     //get bluetooth address
                     bikeMacAddress = card.getDevice().getAddress();
-
 
                     //todo: ensure device exists here?
                     Log.d(TAG, "requestConnectDevice: bike address: " + bikeMacAddress);
@@ -575,7 +558,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                         Log.e(TAG, "requestConnectDevice: Error: BIKE ADDRESS IS NULL: employing work-around of hard coded value for development.");
                         bikeMacAddress = "FC:A8:9A:00:4A:DF";
                     }
-
 
                     Log.d(TAG, "requestConnectDevice: BIKE \"CONNECTED:\"");
                 } else {
@@ -624,7 +606,7 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
                     e.printStackTrace();
                 }
 
-                //establish new connection: todo: testing.
+                //establish new connection:
                 requestConnectDevice(card, type);
             }
         });
@@ -643,8 +625,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
     //-disconnects device from passed card
     public void requestDisconnectDevice(final DeviceCard card, final String type) {
         Log.d(TAG, "requestDisconnectDevice: ");
-        //todo: check actually connected?
-
         //create dialog
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_popup_disconnect_from_device);
@@ -813,10 +793,9 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
 
     /*--------------------------------------
-        (UNUSED) METHODS (potentially impossible)
+        (UNUSED TEST) METHODS
     --------------------------------------*/
     //show list of connected devices
-    //todo: currently incomplete (only shows bool if connection is currently established but cant find out how to specify to WHAT) - research suggests not possible.
     public void listConnected() {
         Log.d(TAG, "listConnected: listing connected devices...");
         //Todo: list connected devices: getConnectedDevices() does not work: why?
@@ -957,7 +936,6 @@ public class BluetoothActions extends AppCompatActivity implements View.OnClickL
 
 
     //returns true if object is connected(always false prior to API ver 15 (iceCreamSandwich: 2011))
-    //todo: confirm memory that this is true for ANYTHING connected to ADAPTER not specific-device.
     public boolean isConnected() {
         Log.d(TAG, "isConnected: ");
         boolean retval = false;

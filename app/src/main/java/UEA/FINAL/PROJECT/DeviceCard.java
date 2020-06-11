@@ -1,31 +1,23 @@
 /*------------------------------------------------------------------------------
  * PROJECT:     3YP Motorcycle Feedback System Mobile Device App
- *
  * FILE:        DeviceCard.Java
- *
  * LAYOUT(S):   card_device.xml
- *
- * DESCRIPTION: Card representing Bluetooth devices.
- *
+ * DESCRIPTION: Cusom CardView representing Bluetooth devices: used to populate the RecyclerViews in
+ *              BluetoothActions activity
  * AUTHOR:      SSQ16SHU / 100166648
- *
  * HISTORY:     v1.0    200315  Initial implementation.
  *              v1.1    200316  Added status boolean and storage of device itself within card,
  *                              connection type const.
  *------------------------------------------------------------------------------
  * NOTES:       
- *      +   Storage of device in card is most likely very inefficient and is only used as an attempted workaround due to time limitations remaining for project.
+ *      +   Storage of device in card is most likely very inefficient and is only used as an
+ *          attempted workaround due to time limitations remaining for project.
  *------------------------------------------------------------------------------
  * FUTURE IMPROVEMENTS:
  *      +   add checking to connection types (ie. error if connection types are > 2 or < 0)
- *------------------------------------------------------------------------------
- * TO DO LIST:
- *      //todo: tidy code.
- *      //todo: change type const from int to string (remove need for 2nd var)
  -----------------------------------------------------------------------------*/
 
 package UEA.FINAL.PROJECT;
-
 
 import android.bluetooth.BluetoothDevice;
 

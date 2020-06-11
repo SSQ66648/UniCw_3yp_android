@@ -1,16 +1,15 @@
 /*--------------------------------------------------------------------------------------------------
  * PROJECT:     3YP Motorcycle Feedback System App (UEA.FINAL.PROJECT)
- *
  * FILE:        PrimeForegroundService.Java
- *
  * AUTHOR:      SSQ16SHU / 100166648
- *
  * DESCRIPTION: 8th version of main function of project app: started from host activity, runs
  *              continuously in background to receive location updates from GPS and network
  *              providers, use coordinates to create and send HTTP queries to OverpassAPI, receive
  *              and parse JSON response to find speed limit of road at current location.
  *              Also handles bluetooth input of bike "status" including speed, warning the user via
  *              bluetooth connection to headset if current speed exceeds the limit at location.
+ *              This service contains all the core functionality of this entire project.
+ *              Multiple threads (and AsyncTasks) carry out all work that would lock UI if on main.
  *--------------------------------------------------------------------------------------------------
  * NOTES:
  *      +   Relies on AppNotificationWrapper class to create the channels used for notification
@@ -50,10 +49,6 @@
  *      +
  *      +   Dates are recorded in YYMMDD notation.
  *--------------------------------------------------------------------------------------------------
- * OUTSTANDING ISSUES:
- *      +   todo: Limit update to value lower than current speed results in warning being placed in
- *           middle of update notification queue: still need to add a way of prioritising playback
- *--------------------------------------------------------------------------------------------------
  * HISTORY:
  *      v1.0    200314  Copied to own project from testing project to reduce build time and
  *                      complexity of app through omission of the 50 test classes and activities
@@ -81,7 +76,7 @@
  *                      locations index would no longer increment: required some restructuring of
  *                      demoMode methods and addition of control booleans.
  *--------------------------------------------------------------------------------------------------
- * PREVIOUS VERSION HISTORY:
+ * PREVIOUS VERSION HISTORY (pre test-class project separation):
  *              v1.0    200223  Initial implementation. (completed logcat output, need to debug
  *                              mean/median as doesnt work, still getting time travelling locations:
  *                              to test with only one provider running when mean median working)
@@ -131,37 +126,21 @@
  * TO DO LIST:
  *              todo:   add warning if accuracy is above upper threshold radius
  *              todo:   need to check that old location more accurate than new, doesnt stack (ensure original timestamp)
- *              todo:   add checks for network/gps enabled etc
- *              todo:   add checks for permissions etc (additional to auto generated ones)
  *              todo:   add notifiaction to user / redirect on permission enable request etc
  *              todo:   change http lock logic from equal location object to equal lat/lon values
  *              todo:   add start 1st update using distance travelled?
- *              todo:   add permission redirect to settings
- *              todo:   change all string const to filenames?
- *              //todo: add check in ofrm of runnabkle post delay by handler to check how long no road data available (is -1): alert audio on incremental counter?
- *------------------------------------------------------------------------------
- * MAJOR ADDITIONS NEEDED:
- *              TODO:   retain/check time of last actual update used (override the accuracy selection of oldLocation)
  *              TODO:   accuracy threshold warning
  *              TODO:   radius input option for testing (textinput view?)
  *              TODO:   sequential no-road-value warning (if no usable data for x seconds: treat as no location update warning)
  *              TODO:   ADD PROPER HANDLING FOR NO MAXSPEED: COULD BE ROAD DOESNT HAVE ONE SPECIFIED IN API
- *              TODO:   if bluetooth connection error: show button to retry? (instead of stop-starting service)
  *              //todo: find way of prompting user to stop service? (some way of adding a clickable kill button to notification display?)
  *              //todo: time delay warning between updates: INCLUDING DEMO MODE
- *              //todo: visual display of demo mode (create own graphics if have to)
- *              //todo: debug start service crash when no network available
- *              //todo: check for all required is enabled (as bt currently checked in seperate activity etc) -combine
- *              //todo: consider combining bluetooth actions activity into service host.
- *              //todo: ADD BEEN TOO LONG SINCE LAST LOCATION WARNING CHECK
  *------------------------------------------------------------------------------
  * CODE HOUSEKEEPING TO DO LIST:
  *              todo:   change all toast notification to method: pass string
  *              todo:   prevent multiple logging error to file (task chain knock-on)
  *              todo:   change all errors in async task to concat strings format
  *              todo:   combine error log and reset methods?
- *              //todo: clean up finished todo items
- *              //todo: change prioriies of log.d/v/i as needed
  *              //todo: add warning to lost bt connection: need own broadcast listener in service or...?
  * ---------------------------------------------------------------------------*/
 
@@ -260,12 +239,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
     //triggers of service methods, broadcast from activity (default is zero: do nothing)
     public static final int METHODTRIGGER_TESTAUDIO = 1;
     public static final int METHODTRIGGER_TESTPRINT = 2;
-
     /*------------------
         Audio Identification Strings (used for selection of corresponding (fragmented) audio arrays
     ------------------*/
     public static final String TTS_LOLA_WARNING_NETWORK_LOST = "networkLost";
-
     /*------------------
         Audio Identification Strings (used for selection of corresponding (full) audio files
     ------------------*/
@@ -324,7 +301,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     long diffSeconds_location_oldLocation;
     LocationManager locationManager;
     Handler handler;
-
     //testing: count of providers (not including first value: immediate assign to prev)
     int gpsCount = 0;
     int netCount = 0;
@@ -348,7 +324,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     Location apiCheckDuplicateLocation;
     //lock to prevent unnecessary http queries (true = prevent execution)
     boolean asyncLocked = false;
-
     //testing:(timestamp of httpTask beginning and ending to check duration required)
     long httpStartTime;
     long httpStopTime;
@@ -369,7 +344,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     private Runnable warningLoop;
     //prevent contents of limit-exceeded check executing more than once
     boolean speedingInProgress = false;
-
 
     /*------------------
         Testing/Log Variables
@@ -395,7 +369,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     WatchedBool mediaLock = new WatchedBool();
     //container of queued audio playback
     ArrayList<String> playQueue;
-
     /*------------------
         Audio Array Variables
         ('word-pool' version of voice audio-feedback: if have individual word/fragments,
@@ -407,6 +380,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
             "tts_mp3_lola_connection_connection.mp3",
             "tts_mp3_lola_connection_lost.mp3"
     };
+    MediaPlayer interruptMediaPlayer;
+    //storage of playback duration on paused
+    private int seekToPosition = -1;
+    //storage of intterupted file reference
+    private String interruptedFile;
+
 
     /*------------------
         Bluetooth Variables
@@ -466,7 +445,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             52.62915255, 52.62826364, 52.62802594, 52.62714352, 52.62533629, 52.62309588,
             52.62233711, 52.62182908, 52.62171185
     };
-
     private double[] demoLonArray = {
             1.23219609, 1.23373836, 1.23584658, 1.23838395, 1.24074966, 1.2466827, 1.24812573,
             1.24953657, 1.25379592, 1.25914961, 1.25933737, 1.25913888, 1.2591657, 1.25986844,
@@ -475,9 +453,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
             1.24887139, 1.24336749, 1.24089986, 1.23990744, 1.24030441, 1.24076575, 1.23981625,
             1.23798162, 1.23466641
     };
-
     //final array for index (array is final -to use in Runnable, but contents can be edited)
     final int[] demoDelayIndex = new int[]{0};
+    private int delayInMillis = DEMOMODE_LOCATION_UPDATE_DELAY * 1000;
 
     /*----------------------------------------------------------------------------------------------
         LIFECYCLE
@@ -488,37 +466,17 @@ public class PrimeForegroundService extends Service implements LocationListener,
         Log.v(TAG, "onCreate: ");
         super.onCreate();
 
+        //notify successfully starting
         queuePlayback(TTS_LOLA_NOTIFY_START_SERVICE);
-
         handler = new Handler(Looper.getMainLooper());
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         //assign listeners to watchedBooleans
         assignWatchedBooleans();
-
         //assign listeners to watchedIntegers
         assignWatchedIntegers();
-
         //assign listeners to watchedIntegers
         assignWatchedFloats();
-
-//        if (ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                && ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    Activity#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for Activity#requestPermissions for more details.
-//            Log.e(TAG, "onCreate: Error: PERMISSIONS NOT GRANTED");
-//            return;
-//        }
-
-        ////todo: test moving begin updates from here to onstart (demo switch)
-
 
         //register receiver for activity reqests to trigger service methods
         LocalBroadcastManager.getInstance(this).registerReceiver(mServiceBroadcastReceiver,
@@ -556,15 +514,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 .build();
         startForeground(1, notification);
 
-//        handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                Toast.makeText(getApplicationContext(),
-//                        "Starting service...",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
         selectServiceType(intent);
 
         //---BEGIN LOGGING---
@@ -600,7 +549,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
         }
         //get median delay value
         Collections.sort(medianTime);
-//todo: add index out of bound checking
         int median = 0;
         if (medianTime != null && medianTime.size() > 0) {
             median = medianTime.get(medianTime.size() / 2);
@@ -790,7 +738,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
             finalLocation = oldFinalLocation;
             finalLocationRealTime = oldFinalLocationRealTime;
-            //todo: handle time difference if needed?
             timeErrCount++;
         }
 
@@ -829,7 +776,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
         oldFinalLocation = finalLocation;
         oldFinalLocationRealTime = finalLocationRealTime;
         oldFinalLocationRealTimeSeconds = finalLocationRealTimeSeconds;
-        //todo: move time location debug to method?
+        //todo: move time location debug to own method
 
         //attempt to begin http async
         checkAsyncLock();
@@ -895,7 +842,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
                 //testing:
                 currentRoadName = ((RoadTags) localProduct).getRoadName();
-                //todo: test this works with watched int
                 currentSpeedLimit.set(((RoadTags) localProduct).getRoadSpeed());
                 Log.d(TAG, "onTaskComplete: service now has access to:\n" +
                         "road: [" + currentRoadName + "]\n" +
@@ -904,7 +850,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 //add parse completion time to log
                 logObject.setParseCompleteTime(SystemClock.elapsedRealtime());
 
-                //todo: add limit alarm logic
                 updateCurrentSpeedInfo((RoadTags) localProduct);
             } else {
                 Log.e(TAG, "onTaskComplete: Error: expected RoadTags object, "
@@ -914,7 +859,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 errorReset("onTaskComplete: PARSE flag found: localProduct is not a " +
                         "RoadTags object");
                 return;
-                //todo: handle?
+                //todo: handle
             }
             //repeat async loop (triggered on location update): unlock async && new location check
             asyncLocked = false;
@@ -1354,7 +1299,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                         //testing:
                         Log.v(TAG, "doInBackground: NAME: " + roadNames.get(i));
                     } catch (JSONException e) {
-                        //todo: investigate why error showing when name IS returned?
                         Log.w(TAG, "AsyncPARSE: JSON exception occurred: no NAME for road");
                         roadNames.add("No name found");
                     }
@@ -1532,9 +1476,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 return;
             }
 
-            //todo: maybe need null/empty check on arrays?
-            //TODO: RESEARCH IF ANY WAY TO DETERMINE SELECTION LOGIC (ORDER OF API RESULTS?):
-
             //ensure name and speed arrays match
             if (roadNames.size() != roadSpeeds.size()) {
                 Log.e(TAG, "AsyncPARSE: chooseRoad: Error: array lengths do not match");
@@ -1623,7 +1564,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
                 Log.e(TAG, "ConnectedThread: Error: creating I/O streams for socket");
-                //todo: insert code to handle exception
+                //todo: handle
             }
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
@@ -1672,6 +1613,128 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
+    //controls the demo mode location updates
+    Runnable demoLocationUpdateThread = new Runnable() {
+        @Override
+        public void run() {
+            //        demoApiResponseLatch = new CountDownLatch(1);
+            Log.d(TAG, "run: attempt demoLocation change...");
+
+            if (demoChangeLocation) {
+                //location is changing: prevent additional
+                demoChangeLocation = false;
+                //reset index if array length complete
+                if (demoDelayIndex[0] == demoLatArray.length) {
+                    //reset index to start
+                    demoDelayIndex[0] = 0;
+                }
+
+                //cause (intentional) delay in updates
+                if (demoDelayIndex[0] == 17) {
+                    Log.d(TAG, "run: intentional update delay occurring...");
+                    Log.d(TAG, "run: update number: [" + demoDelayIndex[0] + "]");
+                    //sleep for 20 seconds
+                    try {
+                        Log.d(TAG, "run: sleeping...");
+                        Thread.sleep(20000);
+                    } catch (InterruptedException e) {
+                        Log.e(TAG, "run: Error attempting to sleep thread");
+                        e.printStackTrace();
+                    }
+                }
+
+
+                Log.d(TAG, "run: index = " + demoDelayIndex[0]);
+
+                //create empty location
+                Location demoLocation = new Location("demoProvider");
+                //assign timestamp
+//                demoLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+
+                //assign coordinates from array using index(array value)
+                demoLocation.setLatitude(demoLatArray[demoDelayIndex[0]]);
+                demoLocation.setLongitude(demoLonArray[demoDelayIndex[0]]);
+                Log.d(TAG, "run: created location from demo coordinates:\n" +
+                        "LAT: [" + demoLocation.getLatitude() + "]\n" +
+                        "LON: [" + demoLocation.getLongitude() + "]\n");
+//                        "Timestamp (since boot): [" + demoLocation.getElapsedRealtimeNanos() + "]");
+
+                //create timestamp
+                long locationRealTime = SystemClock.elapsedRealtime();
+                long locationRealTimeSeconds = locationRealTime / 1000;
+
+                //set demo location to service variables in place of onLocationUpdates
+                if (oldFinalLocation == null) {
+                    Log.v(TAG, "demoLocations: no prior location yet: assigning first update to BOTH old and new locations....");
+
+                    //assign updated location and associated time
+                    finalLocation = demoLocation;
+                    oldFinalLocation = demoLocation;
+                    finalLocationRealTime = locationRealTime;
+                    oldFinalLocationRealTime = locationRealTime;
+                    finalLocationRealTimeSeconds = finalLocationRealTime / 1000;
+                    oldFinalLocationRealTimeSeconds = oldFinalLocationRealTime / 1000;
+                    diffSeconds_location_oldLocation = 0;
+                } else {
+                    //assign demo values to new location variables
+                    finalLocation = demoLocation;
+                    finalLocationRealTime = locationRealTime;
+                    finalLocationRealTimeSeconds = locationRealTimeSeconds;
+
+                    //duplicate testing code (included to prevent current implementation from breaking)
+                    //testing: add time difference (seconds) to mean/median testing
+                    updateCount++;
+                    //second difference (debug: ensure cast from long is correct value
+                    int diff = (int) diffSeconds_location_oldLocation;
+
+                    //add seconds to total
+                    updateTotalTime = updateTotalTime + diff;
+                    //add value to list
+                    medianTime.add(diff);
+
+                    //update previous location
+                    oldFinalLocation = finalLocation;
+                    oldFinalLocationRealTime = finalLocationRealTime;
+                    oldFinalLocationRealTimeSeconds = finalLocationRealTimeSeconds;
+                }
+
+                //begin primary loop
+                checkAsyncLock();
+
+
+                //testing
+//                try {
+//                    demoApiResponseLatch.await();
+//                } catch (Exception e) {
+//                    Log.e(TAG, "run: Error: awaiting demomode API countdown latch");
+//                    e.getMessage();
+//                    e.printStackTrace();
+//                }
+//
+//                try {
+//                    Log.d(TAG, "run: asyncLocked - sleep 1 second...");
+//                    Thread.sleep(1000);
+//                    if (!asyncLocked) {
+//                        break;
+//
+//                    }
+//                } catch (InterruptedException e) {
+//                    Log.w(TAG, "run: Warning: thread interrupted");
+//                    //asyncLocked = false;
+//                }
+//
+//            }
+
+
+            }
+
+
+            //repeat
+            demoUpdateHandler.postDelayed(this, delayInMillis);
+        }
+    };
+
+
     /*----------------------------------------------------------------------------------------------
         METHODS
     ----------------------------------------------------------------------------------------------*/
@@ -1683,7 +1746,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
         switch (playChoice) {
             //alerts
             case TTS_LOLA_ALERT_SPEEDLIMIT_EXCEEDED:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_alert_speedlimitexceeded.mp3";
                 break;
             //notifications
@@ -1693,11 +1755,9 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 resourceFilenameArray[0] = "tts_lola_notify_20mph.mp3";
                 break;
             case TTS_LOLA_NOTIFY_LIMIT_CHANGE_30:
-                //todo: test
                 resourceFilenameArray[0] = "tts_lola_notify_30mph.mp3";
                 break;
             case TTS_LOLA_NOTIFY_BEGIN_LOCATION_UPDATES:
-                //todo: test
                 resourceFilenameArray[0] = "tts_lola_notify_beginninglocationupdates.mp3";
                 break;
             case TTS_LOLA_NOTIFY_BLUETOOTH_ESTABLISHED:
@@ -1707,14 +1767,12 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 resourceFilenameArray[0] = "tts_lola_notify_mobileonline_.mp3";
                 break;
             case TTS_LOLA_NOTIFY_NETWORK_ONLINE:
-                //todo: implment / test
                 //not currently used (as opted for wifi mobile data -specific feedback,
                 //kept to possibly reuse later if user-preferred (not much wifi outside)
                 resourceFilenameArray[0] = "tts_lola_notify_networkconnectiononline.mp3";
                 break;
             case TTS_LOLA_NOTIFY_SPEEDLIMIT_CHANGED:
-                //used in conjunction with numeric value: //todo: review combining idea
-                //todo: implment / test
+                //used in conjunction with numeric value:
                 resourceFilenameArray[0] = "tts_lola_notify_speedlimitchangedto.mp3";
                 break;
             case TTS_LOLA_NOTIFY_START_SERVICE:
@@ -1731,23 +1789,18 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 resourceFilenameArray[0] = "tts_lola_prompt_bluetootherror_.mp3";
                 break;
             case TTS_LOLA_PROMPT_CHECK_BLUETOOTH:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_prompt_checkbluetoothconnected.mp3";
                 break;
             case TTS_LOLA_PROMPT_DEV_VERSION:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_prompt_developmentbuildversion.mp3";
                 break;
             case TTS_LOLA_PROMPT_DISCLAIMER:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_prompt_disclaimer.mp3";
                 break;
             case TTS_LOLA_PROMPT_HELMET_TEST:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_prompt_helmetbluetoothtest.mp3";
                 break;
             case TTS_LOLA_PROMPT_ENABLE_PERMISSIONS:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_prompt_pleaseenablepermissions.mp3";
                 break;
             case TTS_LOLA_PROMPT_VOICETEST:
@@ -1756,34 +1809,30 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 break;
             //warnings
             case TTS_LOLA_WARNING_CONNECTIONS_REQUIRED:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_warning_appconnectionstofunction.mp3";
                 break;
             case TTS_LOLA_WARNING_BLUETOOTH_LOST:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_warning_bluetoothtobikelost.mp3";
                 break;
             case TTS_LOLA_WARNING_ERROR_OCCURRED:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_warning_erroroccurred.mp3";
                 break;
             case TTS_LOLA_WARNING_GPS_LOST:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_warning_gpssignallost.mp3";
                 break;
             case TTS_LOLA_WARNING_NETWORK_LOST:
                 //original 'word-pool' implementation (kept unacceptable delay for reference)
+                //NOTE: this was not judged to be an issue during user testing: may revisit the "word-pool" idea later
+                //NOTE2: may also consider changing out all these audio files to internal android TTS (would remove the mediaPlayer issues)
                 resourceFilenameArray = tts_lola_NetworkConnectionLost;
                 break;
             case TTS_LOLA_WARNING_NO_ROAD_DATA:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_warning_noroaddatafound.mp3";
                 break;
             case TTS_LOLA_WARNING_NO_SPEED_DATA:
                 resourceFilenameArray[0] = "tts_lola_warning_nospeedlimitavailable.mp3";
                 break;
             case TTS_LOLA_WARNING_UNABLE_TO_CONTINUE:
-                //todo: implment / test
                 resourceFilenameArray[0] = "tts_lola_warning_unabletocontinue.mp3";
                 break;
         }
@@ -1807,9 +1856,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             playAudio(selection);
         }
     }
-
-
-    MediaPlayer interruptMediaPlayer;
 
 
     //-pause and resume playback that needs to be interrupted
@@ -1845,7 +1891,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                     if (mediaPlayer_sfx_indicator != null && !mediaPlayer_sfx_indicator.isPlaying()) {
                         mediaPlayer_sfx_indicator.start();
                     }
-                    //todo: test if needs storage of seek position...?
                 }
             });
             interruptMediaPlayer.prepare();
@@ -1854,11 +1899,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             Log.e(TAG, "interruptPlayback: Error: error on priority player.");
         }
     }
-
-    //storage of playback duration on paused
-    private int seekToPosition = -1;
-    //storage of intterupted file reference
-    private String interruptedFile;
 
 
     //-play audio at index in array or cease
@@ -1945,11 +1985,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public void setupBluetoothSockets(Intent intent) {
         Log.v(TAG, "onStartCommand: obtaining bluetooth adapter");
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        //todo: check bluetooth state?
         bikeAddress = intent.getStringExtra(BluetoothActions.EXTRA_DEVICE_ADDRESS);
         Log.v(TAG, "onStartCommand: received bluetooth address: " + bikeAddress);
 
-        //todo: fix workaround: hard coded address if intent extra is lost : how can this happen?
+        //todo: fix workaround: hard coded address if intent extra is lost : how does this happen?
         if (bikeAddress == null) {
             Log.e(TAG, "requestConnectDevice: Error: BIKE ADDRESS IS NULL: employing " +
                     "work-around of hard coded value for development.");
@@ -2067,7 +2106,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                             Log.v(TAG, "----------------------------------------");
 
                             //get local copy of speed (that can be monitored)
-                            //todo: test if needs valueOf instead?
                             currentSpeed.set(Float.parseFloat(incomingStatusValues[1]));
                             //string copy to display to UI
                             String currentSpeeds = incomingStatusValues[1] + "mph";
@@ -2098,6 +2136,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
                                 //testing
                                 Log.e(TAG, "handleMessage: incorrect message sequence");
                                 //todo: add handling for incorrect input sequence
+                                //incorrect sequence is expected on first message received
                             }
                             //assign current to old sequence variable
                             seqOld = seqNew;
@@ -2295,7 +2334,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
     public void updateCurrentSpeedInfo(RoadTags product) {
         Log.v(TAG, "updateCurrentSpeedInfo: ");
         //update speed (in local variable)
-        //todo: address assumed duplicate update (additional in onComplete listener)
         currentSpeedLimit.set(product.getRoadSpeed());
         currentRoadName = product.getRoadName();
 
@@ -2321,7 +2359,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             //allow ui update to happen
             demoUpdateReady = true;
 
-            //todo: test this here...?
             //increment index for next loop
 //            demoDelayIndex[0]++;
         }
@@ -2455,7 +2492,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
     //-send notification to activity that bluetooth connection has failed (stop self)
     public void sendConnectionError() {
-        //todo: test
         //  demoErrorLoopEscape = true;
         Log.d(TAG, "sendConnectionError: ");
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
@@ -2476,7 +2512,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
             Log.d(TAG, "selectServiceType: beginning IRL location updates...");
             //started actual service: begin updates
             //begin location updates from both providers
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                            PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    Activity#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -2485,7 +2524,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
                 // to handle the case where the user grants the permission. See the documentation
                 // for Activity#requestPermissions for more details.
 
-                //todo: add warning audio here and stop service as no network available? or already covered?
                 return;
             }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
@@ -2506,7 +2544,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             startDemoLocations();
         } else {
             Log.e(TAG, "selectServiceType: Error: did not receive an expected intent extra");
-            //todo: handle? stop?
         }
 
     }
@@ -2522,144 +2559,10 @@ public class PrimeForegroundService extends Service implements LocationListener,
     }
 
 
-    //todo: move this to correct sections
-    private int delayInMillis = DEMOMODE_LOCATION_UPDATE_DELAY * 1000;
-
-    Runnable demoLocationUpdateThread = new Runnable() {
-        @Override
-        public void run() {
-            //        demoApiResponseLatch = new CountDownLatch(1);
-            Log.d(TAG, "run: attempt demoLocation change...");
-
-
-            if (demoChangeLocation) {
-                //location is changing: prevent additional
-                demoChangeLocation = false;
-
-
-                //reset index if array length complete
-                if (demoDelayIndex[0] == demoLatArray.length) {
-                    //reset index to start
-                    demoDelayIndex[0] = 0;
-                }
-
-                //cause (intentional) delay in updates
-                if (demoDelayIndex[0] == 17) {
-                    Log.d(TAG, "run: intentional update delay occurring...");
-                    ////todo: check
-                    Log.d(TAG, "run: update number: [" + demoDelayIndex[0] + "]");
-                    //sleep for 20 seconds
-                    try {
-                        Log.d(TAG, "run: sleeping...");
-                        Thread.sleep(20000);
-                    } catch (InterruptedException e) {
-                        Log.e(TAG, "run: Error attempting to sleep thread");
-                        e.printStackTrace();
-                    }
-                }
-
-
-                // TODO: 20/04/2020 change if and increment to equals modulo?
-                Log.d(TAG, "run: index = " + demoDelayIndex[0]);
-
-                //create empty location
-                Location demoLocation = new Location("demoProvider");
-                //assign timestamp
-//                demoLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-
-                //assign coordinates from array using index(array value)
-                demoLocation.setLatitude(demoLatArray[demoDelayIndex[0]]);
-                demoLocation.setLongitude(demoLonArray[demoDelayIndex[0]]);
-                Log.d(TAG, "run: created location from demo coordinates:\n" +
-                        "LAT: [" + demoLocation.getLatitude() + "]\n" +
-                        "LON: [" + demoLocation.getLongitude() + "]\n");
-//                        "Timestamp (since boot): [" + demoLocation.getElapsedRealtimeNanos() + "]");
-
-                //create timestamp
-                long locationRealTime = SystemClock.elapsedRealtime();
-                long locationRealTimeSeconds = locationRealTime / 1000;
-
-                //set demo location to service variables in place of onLocationUpdates
-                if (oldFinalLocation == null) {
-                    Log.v(TAG, "demoLocations: no prior location yet: assigning first update to BOTH old and new locations....");
-                    //todo: debug this.....
-
-                    //assign updated location and associated time
-                    finalLocation = demoLocation;
-                    oldFinalLocation = demoLocation;
-                    finalLocationRealTime = locationRealTime;
-                    oldFinalLocationRealTime = locationRealTime;
-                    finalLocationRealTimeSeconds = finalLocationRealTime / 1000;
-                    oldFinalLocationRealTimeSeconds = oldFinalLocationRealTime / 1000;
-                    diffSeconds_location_oldLocation = 0;
-                } else {
-                    //assign demo values to new location variables
-                    finalLocation = demoLocation;
-                    finalLocationRealTime = locationRealTime;
-                    finalLocationRealTimeSeconds = locationRealTimeSeconds;
-
-                    //duplicate testing code (included to prevent current implementation from breaking)
-                    //testing: add time difference (seconds) to mean/median testing
-                    updateCount++;
-                    //second difference (debug: ensure cast from long is correct value
-                    int diff = (int) diffSeconds_location_oldLocation;
-
-                    //add seconds to total
-                    updateTotalTime = updateTotalTime + diff;
-                    //add value to list
-                    medianTime.add(diff);
-
-                    //update previous location
-                    oldFinalLocation = finalLocation;
-                    oldFinalLocationRealTime = finalLocationRealTime;
-                    oldFinalLocationRealTimeSeconds = finalLocationRealTimeSeconds;
-
-
-                }
-
-                //begin primary loop
-                checkAsyncLock();
-
-//                //todo: workaround for out of sync map location updates :test.
-//                try {
-//                    demoApiResponseLatch.await();
-//                } catch (Exception e) {
-//                    Log.e(TAG, "run: Error: awaiting demomode API countdown latch");
-//                    e.getMessage();
-//                    e.printStackTrace();
-//                }
-//todo: test while loop of sleep to pause until response has been received (cause of location array updating before api call is finished)
-//            while (asyncLocked) {
-//
-//                try {
-//                    Log.d(TAG, "run: asyncLocked - sleep 1 second...");
-//                    Thread.sleep(1000);
-//                    if (!asyncLocked) {
-//                        break;
-//
-//                    }
-//                } catch (InterruptedException e) {
-//                    Log.w(TAG, "run: Warning: thread interrupted");
-//                    //asyncLocked = false;
-//                }
-//
-//            }
-
-
-            }
-
-
-            //repeat
-            demoUpdateHandler.postDelayed(this, delayInMillis);
-
-        }
-    };
-
-
     /*----------------------------------------------------------------------------------------------
         HELPER METHODS
     ----------------------------------------------------------------------------------------------*/
-    //-assigning listeners to watchedBooleans
+    //-assigning listeners to watched primitive-wrapper objects
     public void assignWatchedBooleans() {
         Log.v(TAG, "assignIndicatorLightBools: ");
         //if indicators are on: play indicator SFX
@@ -2883,7 +2786,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             return;
         } else {
             //lock async asap (attempt to control conditions)
-            //todo: research how to make this lock exclusive
             asyncLocked = true;
 
             //check previous location matches last query check location record (treat null as same)
@@ -2913,7 +2815,6 @@ public class PrimeForegroundService extends Service implements LocationListener,
             logObject = new PrimeServceLogObject(finalLocation.getLatitude(),
                     finalLocation.getLongitude(), finalLocation.getAccuracy(),
                     finalLocationRealTime, SystemClock.elapsedRealtime());
-            //todo: add this to creation above
             logObject.setProvider(finalLocation.getProvider());
 
             //set async primary loop in motion
@@ -2980,7 +2881,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
     /*----------------------------------------------------------------------------------------------
         TESTING METHODS
     ----------------------------------------------------------------------------------------------*/
-    //-testing of audio warning playback (triggered from activity button)
+    //-testing of audio warning playback (triggered from activity test button)
     public void testAudioFromButton() {
         //initial testing of binding of service:
 //        showToastOnUI("binding of service succeeded:\n" +
@@ -3013,7 +2914,7 @@ public class PrimeForegroundService extends Service implements LocationListener,
 
 
     /*----------------------------------------------------------------------------------------------
-        INCOMPLETE/OBSOLETE METHODS
+        INCOMPLETE/OBSOLETE/TESTING METHODS (that may be useful later)
     --------------------------------------*/
     //-request write to external memory permission for logging
     //INCOMPLETE DUE TO SERVICE INSTEAD OF ACTIVITY USE

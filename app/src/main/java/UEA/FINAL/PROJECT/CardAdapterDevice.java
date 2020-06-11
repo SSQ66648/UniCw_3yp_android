@@ -1,21 +1,10 @@
 /*------------------------------------------------------------------------------
  * PROJECT:     3YP Motorcycle Feedback System Mobile Device App
- *
  * FILE:        CardAdapterDevice.Java
- *
  * LAYOUT(S):   n/a
- *
- * DESCRIPTION: Implementation of own version of exampleAdapter
- *
+ * DESCRIPTION: Implementation of own adapter to allow use of customised CardViews
  * AUTHOR:      SSQ16SHU / 100166648
- *
  * HISTORY:     v1.0    200315  Initial implementation.
-*------------------------------------------------------------------------------
- * NOTES:
- *      +
- *------------------------------------------------------------------------------
- * TO DO LIST:
- *      //todo:
  -----------------------------------------------------------------------------*/
 
 package UEA.FINAL.PROJECT;
@@ -38,7 +27,7 @@ public class CardAdapterDevice extends RecyclerView.Adapter<CardAdapterDevice.Ca
     private static final String TAG = "CardAdapterDevice";
 
     /*--------------------------------------
-        CLASS VARIABLES
+        MEMBER VARIABLES
     --------------------------------------*/
     //---VARIABLES---
     private ArrayList<DeviceCard> cardList;

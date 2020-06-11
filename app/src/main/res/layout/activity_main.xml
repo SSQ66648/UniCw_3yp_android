@@ -1,23 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--****************************************************************************
-*
-* TITLE:        3YP Motorcycle Feedback System Mobile Device App
-*
-* FILE:         activity_main.xml
-*
-* ASSOCIATED:   MainActivity.Java
-*
-* DESCRIPTION:  Activity layout for main page of app
-*
-* AUTHOR:       SSQ16SHU / 100166648
-*
-* HISTORY:      v0.1    191223  initial Implementation
-*
-* NOTES:       All elements (where possible) are listed vertically (left-right)
-*
-*****************************************************************************-->
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

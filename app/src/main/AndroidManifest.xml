@@ -38,16 +38,6 @@
         </activity>
 
         <activity
-            android:name=".SyncDevices_REMOVE"
-            android:label="SyncActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-
-        <activity
             android:name=".PrimeForegroundServiceHost"
             android:label="PrimaryForegroundServiceHost"
             android:parentActivityName=".MainActivity"

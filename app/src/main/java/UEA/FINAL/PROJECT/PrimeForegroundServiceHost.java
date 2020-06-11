@@ -1,17 +1,10 @@
 /*------------------------------------------------------------------------------
- *
  * PROJECT:     3YP Motorcycle Feedback System Mobile Device App
- *
- * FILE:        GpsForegroundServiceActivity.Java
- *
- * LAYOUT(S):   activity_gps_foreground_service_activity.xml
- *              content_gps_foreground_service_activity.xml
- *
- * DESCRIPTION: host activity for implementation of gps containing foreground service class.
- *
- *
+ * FILE:        PrimeForegroundServiceHost.Java
+ * LAYOUT(S):   activity_proimaryforegroundservicehost
+ * DESCRIPTION: "host" activity for Launching and monitoring the PrimeForegroundService
  * AUTHOR:      SSQ16SHU / 100166648
- *
+ *------------------------------------------------------------------------------
  * HISTORY:     v1.0    200223  Initial implementation.
  *              v1.1    200224  added button (unnecessarily: easier to test from within service than
  *                              bind to activity) -remove later if needed
@@ -42,18 +35,11 @@
  * NOTES:
  *          +   not currently stopping service on destroy as this has proved problematic (if switch
  *              to another app or notification for example)
- *              todo: will need to consider how to handle this if it is a problem? - ie if activity gone, have to reopen to get to stop button -tie ervice stop to application lifecycle somehow?
+ *              todo: will need to consider how to handle this if it is a problem
  *          +   no enabled/etc have been implemented for time (other than debug logs): will include
  *              them in next iteration if this version of the service works
- *
- *              date notation: YYMMDD
- *              comment format:
- *                  //---GROUP---
- *                  //explanation
- *
  *------------------------------------------------------------------------------
  * TO DO LIST:
- * //todo: restore buttons to main menu
  *      //todo: add status display for bt devices
  *      //todo: ADD CHECKING FOR RUNNING SERVICE TO CONTROL START/STOP  BUTTON VISIBILITY STATUS
  *      //todo: checking for bt connections?
@@ -61,8 +47,6 @@
  *      //todo: COMBINE BTACTIONS ACTIVITY??
  *      //todo: hide/collapse bike status until something to view? (visible on connect?)
  *      //todo: add better notification to user re bt connecting
- *      //todo: add check for bt connection failure (if fail: notify user and maybe dont start service?) -add testing override of course.
- *      //todo: debug no network on start crash?
  -----------------------------------------------------------------------------*/
 package UEA.FINAL.PROJECT;
 /*--------------------------------------
@@ -223,6 +207,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
             }
         });
 
+        //following to-do was never implemented, but both of these tests were successful when attached to active buttons
         //todo: commented out buttons for testing: move functions to main menu
 
 //        //check app battery optimisation
@@ -269,7 +254,7 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         Log.v(TAG, "onResume: obtained MAC address: " + bike_MAC + "\n" +
                 "Adding bike address to foreground service intent...");
 
-        //todo: fix work around: (dont know why intent is losing the address en-route?
+        //todo: fix work around: (dont know why intent occasionally loses the address en-route)
         if (bike_MAC == null) {
             Log.e(TAG, "requestConnectDevice: Error: BIKE ADDRESS IS NULL: employing work-around of hard coded value for development.");
             bike_MAC = "FC:A8:9A:00:4A:DF";
@@ -311,7 +296,8 @@ public class PrimeForegroundServiceHost extends AppCompatActivity {
         Log.v(TAG, "onDestroy: ");
         super.onDestroy();
 
-        //todo: review how to stop "rouge" service is app no longer exists? (stopping it here causes issues when activity interrupted)
+        //todo: review how to stop "rouge" service is app no longer exists?
+        // (stopping it here causes issues when activity interrupted)
         //stopGpsService();
     }
 

@@ -1,29 +1,18 @@
 /*--------------------------------------------------------------------------------------------------
  * PROJECT:     3YP Motorcycle Feedback System App (UEA.FINAL.PROJECT)
- *
  * FILE:        MainActivity.Java
- *
- * LAYOUT:      .xml
- *
+ * LAYOUT:      activity_main.xml
  * AUTHOR:      SSQ16SHU / 100166648
- *
- * DESCRIPTION: Main activity for app. Hosts main menu for application
- *              (possibly superfluous if no submenus are implemented in time)
+ * DESCRIPTION: Main activity for app. Hosts main menu for launching development version of app
  *--------------------------------------------------------------------------------------------------
  * NOTES:
- *      +
  *      +   Dates are recorded in YYMMDD notation.
- *--------------------------------------------------------------------------------------------------
- * OUTSTANDING ISSUES:
- *      +
  *--------------------------------------------------------------------------------------------------
  * HISTORY:
  *      v1.0    200314  Reimplementation from test project.
  *--------------------------------------------------------------------------------------------------
  * TO DO:
- *      todo:   finish assigning buttons
- *      todo:
- *      todo:
+ *      todo:   assign hi-fi layouts to options button
  *------------------------------------------------------------------------------------------------*/
 
 package UEA.FINAL.PROJECT;
@@ -89,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
         button_optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo: change code to class when created...
-                startActivity(new Intent(MainActivity.this, SyncDevices_REMOVE.class));
+                //todo: add intent to hi-fi UI layouts after user testing
             }
         });
 
